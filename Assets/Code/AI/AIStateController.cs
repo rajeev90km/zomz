@@ -95,7 +95,7 @@ public class AIStateController : MonoBehaviour {
 		//Get all waypoints
 		if (_wayPointsObj != null)
 		{
-			for(int i=0;i<_wayPointsObj.transform.GetChildCount();i++)
+			for(int i=0;i<_wayPointsObj.transform.childCount;i++)
 			{
 				wayPoints.Add(_wayPointsObj.transform.GetChild(i));
 			}
@@ -106,7 +106,6 @@ public class AIStateController : MonoBehaviour {
 
 		//Set Animator
 		_animator = GetComponent<Animator>();
-		Debug.Log (_currentState.AnimationTrigger);
 		_animator.SetTrigger (_currentState.AnimationTrigger);
 	}
 
@@ -128,7 +127,7 @@ public class AIStateController : MonoBehaviour {
 	{
 		if (pNextState != RemainState)
 		{
-			navMeshAgent.Stop ();
+			navMeshAgent.isStopped = true;
 			_currentState = pNextState;
 			_animator.SetTrigger (_currentState.AnimationTrigger);
 			OnExitState ();

@@ -12,7 +12,6 @@ public class AttackAction : Action
 
 	private void Attack(AIStateController pController)
 	{
-		pController.navMeshAgent.Stop ();
-		Debug.Log ("Attacking");
+		pController.navMeshAgent.isStopped = true;
 	}	
 }

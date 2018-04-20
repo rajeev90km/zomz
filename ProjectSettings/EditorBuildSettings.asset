@@ -6,8 +6,5 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_Scenes/Street1.unity
-    guid: 8a54dc8060491264bb5d05c7f4583699
-  - enabled: 0
-    path: Assets/_Scenes/Main.unity
-    guid: 83d1a193b19b8460bb56b877d21f9561
+    path: Assets/_Scenes/Zomz_Debug.unity
+    guid: d18132cb5cd87467fb5ffa3da71a0bd4
