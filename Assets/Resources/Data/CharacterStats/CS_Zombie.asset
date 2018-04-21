@@ -9,11 +9,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 010f5063cff6044a5bc592ccdb7030cc, type: 3}
-  m_Name: CS_Player
+  m_Name: CS_Zombie
   m_EditorClassIdentifier: 
   InitHealth: 100
-  Health: 60
+  Health: 100
   WalkSpeed: 2
-  RunSpeed: 3
-  AttackRate: 1.2
-  AttackStrength: 20
+  RunSpeed: 2
+  AttackRate: 2
+  AttackStrength: 10

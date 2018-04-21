@@ -6,6 +6,7 @@ TagManager:
   tags:
   - fow
   - Moveable
+  - Enemy
   layers:
   - Default
   - TransparentFX

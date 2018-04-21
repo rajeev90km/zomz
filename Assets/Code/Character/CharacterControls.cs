@@ -9,6 +9,9 @@ public class CharacterControls : MonoBehaviour {
 	[SerializeField]
 	private CharacterStats _characterStats;
 
+	[SerializeField]
+	private Transform _eyes;
+
 	private float _speedSmoothTime = 0.1f;
 	private float _speedSmoothVelocity;
 	private float _currentSpeed;
@@ -39,6 +42,8 @@ public class CharacterControls : MonoBehaviour {
 
 	void Start () 
 	{
+		_characterStats.Health = _characterStats.InitHealth;
+
 		forward = Camera.main.transform.forward;
 		forward.y = 0;
 		forward = Vector3.Normalize (forward);
@@ -51,24 +56,36 @@ public class CharacterControls : MonoBehaviour {
 
 	public void Attack()
 	{
-		if (_attackCoroutine != null)
+		if (_isAlive)
 		{
-			StopCoroutine (_attackCoroutine);
-			_attackCoroutine = null;
-		}
+			if (_attackCoroutine != null)
+			{
+				StopCoroutine (_attackCoroutine);
+				_attackCoroutine = null;
+			}
 
-		_attackCoroutine = StartCoroutine (BeginAttack ());
+			_attackCoroutine = StartCoroutine (BeginAttack ());
+		}
 	}
 
-	public void Hurt()
+	public void Hurt(float pDamage = 0.0f)
 	{
-		if (_hurtCoroutine != null)
+		if (_isAlive)
 		{
-			StopCoroutine (_hurtCoroutine);
-			_hurtCoroutine = null;
-		}
+			if (_characterStats.Health - pDamage > 0)
+				_characterStats.Health -= pDamage;
+			else
+				_characterStats.Health = 0;
 
-		_hurtCoroutine = StartCoroutine (BeginHurt ());
+			if (_characterStats.Health > 0 && !_isAttacking)
+			{
+				_animator.SetTrigger (_hurtAnimations [Random.Range (0, _hurtAnimations.Length)]);
+			} 
+			else if (_characterStats.Health <= 0)
+			{
+				Die ();
+			}
+		}
 	}
 
 
@@ -78,20 +95,67 @@ public class CharacterControls : MonoBehaviour {
 		_canAttack = false;
 		_animator.SetTrigger (_attackAnimations[Random.Range(0,_attackAnimations.Length)]);
 
-		yield return new WaitForSeconds(1.2f);
+		GameObject closestEnemy = GetClosestObject ();
+
+		if (closestEnemy)
+		{
+			AIStateController zombieControls = closestEnemy.GetComponent<AIStateController> ();
+			if (zombieControls)
+				zombieControls.TakeDamage (_characterStats.AttackStrength);
+		}
+
+		yield return new WaitForSeconds(_characterStats.AttackRate);
 		_canAttack = true;
 
 		yield return new WaitForSeconds(0.6f);
 		_isAttacking = false;
 	}
 
+	void OnDrawGizmos()
+	{
+		Gizmos.color = Color.black;
+		Gizmos.DrawWireSphere (transform.position, 1f);
+	}
 
-	private IEnumerator BeginHurt()
+	private IEnumerator BeginHurt(float pDamage = 0.0f)
 	{
 		_isHurting = true;
-		_animator.SetTrigger(_hurtAnimations[Random.Range(0,_hurtAnimations.Length)]);
-		yield return new WaitForSeconds(1f);
+		yield return null;
 		_isHurting = false;
+	}
+
+	public void Die()
+	{
+		_animator.SetTrigger ("die");
+		_isAlive = false;
+	}
+
+	public GameObject GetClosestObject()
+	{
+		Collider[] colliders = Physics.OverlapSphere (transform.position, 1f);
+		Collider closestCollider = null;
+
+		foreach (Collider hit in colliders) 
+		{
+			if((hit.GetComponent<Collider>() == transform.GetComponent<Collider>()) || !hit.transform.CompareTag("Enemy"))
+			{
+				continue;
+			}
+			if(!closestCollider)
+			{
+				closestCollider = hit;
+			}
+			//compares distances
+			if(Vector3.Distance(transform.position, hit.transform.position) <= Vector3.Distance(transform.position, closestCollider.transform.position))
+			{
+				closestCollider = hit;
+			}
+		}
+
+		if (!closestCollider)
+			return null;
+
+		return closestCollider.gameObject;
 	}
 
 
@@ -107,6 +171,7 @@ public class CharacterControls : MonoBehaviour {
 					Attack ();
 				}
 			}
+
 
 			if (!_isAttacking && !_isHurting)
 			{
@@ -140,8 +205,7 @@ public class CharacterControls : MonoBehaviour {
 			//Die
 			if (Input.GetKeyDown (KeyCode.X))
 			{
-				_animator.SetTrigger ("die");
-				_isAlive = false;
+				Die ();
 			}
 
 			//Hurt

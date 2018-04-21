@@ -51,49 +51,49 @@ public class CameraControls : MonoBehaviour {
 
 	void Update(){
 		//raycast
-		if (_rayCastPlayerTransform != null) {
-			Vector3 direction = _rayCastPlayerTransform.position - transform.position;
-
-			if (Physics.Raycast(transform.position, direction, out _hit)) {
-				if (!_hit.collider.gameObject.CompareTag ("Player")) {
-
-					if (_mask != null)
-					{
-						_mask.SetActive (true);
-						_mask.transform.position = _hit.point;
-					}
-
-
-					Renderer hitRenderer = _hit.transform.GetComponent<Renderer>();
-					if (hitRenderer) {
-						if (changedObject != null) {
-							if (changedObject.renderer == hitRenderer)
-								return;
-							else
-								changedObject.renderer.materials = changedObject.originalMaterials;
-						}
-						changedObject = new ChangedObject (hitRenderer, hitRenderer.sharedMaterials);
-					}
-
-					r = _hit.collider.gameObject.GetComponent<Renderer> ();
-					oldRenderer = r;
-
-					for(int i=0;i<r.materials.Length;i++)
-						r.materials[i].renderQueue = 3000;
-
-
-
-				} else {
-					if (changedObject != null) {
-						changedObject.renderer.materials = changedObject.originalMaterials;
-						changedObject = null;
-					}
-
-					if (_mask != null)
-						_mask.SetActive (false);
-				}
-			}
-		}
+//		if (_rayCastPlayerTransform != null) {
+//			Vector3 direction = _rayCastPlayerTransform.position - transform.position;
+//
+//			if (Physics.Raycast(transform.position, direction, out _hit)) {
+//				if (!_hit.collider.gameObject.CompareTag ("Player")) {
+//
+//					if (_mask != null)
+//					{
+//						_mask.SetActive (true);
+//						_mask.transform.position = _hit.point;
+//					}
+//
+//
+//					Renderer hitRenderer = _hit.transform.GetComponent<Renderer>();
+//					if (hitRenderer) {
+//						if (changedObject != null) {
+//							if (changedObject.renderer == hitRenderer)
+//								return;
+//							else
+//								changedObject.renderer.materials = changedObject.originalMaterials;
+//						}
+//						changedObject = new ChangedObject (hitRenderer, hitRenderer.sharedMaterials);
+//					}
+//
+//					r = _hit.collider.gameObject.GetComponent<Renderer> ();
+//					oldRenderer = r;
+//
+//					for(int i=0;i<r.materials.Length;i++)
+//						r.materials[i].renderQueue = 3000;
+//
+//
+//
+//				} else {
+//					if (changedObject != null) {
+//						changedObject.renderer.materials = changedObject.originalMaterials;
+//						changedObject = null;
+//					}
+//
+//					if (_mask != null)
+//						_mask.SetActive (false);
+//				}
+//			}
+//		}
 	}
 
 	void LateUpdate () {

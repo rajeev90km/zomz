@@ -6,6 +6,15 @@ using UnityEngine.AI;
 public class AIStateController : MonoBehaviour {
 
 	[SerializeField]
+	private CharacterStats _characterStats;
+	public CharacterStats CharacterStats
+	{
+		get { return _characterStats; }
+	}
+
+	private bool _isAlive = true;
+
+	[SerializeField]
 	private Transform _eyes;
 	public Transform Eyes
 	{
@@ -45,6 +54,7 @@ public class AIStateController : MonoBehaviour {
 		set{ _attackRate = value; }
 	}
 
+	[Header("AI States")]
 	[SerializeField]
 	private State _currentState;
 	public State CurrentState
@@ -53,13 +63,20 @@ public class AIStateController : MonoBehaviour {
 		set{ _currentState = value; }
 	}
 
-
 	[SerializeField]
 	private State _remainState;
 	public State RemainState
 	{
 		get{ return _remainState; }
 		set{ _remainState = value; }
+	}
+
+	[SerializeField]
+	private State _deadState;
+	public State DeadState
+	{
+		get{ return _deadState; }
+		set{ _deadState = value; }
 	}
 
 	private Animator _animator;
@@ -92,6 +109,8 @@ public class AIStateController : MonoBehaviour {
 
 	void Start () 
 	{
+		_characterStats.Health = _characterStats.InitHealth;
+
 		//Get all waypoints
 		if (_wayPointsObj != null)
 		{
@@ -111,7 +130,10 @@ public class AIStateController : MonoBehaviour {
 
 	void Update () 
 	{ 
-		CurrentState.UpdateState (this);
+		if (_isAlive)
+		{
+			CurrentState.UpdateState (this);
+		}
 	}
 
 	void OnDrawGizmos()
@@ -120,6 +142,27 @@ public class AIStateController : MonoBehaviour {
 		{
 			Gizmos.color = _currentState.SceneGizmoColor;
 			Gizmos.DrawWireSphere (transform.position, 2);
+		}
+	}
+
+	public void TakeDamage(float pDamage)
+	{
+		if (_isAlive)
+		{
+			if (_characterStats.Health - pDamage > 0)
+				_characterStats.Health -= pDamage;
+			else
+				_characterStats.Health = 0;
+
+			if (_characterStats.Health > 0)
+			{
+				// Play some FX or something
+			} 
+			else
+			{
+				TransitionToState (DeadState);
+				_isAlive = false;
+			}
 		}
 	}
 
