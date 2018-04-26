@@ -12,6 +12,8 @@ public class CharacterControls : MonoBehaviour {
 	[SerializeField]
 	private Transform _eyes;
 
+	public float _currentHealth;
+
 	private float _speedSmoothTime = 0.1f;
 	private float _speedSmoothVelocity;
 	private float _currentSpeed;
@@ -19,7 +21,7 @@ public class CharacterControls : MonoBehaviour {
 	[SerializeField]
 	private bool _debugMode = false;
 
-	private bool _isAlive = true;
+	public bool _isAlive = true;
 	public bool IsAlive
 	{
 		get { return _isAlive; }
@@ -42,7 +44,7 @@ public class CharacterControls : MonoBehaviour {
 
 	void Start () 
 	{
-		_characterStats.Health = _characterStats.InitHealth;
+		_currentHealth = _characterStats.Health;
 
 		forward = Camera.main.transform.forward;
 		forward.y = 0;
@@ -68,22 +70,29 @@ public class CharacterControls : MonoBehaviour {
 		}
 	}
 
-	public void Hurt(float pDamage = 0.0f)
+	public IEnumerator Hurt(Transform pEnemy,float pDamage = 0.0f)
 	{
+		AIStateController enemyAI = pEnemy.gameObject.GetComponent<AIStateController> ();
+
 		if (_isAlive)
 		{
-			if (_characterStats.Health - pDamage > 0)
-				_characterStats.Health -= pDamage;
-			else
-				_characterStats.Health = 0;
+			yield return new WaitForSeconds (1.5f);
 
-			if (_characterStats.Health > 0 && !_isAttacking)
+			if (Vector3.Distance (transform.position, pEnemy.position) < enemyAI.AttackRange)
 			{
-				_animator.SetTrigger (_hurtAnimations [Random.Range (0, _hurtAnimations.Length)]);
-			} 
-			else if (_characterStats.Health <= 0)
-			{
-				Die ();
+				if (_currentHealth - pDamage > 0)
+					_currentHealth -= pDamage;
+				else
+					_currentHealth = 0;
+
+				if (_currentHealth > 0 && !_isAttacking)
+				{
+					_animator.SetTrigger (_hurtAnimations [Random.Range (0, _hurtAnimations.Length)]);
+				} 
+				else if (_currentHealth <= 0)
+				{
+					Die ();
+				}
 			}
 		}
 	}
@@ -137,10 +146,18 @@ public class CharacterControls : MonoBehaviour {
 
 		foreach (Collider hit in colliders) 
 		{
+			AIStateController zombieControls = hit.gameObject.GetComponent<AIStateController> ();
+
 			if((hit.GetComponent<Collider>() == transform.GetComponent<Collider>()) || !hit.transform.CompareTag("Enemy"))
 			{
 				continue;
 			}
+
+			if (zombieControls != null && !zombieControls.IsAlive)
+			{
+				continue;
+			}
+
 			if(!closestCollider)
 			{
 				closestCollider = hit;
@@ -211,7 +228,7 @@ public class CharacterControls : MonoBehaviour {
 			//Hurt
 			if (Input.GetKeyDown (KeyCode.H))
 			{
-				Hurt ();
+				//Hurt ();
 			}
 		}
 	}

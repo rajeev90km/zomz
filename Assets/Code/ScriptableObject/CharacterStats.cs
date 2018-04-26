@@ -5,8 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName="Zomz/Data/New Character Stats",fileName="CS_New")]
 public class CharacterStats : ScriptableObject 
 {
-	public float InitHealth = 100;
-
 	public float Health = 100;
 
 	public float WalkSpeed;

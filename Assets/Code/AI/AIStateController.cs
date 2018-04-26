@@ -13,6 +13,12 @@ public class AIStateController : MonoBehaviour {
 	}
 
 	private bool _isAlive = true;
+	public bool IsAlive
+	{
+		get { return _isAlive; }
+	}
+
+	public float _currentHealth;
 
 	[SerializeField]
 	private Transform _eyes;
@@ -79,6 +85,10 @@ public class AIStateController : MonoBehaviour {
 		set{ _deadState = value; }
 	}
 
+	[Header("FX")]
+	[SerializeField]
+	private GameObject _hurtFX;
+
 	private Animator _animator;
 	public Animator Animator
 	{
@@ -100,6 +110,13 @@ public class AIStateController : MonoBehaviour {
 	[HideInInspector]
 	public List<Transform> wayPoints;
 
+	private float period = float.MaxValue;
+
+	private CharacterControls _playerControls;
+	private GameObject _player;
+
+	private Coroutine _attackPlayerCoroutine;
+
 	private int _nextWayPoint;
 	public int NextWayPoint
 	{
@@ -109,7 +126,9 @@ public class AIStateController : MonoBehaviour {
 
 	void Start () 
 	{
-		_characterStats.Health = _characterStats.InitHealth;
+		_currentHealth = _characterStats.Health;
+		_player = GameObject.FindWithTag ("Player");
+		_playerControls = _player.GetComponent<CharacterControls> ();
 
 		//Get all waypoints
 		if (_wayPointsObj != null)
@@ -147,22 +166,48 @@ public class AIStateController : MonoBehaviour {
 
 	public void TakeDamage(float pDamage)
 	{
+		StartCoroutine (DamageCoroutine (pDamage));
+	}
+
+	IEnumerator DamageCoroutine(float pDamage)
+	{
 		if (_isAlive)
 		{
-			if (_characterStats.Health - pDamage > 0)
-				_characterStats.Health -= pDamage;
+			if (_currentHealth - pDamage > 0)
+				_currentHealth -= pDamage;
 			else
-				_characterStats.Health = 0;
+				_currentHealth = 0;
 
-			if (_characterStats.Health > 0)
+			if (_currentHealth > 0)
 			{
-				// Play some FX or something
+				yield return new WaitForSeconds(0.7f);
+
+				if (_hurtFX != null)
+					Instantiate (_hurtFX, _eyes.transform.position, Quaternion.identity);
 			} 
 			else
 			{
 				TransitionToState (DeadState);
 				_isAlive = false;
 			}
+		}
+	}
+
+	public void Attack()
+	{
+		if (_characterStats)
+		{
+			if (period > _characterStats.AttackRate)
+			{
+				_animator.SetTrigger ("attack");
+
+				if (_playerControls)
+					_attackPlayerCoroutine = _playerControls.StartCoroutine (_playerControls.Hurt (transform,_characterStats.AttackStrength));
+
+				period = 0;
+			}
+
+			period += Time.deltaTime;
 		}
 	}
 

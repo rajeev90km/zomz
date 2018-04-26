@@ -6,11 +6,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName="Zomz/AI/Decision/Attack",fileName="Decision_Attack_New")]
 public class AttackDecision : Decision 
 {
-	[NonSerialized]
-	public float period = float.MaxValue;
-
 	private GameObject _player;
-	private CharacterControls _playerControls;
+	private CharacterControls _playerStats;
 
 	public override bool Decide(AIStateController pController)
 	{
@@ -18,37 +15,18 @@ public class AttackDecision : Decision
 
 		if (targetVisible)
 		{
-			Attack (pController);
+			pController.Attack ();
 		}
 
 		return targetVisible;
 	}
 
-	public void Attack(AIStateController pController)
-	{
-		if (pController.CharacterStats)
-		{
-			if (period > pController.CharacterStats.AttackRate)
-			{
-				pController.Animator.SetTrigger ("attack");
-
-				_playerControls = _player.GetComponent<CharacterControls> ();
-
-				if(_playerControls)
-					_playerControls.Hurt (pController.CharacterStats.AttackStrength);
-
-				period = 0;
-			}
-
-			period += Time.deltaTime;
-		}
-	}
-
 	public bool CanAttack(AIStateController pController)
 	{
 		_player = GameObject.FindWithTag ("Player");
+		_playerStats = _player.GetComponent<CharacterControls> ();
 
-		if (Vector3.Distance (pController.transform.position, _player.transform.position) < pController.AttackRange)
+		if ((_playerStats!=null && _playerStats.IsAlive) && (Vector3.Distance (pController.transform.position, _player.transform.position) < pController.AttackRange))
 		{
 			return true;
 		}

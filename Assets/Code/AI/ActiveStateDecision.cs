@@ -6,6 +6,7 @@ using UnityEngine;
 public class ActiveStateDecision : Decision 
 {
 	GameObject _player;
+	CharacterControls _playerStats;
 
 	void OnEnable()
 	{
@@ -17,7 +18,9 @@ public class ActiveStateDecision : Decision
 		if (pController.ChaseTarget == null)
 			pController.ChaseTarget = _player.transform;
 
-		bool chaseTargetIsActive = pController.ChaseTarget.gameObject.activeSelf;
+		_playerStats = _player.GetComponent<CharacterControls> ();
+
+		bool chaseTargetIsActive = _playerStats.IsAlive;
 		return chaseTargetIsActive;
 	}
 }

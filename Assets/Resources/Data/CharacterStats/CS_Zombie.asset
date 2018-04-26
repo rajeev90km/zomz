@@ -11,7 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 010f5063cff6044a5bc592ccdb7030cc, type: 3}
   m_Name: CS_Zombie
   m_EditorClassIdentifier: 
-  InitHealth: 100
   Health: 100
   WalkSpeed: 2
   RunSpeed: 2

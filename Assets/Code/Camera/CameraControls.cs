@@ -99,14 +99,14 @@ public class CameraControls : MonoBehaviour {
 	void LateUpdate () {
 
 		if (_targetTransform != null) {
-			if (Input.GetMouseButton (0)) {
-				transform.RotateAround (_targetTransform.position, Vector3.up, Input.GetAxis ("Mouse X") * _rotateSpeed * Time.deltaTime);
-				_cameraOffset = transform.position - _targetTransform.position;		
-			} else {			
+//			if (Input.GetMouseButton (0)) {
+//				transform.RotateAround (_targetTransform.position, Vector3.up, Input.GetAxis ("Mouse X") * _rotateSpeed * Time.deltaTime);
+//				_cameraOffset = transform.position - _targetTransform.position;		
+//			} else {			
 				Vector3 newPos = _targetTransform.position + _cameraOffset;
 				transform.position = Vector3.Slerp (transform.position, newPos, _smoothnessFactor);
 				transform.LookAt (_targetTransform);
-			}
+//			}
 		}
 	}
 }
