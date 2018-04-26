@@ -16,3 +16,4 @@ MonoBehaviour:
   RunSpeed: 2
   AttackRate: 2
   AttackStrength: 10
+  AttackRange: 1.2

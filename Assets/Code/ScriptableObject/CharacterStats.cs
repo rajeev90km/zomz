@@ -15,4 +15,6 @@ public class CharacterStats : ScriptableObject
 
 	public float AttackStrength = 10f;
 
+	public float AttackRange = 1.2f;
+
 }

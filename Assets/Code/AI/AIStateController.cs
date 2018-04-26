@@ -2,8 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Linq;
 
+[DisallowMultipleComponent]
+[RequireComponent(typeof(LineRenderer))]
 public class AIStateController : MonoBehaviour {
+
+	private bool _isAIOn = true;
+
+	private bool _beingControlled = false;
+	public bool BeingControlled
+	{
+		get{ return _beingControlled; }	 
+		set{ _beingControlled = value;}
+	}
 
 	[SerializeField]
 	private CharacterStats _characterStats;
@@ -27,6 +39,12 @@ public class AIStateController : MonoBehaviour {
 		get { return _eyes; }
 		set { _eyes = value; }
 	}
+
+	[Header("Models")]
+	[SerializeField]
+	private GameObject _normalModeModel;
+	[SerializeField]
+	private GameObject _zomzModeModel;
 
 	[SerializeField]
 	private float _lookRange = 10f;
@@ -61,6 +79,14 @@ public class AIStateController : MonoBehaviour {
 	}
 
 	[Header("AI States")]
+	[SerializeField]
+	private State _initState;
+	public State InitState
+	{
+		get{ return _initState; }
+		set{ InitState = value; }
+	}
+
 	[SerializeField]
 	private State _currentState;
 	public State CurrentState
@@ -115,8 +141,6 @@ public class AIStateController : MonoBehaviour {
 	private CharacterControls _playerControls;
 	private GameObject _player;
 
-	private Coroutine _attackPlayerCoroutine;
-
 	private int _nextWayPoint;
 	public int NextWayPoint
 	{
@@ -124,8 +148,16 @@ public class AIStateController : MonoBehaviour {
 		set{ _nextWayPoint = value; }
 	}
 
+	private LineRenderer _lineRenderer;
+	private List<Vector3> points = new List<Vector3> ();
+
+	private int _groundLayerMask;
+
 	void Start () 
 	{
+		_groundLayerMask |= (1 << LayerMask.NameToLayer ("Ground"));
+		_lineRenderer = GetComponent<LineRenderer> ();
+		_currentState = _initState;
 		_currentHealth = _characterStats.Health;
 		_player = GameObject.FindWithTag ("Player");
 		_playerControls = _player.GetComponent<CharacterControls> ();
@@ -151,8 +183,100 @@ public class AIStateController : MonoBehaviour {
 	{ 
 		if (_isAlive)
 		{
-			CurrentState.UpdateState (this);
+			if(_isAIOn)
+				CurrentState.UpdateState (this);
+
+
+			//ZOMZ
+			if(Input.GetKeyDown(KeyCode.Z))
+				ToggleAI();
+
+			if (_beingControlled)
+			{
+				_normalModeModel.SetActive (false);
+				_zomzModeModel.SetActive (true);
+
+				if (Input.GetMouseButtonDown (0))
+				{
+					points.Clear ();
+				}	
+
+				if (Input.GetMouseButton (0))
+				{
+					Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+					RaycastHit hit;
+
+					if (!points.Any ())
+					{
+						if (Physics.Raycast (ray, out hit))
+						{
+							if (hit.collider.gameObject == gameObject)
+							{
+								points.Add (hit.point);
+
+								_lineRenderer.positionCount = points.Count;
+								_lineRenderer.SetPositions (points.ToArray ());
+							}
+						}
+					} else
+					{
+						if (Physics.Raycast (ray, out hit, Mathf.Infinity, _groundLayerMask))
+						{
+							if (DistanceToLastPoint (hit.point) > 0.25f)
+							{
+								points.Add (hit.point);
+
+								_lineRenderer.positionCount = points.Count;
+								_lineRenderer.SetPositions (points.ToArray ());
+							}
+						}
+					}
+
+
+				} else if (Input.GetMouseButtonUp (0))
+				{
+
+				}
+			} 
+			else
+			{
+				_normalModeModel.SetActive (true);
+				_zomzModeModel.SetActive (false);
+
+				points.Clear ();
+				_lineRenderer.positionCount = points.Count;
+				_lineRenderer.SetPositions (points.ToArray ());
+
+			}
 		}
+	}
+
+	private float DistanceToLastPoint(Vector3 pPoint)
+	{
+		if (!points.Any())
+			return float.MaxValue;
+		return Vector3.Distance (points.Last (), pPoint);
+	}
+
+	void ResetAI()
+	{
+		navMeshAgent.isStopped = true;
+		_animator.SetTrigger ("idle");
+	}
+
+	public void ToggleAI()
+	{
+		_isAIOn = !_isAIOn;	
+
+		if (!_isAIOn)
+		{
+			ResetAI ();
+		}
+		else
+		{
+			TransitionToState (InitState);
+		}
+
 	}
 
 	void OnDrawGizmos()
@@ -202,7 +326,7 @@ public class AIStateController : MonoBehaviour {
 				_animator.SetTrigger ("attack");
 
 				if (_playerControls)
-					_attackPlayerCoroutine = _playerControls.StartCoroutine (_playerControls.Hurt (transform,_characterStats.AttackStrength));
+					_playerControls.StartCoroutine (_playerControls.Hurt (transform,_characterStats.AttackStrength));
 
 				period = 0;
 			}

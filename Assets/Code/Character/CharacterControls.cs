@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+[DisallowMultipleComponent]
 [RequireComponent(typeof(Animator))]
 public class CharacterControls : MonoBehaviour {
 
 	[SerializeField]
 	private CharacterStats _characterStats;
+	public CharacterStats CharacterStats
+	{
+		get { return _characterStats; }
+	}
 
 	[SerializeField]
 	private Transform _eyes;
@@ -118,12 +123,6 @@ public class CharacterControls : MonoBehaviour {
 
 		yield return new WaitForSeconds(0.6f);
 		_isAttacking = false;
-	}
-
-	void OnDrawGizmos()
-	{
-		Gizmos.color = Color.black;
-		Gizmos.DrawWireSphere (transform.position, 1f);
 	}
 
 	private IEnumerator BeginHurt(float pDamage = 0.0f)
