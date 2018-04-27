@@ -36,6 +36,8 @@ public class CharacterControls : MonoBehaviour {
 
 	private Animator _animator;
 
+	private ZomzControls _zomzControls;
+
 	private bool _isAttacking = false;
 	private bool _isHurting = false;
 	private bool _canAttack = true;
@@ -49,6 +51,7 @@ public class CharacterControls : MonoBehaviour {
 
 	void Start () 
 	{
+		_zomzControls = GetComponent<ZomzControls> ();
 		_currentHealth = _characterStats.Health;
 
 		forward = Camera.main.transform.forward;
@@ -174,13 +177,12 @@ public class CharacterControls : MonoBehaviour {
 		return closestCollider.gameObject;
 	}
 
-
 	void Update () 
 	{
 		if (_isAlive)
 		{
 			//Attack
-			if (Input.GetKeyDown (KeyCode.Space))
+			if (Input.GetKeyDown (KeyCode.Space) && !_zomzControls.ZomzMode)
 			{
 				if (_canAttack)
 				{
@@ -199,6 +201,9 @@ public class CharacterControls : MonoBehaviour {
 				Vector3 upMovement = forward * _currentSpeed * Time.deltaTime * Input.GetAxis ("Vertical");
 
 				Vector3 heading = Vector3.Normalize (rightMovement + upMovement);
+
+				if(_zomzControls.ZomzMode)
+					heading = Vector3.zero;
 
 				if (heading != Vector3.zero)
 				{

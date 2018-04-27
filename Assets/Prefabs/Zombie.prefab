@@ -1480,6 +1480,7 @@ GameObject:
   - component: {fileID: 114238872295355190}
   - component: {fileID: 136047089069561546}
   - component: {fileID: 120131644203422372}
+  - component: {fileID: 54021636420354512}
   m_Layer: 12
   m_Name: Zombie
   m_TagString: Enemy
@@ -1601,6 +1602,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4382366277260636}
   - component: {fileID: 95821298954060438}
+  - component: {fileID: 114244962565547056}
   m_Layer: 0
   m_Name: ZomzModel
   m_TagString: Untagged
@@ -5387,6 +5389,21 @@ Transform:
   m_Father: {fileID: 4472113523566284}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &54021636420354512
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1448135709913774}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!95 &95560987293748378
 Animator:
   serializedVersion: 3
@@ -5413,7 +5430,7 @@ Animator:
   m_GameObject: {fileID: 1481368437741964}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: e1759796738a8420ea553a29df683244, type: 3}
-  m_Controller: {fileID: 9100000, guid: 0c37809dc53b04bf29bffbc5661f727f, type: 2}
+  m_Controller: {fileID: 9100000, guid: 0dd4c7d773853497790494a2a8d0da29, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -5452,6 +5469,19 @@ MonoBehaviour:
   _wayPointsObj: {fileID: 1595053081091888, guid: 6f09920b07c6a47fb81457c680e7c475,
     type: 2}
   wayPoints: []
+--- !u!114 &114244962565547056
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1481368437741964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baa0bb84f22de4daba480f477c9da369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _characterStats: {fileID: 11400000, guid: 83d7d795f5b6f47f8a2d14a322ba6c10, type: 2}
+  _movementSpeed: 2
 --- !u!120 &120131644203422372
 LineRenderer:
   m_ObjectHideFlags: 1

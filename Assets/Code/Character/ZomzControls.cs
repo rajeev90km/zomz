@@ -7,13 +7,20 @@ using System.Linq;
 public class ZomzControls : MonoBehaviour {
 
 	private bool _zomzMode = false;
+	public bool ZomzMode
+	{
+		get{ return _zomzMode;}	
+	}
+
 	private int _enemyLayerMask;
 	private CharacterControls _characterControls;
+	private Animator _animator;
 
 	private List<AIStateController> _zombiesUnderControl;
 
 	void Start () 
 	{
+		_animator = GetComponent<Animator> ();
 		_zombiesUnderControl = new List<AIStateController> ();
 		_characterControls = GetComponent<CharacterControls> ();
 		_enemyLayerMask |= (1 << LayerMask.NameToLayer ("Enemy"));
@@ -30,6 +37,30 @@ public class ZomzControls : MonoBehaviour {
 
 	void Update () 
 	{
+		RaycastHit hit; 
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); 
+		if (_zomzMode)
+		{
+			if (Input.GetMouseButton (0))
+			{
+				if (Physics.Raycast (ray, out hit, Mathf.Infinity, _enemyLayerMask))
+				{
+					if (hit.transform != null)
+					{
+						for (int i = 0; i < _zombiesUnderControl.Count; i++)
+						{
+							if (hit.collider.gameObject != _zombiesUnderControl [i].gameObject)
+								_zombiesUnderControl [i].ClearCurrentControl ();
+							else
+								_zombiesUnderControl [i].SelectCurrentForControl ();
+						}
+
+					}
+				}
+			}
+		}
+
+
 		if (Input.GetKeyDown (KeyCode.Z))
 		{
 			ToggleZomzMode ();	
@@ -42,6 +73,8 @@ public class ZomzControls : MonoBehaviour {
 
 		if (_zomzMode)
 		{
+			_animator.SetTrigger ("idle");
+
 			Collider[] _zombiesHit = Physics.OverlapSphere (transform.position, _characterControls.CharacterStats.AttackRange, _enemyLayerMask);
 
 			for (int i = 0; i < _zombiesHit.Length; i++)
@@ -50,7 +83,7 @@ public class ZomzControls : MonoBehaviour {
 
 				if (zCtrl != null)
 				{
-					zCtrl.BeingControlled = true;
+					zCtrl.TakeControl();
 					_zombiesUnderControl.Add (zCtrl);
 				}
 			}
@@ -60,7 +93,7 @@ public class ZomzControls : MonoBehaviour {
 		{
 			for (int i = 0; i < _zombiesUnderControl.Count; i++)
 			{
-				_zombiesUnderControl [i].BeingControlled = false;
+				_zombiesUnderControl [i].RelinquishControl ();
 			}
 			_zombiesUnderControl.Clear ();
 		}

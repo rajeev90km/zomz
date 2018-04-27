@@ -17,6 +17,8 @@ public class AIStateController : MonoBehaviour {
 		set{ _beingControlled = value;}
 	}
 
+	private bool _selectedForControl = false;
+
 	[SerializeField]
 	private CharacterStats _characterStats;
 	public CharacterStats CharacterStats
@@ -152,9 +154,11 @@ public class AIStateController : MonoBehaviour {
 	private List<Vector3> points = new List<Vector3> ();
 
 	private int _groundLayerMask;
+	private ZomzActionSystem _zactionSystem;
 
 	void Start () 
 	{
+		_zactionSystem = _zomzModeModel.GetComponent<ZomzActionSystem> ();	
 		_groundLayerMask |= (1 << LayerMask.NameToLayer ("Ground"));
 		_lineRenderer = GetComponent<LineRenderer> ();
 		_currentState = _initState;
@@ -179,6 +183,30 @@ public class AIStateController : MonoBehaviour {
 		_animator.SetTrigger (_currentState.AnimationTrigger);
 	}
 
+	public void SelectCurrentForControl()
+	{
+		_selectedForControl = true;
+	}
+
+	public void ClearCurrentControl()
+	{
+		_selectedForControl = false;
+	}
+
+	public void TakeControl()
+	{
+		_beingControlled = true;
+		points.Clear ();
+		points.Add (transform.position);
+	}
+
+	public void RelinquishControl()
+	{
+		_beingControlled = false;
+		_zomzModeModel.transform.localPosition = Vector3.zero;
+		_zomzModeModel.transform.localRotation = Quaternion.identity;
+	}
+
 	void Update () 
 	{ 
 		if (_isAlive)
@@ -191,63 +219,34 @@ public class AIStateController : MonoBehaviour {
 			if(Input.GetKeyDown(KeyCode.Z))
 				ToggleAI();
 
-			if (_beingControlled)
+			if (_beingControlled && _selectedForControl)
 			{
-				_normalModeModel.SetActive (false);
 				_zomzModeModel.SetActive (true);
+				_zactionSystem.IsSelected = true;
 
-				if (Input.GetMouseButtonDown (0))
+				if (DistanceToLastPoint (_zomzModeModel.transform.position) > 0.25f)
 				{
-					points.Clear ();
-				}	
-
-				if (Input.GetMouseButton (0))
-				{
-					Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-					RaycastHit hit;
-
-					if (!points.Any ())
-					{
-						if (Physics.Raycast (ray, out hit))
-						{
-							if (hit.collider.gameObject == gameObject)
-							{
-								points.Add (hit.point);
-
-								_lineRenderer.positionCount = points.Count;
-								_lineRenderer.SetPositions (points.ToArray ());
-							}
-						}
-					} else
-					{
-						if (Physics.Raycast (ray, out hit, Mathf.Infinity, _groundLayerMask))
-						{
-							if (DistanceToLastPoint (hit.point) > 0.25f)
-							{
-								points.Add (hit.point);
-
-								_lineRenderer.positionCount = points.Count;
-								_lineRenderer.SetPositions (points.ToArray ());
-							}
-						}
-					}
-
-
-				} else if (Input.GetMouseButtonUp (0))
-				{
-
+					points.Add (_zomzModeModel.transform.position);
+					_lineRenderer.positionCount = points.Count;
+					_lineRenderer.SetPositions (points.ToArray ());
 				}
-			} 
-			else
-			{
-				_normalModeModel.SetActive (true);
-				_zomzModeModel.SetActive (false);
 
+			} 
+
+			if (!_selectedForControl)
+			{
+				_zactionSystem.IsSelected = false;
+			}
+
+			if (!_beingControlled)
+			{
+				_zomzModeModel.SetActive (false);
+				_zactionSystem.IsSelected = false;
 				points.Clear ();
 				_lineRenderer.positionCount = points.Count;
 				_lineRenderer.SetPositions (points.ToArray ());
-
 			}
+
 		}
 	}
 
