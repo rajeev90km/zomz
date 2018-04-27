@@ -18,6 +18,10 @@ public class AIStateController : MonoBehaviour {
 	}
 
 	private bool _selectedForControl = false;
+	public bool IsSelectedForControl
+	{
+		get { return _selectedForControl; }
+	}
 
 	[SerializeField]
 	private CharacterStats _characterStats;
@@ -143,6 +147,8 @@ public class AIStateController : MonoBehaviour {
 	private CharacterControls _playerControls;
 	private GameObject _player;
 
+	private bool _zomzAttack = false;
+
 	private int _nextWayPoint;
 	public int NextWayPoint
 	{
@@ -154,12 +160,16 @@ public class AIStateController : MonoBehaviour {
 	private List<Vector3> points = new List<Vector3> ();
 
 	private int _groundLayerMask;
+	private int _enemyPlayerMask;
 	private ZomzActionSystem _zactionSystem;
 
 	void Start () 
 	{
 		_zactionSystem = _zomzModeModel.GetComponent<ZomzActionSystem> ();	
+
 		_groundLayerMask |= (1 << LayerMask.NameToLayer ("Ground"));
+		_enemyPlayerMask = (1 << LayerMask.NameToLayer ("Enemy")) | (1 << LayerMask.NameToLayer ("Player")); 
+
 		_lineRenderer = GetComponent<LineRenderer> ();
 		_currentState = _initState;
 		_currentHealth = _characterStats.Health;
@@ -219,6 +229,7 @@ public class AIStateController : MonoBehaviour {
 			if(Input.GetKeyDown(KeyCode.Z))
 				ToggleAI();
 
+
 			if (_beingControlled && _selectedForControl)
 			{
 				_zomzModeModel.SetActive (true);
@@ -231,11 +242,35 @@ public class AIStateController : MonoBehaviour {
 					_lineRenderer.SetPositions (points.ToArray ());
 				}
 
-			} 
+				//Show attack sphere
+				if (Input.GetKeyDown (KeyCode.Alpha1))
+				{
+					_zomzAttack = true;
+				}
 
-			if (!_selectedForControl)
-			{
-				_zactionSystem.IsSelected = false;
+				if (_zomzAttack)
+				{
+					if (Input.GetMouseButtonDown (1))
+					{
+						RaycastHit hit; 
+						Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); 
+						if (Physics.Raycast (ray, out hit, Mathf.Infinity, _enemyPlayerMask))
+						{
+							if (hit.transform != null)
+							{
+								if (hit.collider.gameObject != this.gameObject)
+								{
+									if (Vector3.Distance (_zomzModeModel.transform.position, hit.transform.position) <= _characterStats.AttackRange)
+									{
+										//add action to queue
+										Debug.Log (hit.transform.name);
+										_zactionSystem.Animator.SetTrigger ("attack");
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 
 			if (!_beingControlled)
@@ -245,6 +280,8 @@ public class AIStateController : MonoBehaviour {
 				points.Clear ();
 				_lineRenderer.positionCount = points.Count;
 				_lineRenderer.SetPositions (points.ToArray ());
+				_selectedForControl = false;
+				_zomzAttack = false;
 			}
 
 		}

@@ -23,7 +23,7 @@ public class ZomzControls : MonoBehaviour {
 		_animator = GetComponent<Animator> ();
 		_zombiesUnderControl = new List<AIStateController> ();
 		_characterControls = GetComponent<CharacterControls> ();
-		_enemyLayerMask |= (1 << LayerMask.NameToLayer ("Enemy"));
+		_enemyLayerMask = (1 << LayerMask.NameToLayer ("Enemy"));
 	}
 
 	void OnDrawGizmos()
@@ -41,7 +41,7 @@ public class ZomzControls : MonoBehaviour {
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); 
 		if (_zomzMode)
 		{
-			if (Input.GetMouseButton (0))
+			if (Input.GetMouseButtonDown (0))
 			{
 				if (Physics.Raycast (ray, out hit, Mathf.Infinity, _enemyLayerMask))
 				{
@@ -60,10 +60,9 @@ public class ZomzControls : MonoBehaviour {
 			}
 		}
 
-
 		if (Input.GetKeyDown (KeyCode.Z))
 		{
-			ToggleZomzMode ();	
+			ToggleZomzMode ();
 		}
 	}
 

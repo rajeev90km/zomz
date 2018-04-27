@@ -20,6 +20,10 @@ public class ZomzActionSystem : MonoBehaviour {
 	private float _movementSpeed = 2f;
 
 	private Animator _animator;	
+	public Animator Animator
+	{
+		get{ return _animator; }	
+	}
 
 	void OnEnable () 
 	{
@@ -50,11 +54,11 @@ public class ZomzActionSystem : MonoBehaviour {
 			{
 				_animator.SetFloat ("speed", 0);
 			}
-
+		
 			//Show attack sphere
 			if (Input.GetKeyDown (KeyCode.Alpha1))
 			{
-			
+				//Set UI Attack State
 			}
 		}
 
