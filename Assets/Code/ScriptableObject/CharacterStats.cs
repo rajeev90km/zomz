@@ -17,4 +17,8 @@ public class CharacterStats : ScriptableObject
 
 	public float AttackRange = 1.2f;
 
+	public float ZomzRange = 12f;
+
+	public float ZomzSpeed = 5f;
+
 }

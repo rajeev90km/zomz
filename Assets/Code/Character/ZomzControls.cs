@@ -3,6 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+
+public enum ZomzAction
+{
+	NONE = 0,
+	MOVE = 1,
+	ATTACK = 2
+}
+
+public class ZomzActionPoint
+{
+	public Vector3 Position;
+	public ZomzAction ZomzAction;
+	public Transform ActionTarget;
+
+	public ZomzActionPoint(Vector3 pPosition, ZomzAction pAction, Transform pTarget)
+	{
+		Position = pPosition;
+		ZomzAction = pAction;
+		ActionTarget = pTarget;
+	}
+
+}
+
 [DisallowMultipleComponent]
 public class ZomzControls : MonoBehaviour {
 
@@ -40,7 +63,7 @@ public class ZomzControls : MonoBehaviour {
 		if (_characterControls != null)
 		{
 			Gizmos.color = Color.black;
-			Gizmos.DrawWireSphere (transform.position, _characterControls.CharacterStats.AttackRange);
+			Gizmos.DrawWireSphere (transform.position, _characterControls.CharacterStats.ZomzRange);
 		}
 	}
 
@@ -86,9 +109,11 @@ public class ZomzControls : MonoBehaviour {
 
 			if (_zomzMode)
 			{
+				_zombiesUnderControl.Clear ();
+
 				_animator.SetTrigger ("idle");
 
-				Collider[] _zombiesHit = Physics.OverlapSphere (transform.position, _characterControls.CharacterStats.AttackRange, _enemyLayerMask);
+				Collider[] _zombiesHit = Physics.OverlapSphere (transform.position, _characterControls.CharacterStats.ZomzRange, _enemyLayerMask);
 
 				for (int i = 0; i < _zombiesHit.Length; i++)
 				{
@@ -109,7 +134,6 @@ public class ZomzControls : MonoBehaviour {
 				{
 					_zombiesUnderControl [i].ExecuteActions ();
 				}
-				_zombiesUnderControl.Clear ();
 
 				StartCoroutine (ZomzCoolDown ());
 			}

@@ -51,6 +51,12 @@ public class AIStateController : MonoBehaviour {
 	private GameObject _normalModeModel;
 	[SerializeField]
 	private GameObject _zomzModeModel;
+	[SerializeField]
+	private Material _normalModeMaterial;
+	[SerializeField]
+	private Material _zomzModeMaterial;
+	[SerializeField]
+	private GameObject _selectionQuad;
 
 	[SerializeField]
 	private float _lookRange = 10f;
@@ -157,14 +163,24 @@ public class AIStateController : MonoBehaviour {
 	}
 
 	private LineRenderer _lineRenderer;
+
+	private Queue<ZomzActionPoint> _zomzActionPoints = new Queue<ZomzActionPoint>();
+
 	private List<Vector3> points = new List<Vector3> ();
 
 	private int _groundLayerMask;
 	private int _enemyPlayerMask;
 	private ZomzActionSystem _zactionSystem;
+	private Renderer _renderer;
+
+	private bool _isExecutingActions = false;
+
+
+	private Coroutine _zomzAttackCoroutine;
 
 	void Start () 
 	{
+		_renderer = _normalModeModel.GetComponent<Renderer> ();
 		_zactionSystem = _zomzModeModel.GetComponent<ZomzActionSystem> ();	
 
 		_groundLayerMask |= (1 << LayerMask.NameToLayer ("Ground"));
@@ -196,40 +212,119 @@ public class AIStateController : MonoBehaviour {
 	public void SelectCurrentForControl()
 	{
 		_selectedForControl = true;
+		if (_selectionQuad)
+			_selectionQuad.SetActive (true);
 	}
 
 	public void ClearCurrentControl()
 	{
 		_selectedForControl = false;
+		if (_selectionQuad)
+			_selectionQuad.SetActive (false);
 	}
 
 	public void TakeControl()
 	{
+		_renderer.sharedMaterial = _zomzModeMaterial;
+
 		_beingControlled = true;
+		_zomzActionPoints.Clear ();
+		_zomzActionPoints.Enqueue(new ZomzActionPoint(_zomzModeModel.transform.position,ZomzAction.MOVE,null));
+
 		points.Clear ();
-		points.Add (transform.position);
+		points.Add (_zomzActionPoints.Last().Position);
+
 		ToggleAI ();
 	}
 
 
 	public void ExecuteActions()
 	{
-		StartCoroutine (zomzActions());
-	}
-
-	IEnumerator zomzActions()
-	{
-		yield return new WaitForSeconds(2f);
-		RelinquishControl ();
-		ToggleAI ();
+		ClearCurrentControl ();
+		_zomzModeModel.SetActive (false);
+		_zactionSystem.IsSelected = false;
+		_isExecutingActions = true;
+		navMeshAgent.ResetPath ();
+		_animator.SetTrigger ("walk");
+		Time.timeScale = 3;
 	}
 
 
 	public void RelinquishControl()
 	{
+		_renderer.sharedMaterial = _normalModeMaterial;
+		Time.timeScale = 1;
 		_beingControlled = false;
 		_zomzModeModel.transform.localPosition = Vector3.zero;
 		_zomzModeModel.transform.localRotation = Quaternion.identity;
+		_zomzActionPoints.Clear ();
+		points.Clear ();
+		ToggleAI ();
+		_isExecutingActions = false;
+		navMeshAgent.speed = _characterStats.WalkSpeed;
+	}
+
+	void UpdateZomzActions()
+	{
+		int i = 0;
+		if (!navMeshAgent.hasPath && _zomzAttackCoroutine==null)
+		{
+			ZomzActionPoint actionPoint = _zomzActionPoints.Dequeue ();
+
+			//Move
+			if (actionPoint.ZomzAction == ZomzAction.MOVE)
+			{
+				navMeshAgent.SetDestination (actionPoint.Position);
+				navMeshAgent.speed = _characterStats.ZomzSpeed;
+
+				//Update Line Renderer
+				if(points.Count>0)
+					points.RemoveAt (i++);
+				_lineRenderer.positionCount = points.Count;
+				_lineRenderer.SetPositions (points.ToArray());
+			} 
+			//Attack
+			else if (actionPoint.ZomzAction == ZomzAction.ATTACK)
+			{
+				if (actionPoint.ActionTarget != null)
+				{
+					transform.LookAt (actionPoint.ActionTarget);
+					_animator.SetTrigger ("attack");
+
+					DealZomzDamage (actionPoint.ActionTarget);
+
+					if (_zomzAttackCoroutine == null)
+						_zomzAttackCoroutine = StartCoroutine (WaitToEndZomzAttack ());
+				}
+			}
+		}
+	}
+
+	void DealZomzDamage(Transform pTarget)
+	{
+		if (pTarget.CompareTag ("Enemy"))
+		{
+			AIStateController otherZombie = pTarget.GetComponent<AIStateController> ();
+			if (otherZombie != null)
+			{
+				otherZombie.TakeDamage (_characterStats.AttackStrength);
+			}
+		}
+
+		if (pTarget.CompareTag ("Player"))
+		{
+			if(_playerControls)
+				_playerControls.StartCoroutine (_playerControls.Hurt (transform,_characterStats.AttackStrength));
+		}
+
+
+	}
+
+	IEnumerator WaitToEndZomzAttack()
+	{
+		yield return new WaitForSeconds (_characterStats.AttackRate);
+		_zomzAttackCoroutine = null;
+		_animator.SetTrigger ("walk");
 	}
 
 	void Update () 
@@ -240,16 +335,31 @@ public class AIStateController : MonoBehaviour {
 				CurrentState.UpdateState (this);
 			
 
+			//Execute Actions
+			if (_isExecutingActions)
+			{
+				if (_zomzActionPoints.Count > 0)
+				{
+					UpdateZomzActions ();
+				} 
+				else
+				{
+					RelinquishControl ();
+				}
+			}
+
+			//Under Zomz mode and selected by clicking
 			if (_beingControlled && _selectedForControl)
 			{
 				_zomzModeModel.SetActive (true);
 				_zactionSystem.IsSelected = true;
 
-				if (DistanceToLastPoint (_zomzModeModel.transform.position) > 0.25f)
+				if (DistanceToLastPoint (_zomzModeModel.transform.position) > 0.5f)
 				{
-					points.Add (_zomzModeModel.transform.position);
+					_zomzActionPoints.Enqueue(new ZomzActionPoint(_zomzModeModel.transform.position,ZomzAction.MOVE,null));
+					points.Add (_zomzActionPoints.Last().Position);
 					_lineRenderer.positionCount = points.Count;
-					_lineRenderer.SetPositions (points.ToArray ());
+					_lineRenderer.SetPositions (points.ToArray());
 				}
 
 				//Show attack sphere
@@ -273,8 +383,7 @@ public class AIStateController : MonoBehaviour {
 
 									if (Vector3.Distance (_zomzModeModel.transform.position, hit.transform.position) <= _characterStats.AttackRange)
 									{
-										//add action to queue
-										Debug.Log (hit.transform.name);
+										_zomzActionPoints.Enqueue(new ZomzActionPoint(_zomzModeModel.transform.position,ZomzAction.ATTACK,hit.transform));
 										_zactionSystem.Animator.SetTrigger ("attack");
 									}
 								}
@@ -284,10 +393,12 @@ public class AIStateController : MonoBehaviour {
 				}
 			}
 
+			//Released from zomz mode
 			if (!_beingControlled)
 			{
 				_zomzModeModel.SetActive (false);
 				_zactionSystem.IsSelected = false;
+				_zomzActionPoints.Clear ();
 				points.Clear ();
 				_lineRenderer.positionCount = points.Count;
 				_lineRenderer.SetPositions (points.ToArray ());
@@ -295,6 +406,7 @@ public class AIStateController : MonoBehaviour {
 				_zomzAttack = false;
 			}
 
+			//Different Zombie Selected
 			if (!_selectedForControl)
 			{
 				_zactionSystem.IsSelected = false;
@@ -305,9 +417,9 @@ public class AIStateController : MonoBehaviour {
 
 	private float DistanceToLastPoint(Vector3 pPoint)
 	{
-		if (!points.Any())
+		if (!_zomzActionPoints.Any())
 			return float.MaxValue;
-		return Vector3.Distance (points.Last (), pPoint);
+		return Vector3.Distance (_zomzActionPoints.Last().Position, pPoint);
 	}
 
 	void ResetAI()

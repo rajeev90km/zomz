@@ -2210,6 +2210,7 @@ MonoBehaviour:
   _currentHealth: 0
   _debugMode: 0
   _isAlive: 1
+  _hurtFX: {fileID: 100000, guid: f7261c1b6aae14ad3bb8800b75e3436b, type: 2}
 --- !u!114 &114653738948060212
 MonoBehaviour:
   m_ObjectHideFlags: 1

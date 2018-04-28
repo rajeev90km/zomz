@@ -16,6 +16,10 @@ public class CharacterControls : MonoBehaviour {
 
 	[SerializeField]
 	private Transform _eyes;
+	public Transform Eyes
+	{
+		get{ return _eyes;}	
+	}
 
 	public float _currentHealth;
 
@@ -48,6 +52,10 @@ public class CharacterControls : MonoBehaviour {
 	private string[] _attackAnimations = {"attack1","attack2","attack3","attackcombo1","attackcombo2"};
 	private string[] _hurtAnimations = {"hurt1","hurt2","hurt3"};
 
+
+	[Header("FX")]
+	[SerializeField]
+	private GameObject _hurtFX;
 
 	void Start () 
 	{
@@ -86,12 +94,16 @@ public class CharacterControls : MonoBehaviour {
 		{
 			yield return new WaitForSeconds (1.5f);
 
-			if (Vector3.Distance (transform.position, pEnemy.position) < enemyAI.AttackRange)
+
+			if (Vector3.Distance (transform.position, pEnemy.position) < enemyAI.CharacterStats.AttackRange)
 			{
 				if (_currentHealth - pDamage > 0)
 					_currentHealth -= pDamage;
 				else
 					_currentHealth = 0;
+
+				if (_hurtFX != null)
+					Instantiate (_hurtFX, _eyes.transform.position, Quaternion.identity);
 
 				if (_currentHealth > 0 && !_isAttacking)
 				{
@@ -143,7 +155,7 @@ public class CharacterControls : MonoBehaviour {
 
 	public GameObject GetClosestObject()
 	{
-		Collider[] colliders = Physics.OverlapSphere (transform.position, 1f);
+		Collider[] colliders = Physics.OverlapSphere (transform.position, _characterStats.AttackRange);
 		Collider closestCollider = null;
 
 		foreach (Collider hit in colliders) 

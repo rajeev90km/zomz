@@ -26,7 +26,7 @@ public class AttackDecision : Decision
 		_player = GameObject.FindWithTag ("Player");
 		_playerStats = _player.GetComponent<CharacterControls> ();
 
-		if ((_playerStats!=null && _playerStats.IsAlive) && (Vector3.Distance (pController.transform.position, _player.transform.position) < pController.AttackRange))
+		if ((_playerStats!=null && _playerStats.IsAlive) && (Vector3.Distance (pController.transform.position, _player.transform.position) < pController.CharacterStats.AttackRate))
 		{
 			return true;
 		}
