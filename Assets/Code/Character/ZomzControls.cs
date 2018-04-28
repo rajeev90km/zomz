@@ -18,6 +18,15 @@ public class ZomzControls : MonoBehaviour {
 
 	private List<AIStateController> _zombiesUnderControl;
 
+	private bool _canUseZomzMode = true;
+
+	private const float ZOMZ_COOLDOWN_TIME = 5f;
+
+
+	[Header("Debug")]
+	[SerializeField]
+	private GameObject _debugCanvas;
+
 	void Start () 
 	{
 		_animator = GetComponent<Animator> ();
@@ -68,33 +77,48 @@ public class ZomzControls : MonoBehaviour {
 
 	void ToggleZomzMode()
 	{
-		_zomzMode = !_zomzMode;
 
-		if (_zomzMode)
+		if (_canUseZomzMode)
 		{
-			_animator.SetTrigger ("idle");
+			_zomzMode = !_zomzMode;
 
-			Collider[] _zombiesHit = Physics.OverlapSphere (transform.position, _characterControls.CharacterStats.AttackRange, _enemyLayerMask);
+			_debugCanvas.SetActive (_zomzMode);
 
-			for (int i = 0; i < _zombiesHit.Length; i++)
+			if (_zomzMode)
 			{
-				AIStateController zCtrl =  _zombiesHit [i].GetComponent<AIStateController>();
+				_animator.SetTrigger ("idle");
 
-				if (zCtrl != null)
+				Collider[] _zombiesHit = Physics.OverlapSphere (transform.position, _characterControls.CharacterStats.AttackRange, _enemyLayerMask);
+
+				for (int i = 0; i < _zombiesHit.Length; i++)
 				{
-					zCtrl.TakeControl();
-					_zombiesUnderControl.Add (zCtrl);
-				}
-			}
+					AIStateController zCtrl = _zombiesHit [i].GetComponent<AIStateController> ();
 
-		} 
-		else
-		{
-			for (int i = 0; i < _zombiesUnderControl.Count; i++)
+					if (zCtrl != null)
+					{
+						zCtrl.TakeControl ();
+						_zombiesUnderControl.Add (zCtrl);
+					}
+				}
+			} 
+			else
 			{
-				_zombiesUnderControl [i].RelinquishControl ();
+				_canUseZomzMode = false;
+
+				for (int i = 0; i < _zombiesUnderControl.Count; i++)
+				{
+					_zombiesUnderControl [i].ExecuteActions ();
+				}
+				_zombiesUnderControl.Clear ();
+
+				StartCoroutine (ZomzCoolDown ());
 			}
-			_zombiesUnderControl.Clear ();
 		}
+	}
+
+	IEnumerator ZomzCoolDown()
+	{
+		yield return new WaitForSeconds (ZOMZ_COOLDOWN_TIME);
+		_canUseZomzMode = true;
 	}
 }

@@ -208,7 +208,22 @@ public class AIStateController : MonoBehaviour {
 		_beingControlled = true;
 		points.Clear ();
 		points.Add (transform.position);
+		ToggleAI ();
 	}
+
+
+	public void ExecuteActions()
+	{
+		StartCoroutine (zomzActions());
+	}
+
+	IEnumerator zomzActions()
+	{
+		yield return new WaitForSeconds(2f);
+		RelinquishControl ();
+		ToggleAI ();
+	}
+
 
 	public void RelinquishControl()
 	{
@@ -223,12 +238,7 @@ public class AIStateController : MonoBehaviour {
 		{
 			if(_isAIOn)
 				CurrentState.UpdateState (this);
-
-
-			//ZOMZ
-			if(Input.GetKeyDown(KeyCode.Z))
-				ToggleAI();
-
+			
 
 			if (_beingControlled && _selectedForControl)
 			{
@@ -260,6 +270,7 @@ public class AIStateController : MonoBehaviour {
 							{
 								if (hit.collider.gameObject != this.gameObject)
 								{
+
 									if (Vector3.Distance (_zomzModeModel.transform.position, hit.transform.position) <= _characterStats.AttackRange)
 									{
 										//add action to queue
@@ -282,6 +293,11 @@ public class AIStateController : MonoBehaviour {
 				_lineRenderer.SetPositions (points.ToArray ());
 				_selectedForControl = false;
 				_zomzAttack = false;
+			}
+
+			if (!_selectedForControl)
+			{
+				_zactionSystem.IsSelected = false;
 			}
 
 		}
