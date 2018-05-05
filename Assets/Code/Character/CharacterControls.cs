@@ -52,10 +52,11 @@ public class CharacterControls : MonoBehaviour {
 	private string[] _attackAnimations = {"attack1","attack2","attack3","attackcombo1","attackcombo2"};
 	private string[] _hurtAnimations = {"hurt1","hurt2","hurt3"};
 
-
 	[Header("FX")]
 	[SerializeField]
 	private GameObject _hurtFX;
+
+
 
 	void Start () 
 	{
@@ -202,7 +203,6 @@ public class CharacterControls : MonoBehaviour {
 				}
 			}
 
-
 			if (!_isAttacking && !_isHurting)
 			{
 				bool running = Input.GetKey (KeyCode.LeftShift);
@@ -214,7 +214,7 @@ public class CharacterControls : MonoBehaviour {
 
 				Vector3 heading = Vector3.Normalize (rightMovement + upMovement);
 
-				if(_zomzControls.ZomzMode)
+				if(_zomzControls.NumZombiesUnderControl>0)
 					heading = Vector3.zero;
 
 				if (heading != Vector3.zero)

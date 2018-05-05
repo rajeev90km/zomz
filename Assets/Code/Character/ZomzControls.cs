@@ -40,15 +40,26 @@ public class ZomzControls : MonoBehaviour {
 	private Animator _animator;
 
 	private List<AIStateController> _zombiesUnderControl;
+	public int NumZombiesUnderControl
+	{
+		get { return _zombiesUnderControl.Count; }
+	}
 
 	private bool _canUseZomzMode = true;
 
 	private const float ZOMZ_COOLDOWN_TIME = 5f;
 
-
 	[Header("Debug")]
 	[SerializeField]
 	private GameObject _debugCanvas;
+
+	[Header("Events")]
+	[SerializeField]
+	private GameEvent _zomzStartEvent;
+
+	[SerializeField]
+	private GameEvent _zomzEndEvent;
+
 
 	void Start () 
 	{
@@ -94,11 +105,12 @@ public class ZomzControls : MonoBehaviour {
 
 		if (Input.GetKeyDown (KeyCode.Z))
 		{
-			ToggleZomzMode ();
+			//TODO check for null and override
+			StartCoroutine(ToggleZomzMode ());
 		}
 	}
 
-	void ToggleZomzMode()
+	IEnumerator ToggleZomzMode()
 	{
 
 		if (_canUseZomzMode)
@@ -109,6 +121,9 @@ public class ZomzControls : MonoBehaviour {
 
 			if (_zomzMode)
 			{
+				if (_zomzStartEvent)
+					_zomzStartEvent.Raise ();
+
 				_zombiesUnderControl.Clear ();
 
 				_animator.SetTrigger ("idle");
@@ -132,8 +147,18 @@ public class ZomzControls : MonoBehaviour {
 
 				for (int i = 0; i < _zombiesUnderControl.Count; i++)
 				{
-					_zombiesUnderControl [i].ExecuteActions ();
+					yield return StartCoroutine(_zombiesUnderControl [i].ExecuteActions ());
 				}
+
+				for (int i = 0; i < _zombiesUnderControl.Count; i++)
+				{
+					_zombiesUnderControl [i].RelinquishControl ();
+				}
+
+				_zombiesUnderControl.Clear ();
+
+				if (_zomzEndEvent!=null)
+					_zomzEndEvent.Raise ();
 
 				StartCoroutine (ZomzCoolDown ());
 			}

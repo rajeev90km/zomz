@@ -233,12 +233,10 @@ public class AIStateController : MonoBehaviour {
 
 		points.Clear ();
 		points.Add (_zomzActionPoints.Last().Position);
-
-		ToggleAI ();
 	}
 
 
-	public void ExecuteActions()
+	public IEnumerator ExecuteActions()
 	{
 		ClearCurrentControl ();
 		_zomzModeModel.SetActive (false);
@@ -247,6 +245,20 @@ public class AIStateController : MonoBehaviour {
 		navMeshAgent.ResetPath ();
 		_animator.SetTrigger ("walk");
 		Time.timeScale = 3;
+
+		//Execute Actions
+		if (_isExecutingActions)
+		{
+			while (_zomzActionPoints.Count > 0)
+			{
+				UpdateZomzActions ();
+				yield return null;
+			} 
+			_animator.SetTrigger ("idle");
+			//RelinquishControl ();
+		}
+
+		yield return null;
 	}
 
 
@@ -259,7 +271,6 @@ public class AIStateController : MonoBehaviour {
 		_zomzModeModel.transform.localRotation = Quaternion.identity;
 		_zomzActionPoints.Clear ();
 		points.Clear ();
-		ToggleAI ();
 		_isExecutingActions = false;
 		navMeshAgent.speed = _characterStats.WalkSpeed;
 	}
@@ -334,19 +345,6 @@ public class AIStateController : MonoBehaviour {
 			if(_isAIOn)
 				CurrentState.UpdateState (this);
 			
-
-			//Execute Actions
-			if (_isExecutingActions)
-			{
-				if (_zomzActionPoints.Count > 0)
-				{
-					UpdateZomzActions ();
-				} 
-				else
-				{
-					RelinquishControl ();
-				}
-			}
 
 			//Under Zomz mode and selected by clicking
 			if (_beingControlled && _selectedForControl)
@@ -428,9 +426,9 @@ public class AIStateController : MonoBehaviour {
 		_animator.SetTrigger ("idle");
 	}
 
-	public void ToggleAI()
+	public void ToggleAI(bool pOnOff)
 	{
-		_isAIOn = !_isAIOn;	
+		_isAIOn = pOnOff;	
 
 		if (!_isAIOn)
 		{
@@ -450,6 +448,9 @@ public class AIStateController : MonoBehaviour {
 			Gizmos.color = _currentState.SceneGizmoColor;
 			Gizmos.DrawWireSphere (transform.position, 2);
 		}
+
+		Gizmos.color = Color.white;
+		Gizmos.DrawWireSphere (transform.position, _characterStats.ZomzRange);
 	}
 
 	public void TakeDamage(float pDamage)

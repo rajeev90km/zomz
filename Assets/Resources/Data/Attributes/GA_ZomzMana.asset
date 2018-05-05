@@ -8,14 +8,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 010f5063cff6044a5bc592ccdb7030cc, type: 3}
-  m_Name: CS_Zombie
+  m_Script: {fileID: 11500000, guid: 984c2dca39050404d854789ef087a6fd, type: 3}
+  m_Name: GA_ZomzMana
   m_EditorClassIdentifier: 
-  Health: 100
-  WalkSpeed: 2
-  RunSpeed: 2
-  AttackRate: 2
-  AttackStrength: 10
-  AttackRange: 1.5
-  ZomzRange: 10
-  ZomzSpeed: 5
+  InitValue: 100
+  CurrentValue: 100
