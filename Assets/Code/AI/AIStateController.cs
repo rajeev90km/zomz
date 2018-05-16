@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 using System.Linq;
 
 [DisallowMultipleComponent]
@@ -45,6 +46,9 @@ public class AIStateController : MonoBehaviour {
 		get { return _eyes; }
 		set { _eyes = value; }
 	}
+
+	[SerializeField]
+	private Image _zombieHealthBar;
 
 	[Header("Models")]
 	[SerializeField]
@@ -162,6 +166,16 @@ public class AIStateController : MonoBehaviour {
 		set{ _nextWayPoint = value; }
 	}
 
+	[Header("Mana Costs")]
+	[SerializeField]
+	private GameFloatAttribute _zomzManaAttribute;
+
+	[SerializeField]
+	private float _manaForUnitMovement = 2f;
+
+	[SerializeField]
+	private float _manaForAttack = 10f;
+
 	private LineRenderer _lineRenderer;
 
 	private Queue<ZomzActionPoint> _zomzActionPoints = new Queue<ZomzActionPoint>();
@@ -177,6 +191,7 @@ public class AIStateController : MonoBehaviour {
 
 
 	private Coroutine _zomzAttackCoroutine;
+	private Coroutine _hurtPlayerCoroutine;
 
 	void Start () 
 	{
@@ -227,6 +242,9 @@ public class AIStateController : MonoBehaviour {
 	{
 		_renderer.sharedMaterial = _zomzModeMaterial;
 
+		if(_zactionSystem)
+			_zactionSystem.enabled = true;
+
 		_beingControlled = true;
 		_zomzActionPoints.Clear ();
 		_zomzActionPoints.Enqueue(new ZomzActionPoint(_zomzModeModel.transform.position,ZomzAction.MOVE,null));
@@ -243,7 +261,9 @@ public class AIStateController : MonoBehaviour {
 		_zactionSystem.IsSelected = false;
 		_isExecutingActions = true;
 		navMeshAgent.ResetPath ();
-		_animator.SetTrigger ("walk");
+
+		if(_zomzActionPoints.Count>1)
+			_animator.SetTrigger ("walk");
 		Time.timeScale = 3;
 
 		//Execute Actions
@@ -253,10 +273,12 @@ public class AIStateController : MonoBehaviour {
 			{
 				UpdateZomzActions ();
 				yield return null;
-			} 
-			_animator.SetTrigger ("idle");
+			}
 			//RelinquishControl ();
-		}
+		} 
+
+		if(_zomzActionPoints.Count==0)
+			_animator.SetTrigger ("idle");
 
 		yield return null;
 	}
@@ -264,6 +286,7 @@ public class AIStateController : MonoBehaviour {
 
 	public void RelinquishControl()
 	{
+		_isExecutingActions = false;
 		_renderer.sharedMaterial = _normalModeMaterial;
 		Time.timeScale = 1;
 		_beingControlled = false;
@@ -271,8 +294,8 @@ public class AIStateController : MonoBehaviour {
 		_zomzModeModel.transform.localRotation = Quaternion.identity;
 		_zomzActionPoints.Clear ();
 		points.Clear ();
-		_isExecutingActions = false;
 		navMeshAgent.speed = _characterStats.WalkSpeed;
+		_animator.SetTrigger ("walk");
 	}
 
 	void UpdateZomzActions()
@@ -345,50 +368,62 @@ public class AIStateController : MonoBehaviour {
 			if(_isAIOn)
 				CurrentState.UpdateState (this);
 			
-
-			//Under Zomz mode and selected by clicking
-			if (_beingControlled && _selectedForControl)
+			if (_zomzManaAttribute.CurrentValue > 0)
 			{
-				_zomzModeModel.SetActive (true);
-				_zactionSystem.IsSelected = true;
-
-				if (DistanceToLastPoint (_zomzModeModel.transform.position) > 0.5f)
+				//Under Zomz mode and selected by clicking
+				if (_beingControlled && _selectedForControl)
 				{
-					_zomzActionPoints.Enqueue(new ZomzActionPoint(_zomzModeModel.transform.position,ZomzAction.MOVE,null));
-					points.Add (_zomzActionPoints.Last().Position);
-					_lineRenderer.positionCount = points.Count;
-					_lineRenderer.SetPositions (points.ToArray());
-				}
+					_zomzModeModel.SetActive (true);
+					_zactionSystem.IsSelected = true;
 
-				//Show attack sphere
-				if (Input.GetKeyDown (KeyCode.Alpha1))
-				{
-					_zomzAttack = true;
-				}
-
-				if (_zomzAttack)
-				{
-					if (Input.GetMouseButtonDown (1))
+					if (DistanceToLastPoint (_zomzModeModel.transform.position) > 0.5f)
 					{
-						RaycastHit hit; 
-						Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); 
-						if (Physics.Raycast (ray, out hit, Mathf.Infinity, _enemyPlayerMask))
-						{
-							if (hit.transform != null)
-							{
-								if (hit.collider.gameObject != this.gameObject)
-								{
+						if (_zomzManaAttribute)
+							_zomzManaAttribute.CurrentValue -= _manaForUnitMovement;
+					
+						_zomzActionPoints.Enqueue (new ZomzActionPoint (_zomzModeModel.transform.position, ZomzAction.MOVE, null));
+						points.Add (_zomzActionPoints.Last ().Position);
+						_lineRenderer.positionCount = points.Count;
+						_lineRenderer.SetPositions (points.ToArray ());
+					}
 
-									if (Vector3.Distance (_zomzModeModel.transform.position, hit.transform.position) <= _characterStats.AttackRange)
+					//Show attack sphere
+					if (Input.GetKeyDown (KeyCode.Alpha1))
+					{
+						_zomzAttack = true;
+					}
+
+					if (_zomzAttack)
+					{
+						if (Input.GetMouseButtonDown (1))
+						{
+							RaycastHit hit; 
+							Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition); 
+							if (Physics.Raycast (ray, out hit, Mathf.Infinity, _enemyPlayerMask))
+							{
+								if (hit.transform != null)
+								{
+									if (hit.collider.gameObject != this.gameObject)
 									{
-										_zomzActionPoints.Enqueue(new ZomzActionPoint(_zomzModeModel.transform.position,ZomzAction.ATTACK,hit.transform));
-										_zactionSystem.Animator.SetTrigger ("attack");
+
+										if (Vector3.Distance (_zomzModeModel.transform.position, hit.transform.position) <= _characterStats.AttackRange)
+										{
+											if (_zomzManaAttribute)
+												_zomzManaAttribute.CurrentValue -= _manaForAttack;
+
+											_zomzActionPoints.Enqueue (new ZomzActionPoint (_zomzModeModel.transform.position, ZomzAction.ATTACK, hit.transform));
+											_zactionSystem.Animator.SetTrigger ("attack");
+										}
 									}
 								}
 							}
 						}
 					}
 				}
+			} 
+			else
+			{
+				_zactionSystem.enabled = false;
 			}
 
 			//Released from zomz mode
@@ -428,15 +463,17 @@ public class AIStateController : MonoBehaviour {
 
 	public void ToggleAI(bool pOnOff)
 	{
-		_isAIOn = pOnOff;	
+		if (_isAlive)
+		{
+			_isAIOn = pOnOff;	
 
-		if (!_isAIOn)
-		{
-			ResetAI ();
-		}
-		else
-		{
-			TransitionToState (InitState);
+			if (!_isAIOn)
+			{
+				ResetAI ();
+			} else
+			{
+				TransitionToState (InitState);
+			}
 		}
 
 	}
@@ -463,7 +500,9 @@ public class AIStateController : MonoBehaviour {
 		if (_isAlive)
 		{
 			if (_currentHealth - pDamage > 0)
+			{
 				_currentHealth -= pDamage;
+			}
 			else
 				_currentHealth = 0;
 
@@ -473,9 +512,19 @@ public class AIStateController : MonoBehaviour {
 
 				if (_hurtFX != null)
 					Instantiate (_hurtFX, _eyes.transform.position, Quaternion.identity);
+
+				//Update UI Element
+				if (_zombieHealthBar)
+					_zombieHealthBar.fillAmount = _currentHealth / 100;
 			} 
 			else
 			{
+				yield return new WaitForSeconds(0.7f);
+
+				//Update UI Element
+				if (_zombieHealthBar)
+					_zombieHealthBar.fillAmount = 0;
+
 				TransitionToState (DeadState);
 				_isAlive = false;
 			}
@@ -484,6 +533,13 @@ public class AIStateController : MonoBehaviour {
 
 	public void Attack()
 	{
+		if (!IsAlive)
+		{
+			StopCoroutine (_hurtPlayerCoroutine);
+			_hurtPlayerCoroutine = null;
+			return;
+		}
+
 		if (_characterStats)
 		{
 			if (period > _characterStats.AttackRate)
@@ -491,7 +547,14 @@ public class AIStateController : MonoBehaviour {
 				_animator.SetTrigger ("attack");
 
 				if (_playerControls)
-					_playerControls.StartCoroutine (_playerControls.Hurt (transform,_characterStats.AttackStrength));
+				{
+					if (_hurtPlayerCoroutine != null)
+					{
+						StopCoroutine (_hurtPlayerCoroutine);
+						_hurtPlayerCoroutine = null;
+					}
+					_hurtPlayerCoroutine = _playerControls.StartCoroutine (_playerControls.Hurt (transform, _characterStats.AttackStrength));
+				}
 
 				period = 0;
 			}

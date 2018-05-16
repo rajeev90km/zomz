@@ -49,6 +49,9 @@ public class ZomzControls : MonoBehaviour {
 
 	private const float ZOMZ_COOLDOWN_TIME = 5f;
 
+	[SerializeField]
+	private GameFloatAttribute _zomzManaAttribute;
+
 	[Header("Debug")]
 	[SerializeField]
 	private GameObject _debugCanvas;
@@ -117,16 +120,19 @@ public class ZomzControls : MonoBehaviour {
 		{
 			_zomzMode = !_zomzMode;
 
-			_debugCanvas.SetActive (_zomzMode);
+			//_debugCanvas.SetActive (_zomzMode);
 
 			if (_zomzMode)
 			{
+				if (_zomzManaAttribute)
+					_zomzManaAttribute.ResetAttribute ();
+
 				if (_zomzStartEvent)
 					_zomzStartEvent.Raise ();
 
 				_zombiesUnderControl.Clear ();
 
-				_animator.SetTrigger ("idle");
+				_animator.SetFloat ("speedPercent",0.0f);
 
 				Collider[] _zombiesHit = Physics.OverlapSphere (transform.position, _characterControls.CharacterStats.ZomzRange, _enemyLayerMask);
 
@@ -134,7 +140,7 @@ public class ZomzControls : MonoBehaviour {
 				{
 					AIStateController zCtrl = _zombiesHit [i].GetComponent<AIStateController> ();
 
-					if (zCtrl != null)
+					if (zCtrl != null && zCtrl.IsAlive)
 					{
 						zCtrl.TakeControl ();
 						_zombiesUnderControl.Add (zCtrl);
@@ -167,7 +173,21 @@ public class ZomzControls : MonoBehaviour {
 
 	IEnumerator ZomzCoolDown()
 	{
-		yield return new WaitForSeconds (ZOMZ_COOLDOWN_TIME);
+		float time = 0f;
+
+		float curVal = _zomzManaAttribute.CurrentValue;
+		float coolDownTime = ZOMZ_COOLDOWN_TIME - ((curVal / 100) * ZOMZ_COOLDOWN_TIME);
+
+		while (time < 1)
+		{
+			_zomzManaAttribute.CurrentValue = Mathf.Lerp (curVal, 100, time);
+			time += Time.deltaTime / coolDownTime;
+			yield return null;
+		}
+
+		_zomzManaAttribute.CurrentValue = 100;
 		_canUseZomzMode = true;
+
+		yield return null;
 	}
 }

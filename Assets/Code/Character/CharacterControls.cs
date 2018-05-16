@@ -91,7 +91,7 @@ public class CharacterControls : MonoBehaviour {
 	{
 		AIStateController enemyAI = pEnemy.gameObject.GetComponent<AIStateController> ();
 
-		if (_isAlive)
+		if (_isAlive && enemyAI.IsAlive)
 		{
 			yield return new WaitForSeconds (1.5f);
 
@@ -116,6 +116,8 @@ public class CharacterControls : MonoBehaviour {
 				}
 			}
 		}
+
+		yield return null;
 	}
 
 

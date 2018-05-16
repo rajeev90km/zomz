@@ -10,6 +10,11 @@ public class GameFloatAttribute : GameAttribute
 
 	void OnEnable()
 	{
+		ResetAttribute ();
+	}
+
+	public void ResetAttribute()
+	{
 		CurrentValue = InitValue;
 	}
 }

@@ -10,6 +10,11 @@ public class GameIntAttribute : GameAttribute
 
 	void OnEnable()
 	{
+		ResetAttribute ();
+	}
+
+	public void ResetAttribute()
+	{
 		CurrentValue = InitValue;
 	}
 

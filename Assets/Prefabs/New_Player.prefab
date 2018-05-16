@@ -430,6 +430,7 @@ GameObject:
   - component: {fileID: 136583188528146168}
   - component: {fileID: 120944834137201908}
   - component: {fileID: 54492601356111696}
+  - component: {fileID: 114882736207985256}
   m_Layer: 11
   m_Name: New_Player
   m_TagString: Player
@@ -2159,6 +2160,20 @@ MonoBehaviour:
   _debugMode: 0
   _isAlive: 1
   _hurtFX: {fileID: 100000, guid: f7261c1b6aae14ad3bb8800b75e3436b, type: 2}
+--- !u!114 &114882736207985256
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1255338107966642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 175d9afbe35034f9cb718a693f9b6d95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _material: {fileID: 2100000, guid: 96cc172843c4042c8b2c80bc6f93576c, type: 2}
+  _propertyName: _CharacterPosition
+  _transform: {fileID: 0}
 --- !u!114 &114957666113408444
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2170,6 +2185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3f48a0b1f7584473bb54870dd891967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _zomzManaAttribute: {fileID: 11400000, guid: f3a6c0e127ede49ad866f88bc2b95abb, type: 2}
   _debugCanvas: {fileID: 0}
   _zomzStartEvent: {fileID: 11400000, guid: 955a51db9b35444b795c34aefcce8a74, type: 2}
   _zomzEndEvent: {fileID: 11400000, guid: 9bef04880d4c741f786ba635f7878f54, type: 2}

@@ -23,6 +23,6 @@ public class ChaseAction : Action
 			pController.ChaseTarget = _player.transform;
 		
 		pController.navMeshAgent.destination = pController.ChaseTarget.position;
-		pController.navMeshAgent.Resume ();
+		pController.navMeshAgent.isStopped = false;
 	}
 }
