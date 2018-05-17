@@ -25,6 +25,7 @@ public class LookDecision : Decision
 
 		if ((_playerStats!=null && _playerStats.IsAlive) && (Vector3.Distance (pController.transform.position, _player.transform.position) < pController.LookRange))
 		{
+			pController.ChaseTarget = _player.transform;
 			return true;
 		}
 

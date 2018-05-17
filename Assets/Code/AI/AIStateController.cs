@@ -244,6 +244,7 @@ public class AIStateController : MonoBehaviour {
 
 		if(_zactionSystem)
 			_zactionSystem.enabled = true;
+		
 
 		_beingControlled = true;
 		_zomzActionPoints.Clear ();
@@ -260,11 +261,13 @@ public class AIStateController : MonoBehaviour {
 		_zomzModeModel.SetActive (false);
 		_zactionSystem.IsSelected = false;
 		_isExecutingActions = true;
-		navMeshAgent.ResetPath ();
 
-		if(_zomzActionPoints.Count>1)
+		if (_zomzActionPoints.Count > 0 && _zomzActionPoints.Peek().ZomzAction != ZomzAction.ATTACK )
+		{
+			navMeshAgent.ResetPath ();
 			_animator.SetTrigger ("walk");
-		Time.timeScale = 3;
+		}
+		Time.timeScale = 5;
 
 		//Execute Actions
 		if (_isExecutingActions)
@@ -272,7 +275,11 @@ public class AIStateController : MonoBehaviour {
 			while (_zomzActionPoints.Count > 0)
 			{
 				UpdateZomzActions ();
-				yield return null;
+
+				if(_zomzAttackCoroutine==null)
+					yield return null;
+				else
+					yield return new WaitForSeconds (_characterStats.AttackRate);
 			}
 			//RelinquishControl ();
 		} 
@@ -322,13 +329,18 @@ public class AIStateController : MonoBehaviour {
 			{
 				if (actionPoint.ActionTarget != null)
 				{
-					transform.LookAt (actionPoint.ActionTarget);
-					_animator.SetTrigger ("attack");
-
-					DealZomzDamage (actionPoint.ActionTarget);
+					/* Commenting out old method of attacking near target */
 
 					if (_zomzAttackCoroutine == null)
-						_zomzAttackCoroutine = StartCoroutine (WaitToEndZomzAttack ());
+						_zomzAttackCoroutine = StartCoroutine (WaitToEndZomzAttack (actionPoint.ActionTarget));
+
+					transform.LookAt (actionPoint.ActionTarget);
+					_animator.SetTrigger ("attack");
+					DealZomzDamage (actionPoint.ActionTarget);
+
+					/* New attack just points the zombie to chase a particular target */
+//					ChaseTarget = actionPoint.ActionTarget;
+
 				}
 			}
 		}
@@ -354,9 +366,10 @@ public class AIStateController : MonoBehaviour {
 
 	}
 
-	IEnumerator WaitToEndZomzAttack()
+	IEnumerator WaitToEndZomzAttack(Transform pTarget)
 	{
 		yield return new WaitForSeconds (_characterStats.AttackRate);
+
 		_zomzAttackCoroutine = null;
 		_animator.SetTrigger ("walk");
 	}
@@ -548,12 +561,7 @@ public class AIStateController : MonoBehaviour {
 
 				if (_playerControls)
 				{
-					if (_hurtPlayerCoroutine != null)
-					{
-						StopCoroutine (_hurtPlayerCoroutine);
-						_hurtPlayerCoroutine = null;
-					}
-					_hurtPlayerCoroutine = _playerControls.StartCoroutine (_playerControls.Hurt (transform, _characterStats.AttackStrength));
+					_playerControls.StartCoroutine (_playerControls.Hurt (transform, _characterStats.AttackStrength));
 				}
 
 				period = 0;

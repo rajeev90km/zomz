@@ -15,8 +15,8 @@ public class ActiveStateDecision : Decision
 
 	public override bool Decide(AIStateController pController)
 	{
-		if (pController.ChaseTarget == null)
-			pController.ChaseTarget = _player.transform;
+//		if (pController.ChaseTarget == null)
+//			pController.ChaseTarget = _player.transform;
 
 		_playerStats = _player.GetComponent<CharacterControls> ();
 
