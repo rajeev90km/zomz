@@ -34,6 +34,9 @@ public class AIStateController : MonoBehaviour {
 	[SerializeField]
 	private ZomzListAttribute _zomzActionsList;
 
+    [SerializeField]
+    private SelectedZombie _currentSelectedZombie;
+
 	private bool _isAlive = true;
 	public bool IsAlive
 	{
@@ -183,6 +186,7 @@ public class AIStateController : MonoBehaviour {
 
 	private Queue<ZomzActionPoint> _zomzActionPoints = new Queue<ZomzActionPoint>();
 
+
 	private List<Vector3> points = new List<Vector3> ();
 
 	private int _groundLayerMask;
@@ -230,12 +234,18 @@ public class AIStateController : MonoBehaviour {
 	public void SelectCurrentForControl()
 	{
 		_selectedForControl = true;
+
+        _currentSelectedZombie.CurrentSelectedZombie = this;
+
 		if (_selectionQuad)
 			_selectionQuad.SetActive (true);
 	}
 
 	public void ClearCurrentControl()
 	{
+
+        //_currentSelectedZombie.ResetSelection();
+
 		_selectedForControl = false;
 		if (_selectionQuad)
 			_selectionQuad.SetActive (false);
@@ -252,6 +262,7 @@ public class AIStateController : MonoBehaviour {
 		_beingControlled = true;
         _zomzActionsList.AllActionPoints.Clear ();
 		_zomzActionPoints.Enqueue(new ZomzActionPoint(_zomzModeModel.transform.position,ZomzAction.MOVE,null));
+        ToggleZomzAttackMode(false);
         //_zomzActionsList.AllActionPoints.Add(new ZomzActionPoint(this,_zomzModeModel.transform.position, ZomzAction.MOVE, null));
 
 		points.Clear ();
@@ -264,10 +275,11 @@ public class AIStateController : MonoBehaviour {
         _zomzModeModel.SetActive(false);
         _zactionSystem.IsSelected = false;
         _isExecutingActions = true;    
+        _currentSelectedZombie.ResetSelection();
 
-        points.Clear();
-        _lineRenderer.positionCount = points.Count;
-        _lineRenderer.SetPositions(points.ToArray());
+        //points.Clear();
+        //_lineRenderer.positionCount = points.Count;
+        //_lineRenderer.SetPositions(points.ToArray());
 
         EnableDisableColliders(false);
     }
@@ -304,7 +316,6 @@ public class AIStateController : MonoBehaviour {
 		_zomzActionPoints.Clear ();
 		points.Clear ();
 		navMeshAgent.speed = _characterStats.WalkSpeed;
-		_animator.SetTrigger ("walk");
         EnableDisableColliders(true);
         ToggleAI(true);
 	}
@@ -318,13 +329,17 @@ public class AIStateController : MonoBehaviour {
 			if (otherZombie != null)
 			{
 				otherZombie.TakeDamage (_characterStats.AttackStrength);
+                TakeDamage(_characterStats.AttackDamageToSelf);
 			}
 		}
 
 		if (pTarget.CompareTag ("Player"))
 		{
-			if(_playerControls)
-				_playerControls.StartCoroutine (_playerControls.Hurt (transform,_characterStats.AttackStrength));
+            if (_playerControls)
+            {
+                _playerControls.StartCoroutine(_playerControls.Hurt(transform, _characterStats.AttackStrength));
+                TakeDamage(_characterStats.AttackDamageToSelf);
+            }
 		}
 
 
@@ -360,6 +375,7 @@ public class AIStateController : MonoBehaviour {
 					
 						//_zomzActionPoints.Enqueue (new ZomzActionPoint (_zomzModeModel.transform.position, ZomzAction.MOVE, null));
                         _zomzActionsList.AllActionPoints.Add(new ZomzActionPoint(this, _zomzModeModel.transform.position, ZomzAction.MOVE, null));
+                        ToggleZomzAttackMode(false);
                         points.Add (_zomzActionsList.AllActionPoints.Last ().Position);
 						_lineRenderer.positionCount = points.Count;
 						_lineRenderer.SetPositions (points.ToArray ());
@@ -368,7 +384,8 @@ public class AIStateController : MonoBehaviour {
 					//Show attack sphere
 					if (Input.GetKeyDown (KeyCode.Alpha1))
 					{
-						_zomzAttack = true;
+                        ToggleZomzAttackMode(true);
+						//_zomzAttack = true;
 					}
 
 					if (_zomzAttack)
@@ -391,7 +408,7 @@ public class AIStateController : MonoBehaviour {
 
 											//_zomzActionPoints.Enqueue (new ZomzActionPoint (_zomzModeModel.transform.position, ZomzAction.ATTACK, hit.transform));
                                             _zomzActionsList.AllActionPoints.Add(new ZomzActionPoint(this, _zomzModeModel.transform.position, ZomzAction.ATTACK, hit.transform));
-											//_zactionSystem.Animator.SetTrigger ("attack");
+											_zactionSystem.Animator.SetTrigger ("attack");
 										}
 									}
 								}
@@ -415,7 +432,7 @@ public class AIStateController : MonoBehaviour {
 				_lineRenderer.positionCount = points.Count;
 				_lineRenderer.SetPositions (points.ToArray ());
 				_selectedForControl = false;
-				_zomzAttack = false;
+                ToggleZomzAttackMode(false);
 			}
 
 			//Different Zombie Selected
@@ -427,6 +444,11 @@ public class AIStateController : MonoBehaviour {
 		}
 	}
 
+    public void ToggleZomzAttackMode(bool pEnable)
+    {
+        _zomzAttack = pEnable;
+    }
+
 	private float DistanceToLastPoint(Vector3 pPoint)
 	{
         if (!_zomzActionsList.AllActionPoints.Any())
@@ -437,6 +459,7 @@ public class AIStateController : MonoBehaviour {
 	void ResetAI()
 	{
 		navMeshAgent.isStopped = true;
+        _currentState = null;
 		_animator.SetTrigger ("idle");
 	}
 
@@ -449,7 +472,8 @@ public class AIStateController : MonoBehaviour {
 			if (!_isAIOn)
 			{
 				ResetAI ();
-			} else
+			} 
+            else
 			{
 				TransitionToState (InitState);
 			}
@@ -528,6 +552,9 @@ public class AIStateController : MonoBehaviour {
 				if (_playerControls)
 				{
 					_playerControls.StartCoroutine (_playerControls.Hurt (transform, _characterStats.AttackStrength));
+
+                    if(_characterStats.AttackDamageToSelf>0)
+                        TakeDamage(_characterStats.AttackDamageToSelf);
 				}
 
 				period = 0;
@@ -541,7 +568,6 @@ public class AIStateController : MonoBehaviour {
 	{
 		if (pNextState != RemainState)
 		{
-			navMeshAgent.isStopped = true;
 			_currentState = pNextState;
 			_animator.SetTrigger (_currentState.AnimationTrigger);
 			OnExitState ();

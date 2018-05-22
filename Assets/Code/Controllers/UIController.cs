@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour {
 
+    [SerializeField]
+    private SelectedZombie _currentSelectedZombie;
+
 	[Header("Player Health UI")]
 	[SerializeField]
 	private Image _playerHealthBar;
@@ -18,6 +21,9 @@ public class UIController : MonoBehaviour {
 
 	[SerializeField]
 	private Image _zomzManaBar;
+
+    [SerializeField]
+    private GameObject _attackUI;
 
 	private CharacterControls _playerStats;
 	private GameObject _playerObj;
@@ -39,6 +45,11 @@ public class UIController : MonoBehaviour {
 
 	void Update()
 	{
+        if (_currentSelectedZombie.CurrentSelectedZombie != null)
+            _attackUI.SetActive(true);
+        else
+            _attackUI.SetActive(false);
+
 		if (_zomzManaBar && _zomzManaAttribute)
 			_zomzManaBar.fillAmount = _zomzManaAttribute.CurrentValue/100;
 

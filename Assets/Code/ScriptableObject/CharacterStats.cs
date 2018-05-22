@@ -21,4 +21,6 @@ public class CharacterStats : ScriptableObject
 
 	public float ZomzSpeed = 5f;
 
+    public float AttackDamageToSelf = 0f;
+
 }

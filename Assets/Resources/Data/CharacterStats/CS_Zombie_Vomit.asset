@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 010f5063cff6044a5bc592ccdb7030cc, type: 3}
+  m_Name: CS_Zombie_Vomit
+  m_EditorClassIdentifier: 
+  Health: 100
+  WalkSpeed: 2
+  RunSpeed: 3
+  AttackRate: 1.2
+  AttackStrength: 10
+  AttackRange: 5
+  ZomzRange: 12
+  ZomzSpeed: 5
