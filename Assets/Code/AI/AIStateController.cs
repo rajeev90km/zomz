@@ -31,6 +31,9 @@ public class AIStateController : MonoBehaviour {
 		get { return _characterStats; }
 	}
 
+	[SerializeField]
+	private ZomzListAttribute _zomzActionsList;
+
 	private bool _isAlive = true;
 	public bool IsAlive
 	{
@@ -247,49 +250,48 @@ public class AIStateController : MonoBehaviour {
 		
 
 		_beingControlled = true;
-		_zomzActionPoints.Clear ();
+        _zomzActionsList.AllActionPoints.Clear ();
 		_zomzActionPoints.Enqueue(new ZomzActionPoint(_zomzModeModel.transform.position,ZomzAction.MOVE,null));
+        //_zomzActionsList.AllActionPoints.Add(new ZomzActionPoint(this,_zomzModeModel.transform.position, ZomzAction.MOVE, null));
 
 		points.Clear ();
-		points.Add (_zomzActionPoints.Last().Position);
+        points.Add (_zomzModeModel.transform.position);
 	}
 
+    public void BeforeExecuting()
+    {
+        ClearCurrentControl();
+        _zomzModeModel.SetActive(false);
+        _zactionSystem.IsSelected = false;
+        _isExecutingActions = true;    
 
-	public IEnumerator ExecuteActions()
-	{
-		ClearCurrentControl ();
-		_zomzModeModel.SetActive (false);
-		_zactionSystem.IsSelected = false;
-		_isExecutingActions = true;
+        points.Clear();
+        _lineRenderer.positionCount = points.Count;
+        _lineRenderer.SetPositions(points.ToArray());
 
-		if (_zomzActionPoints.Count > 0 && _zomzActionPoints.Peek().ZomzAction != ZomzAction.ATTACK )
-		{
-			navMeshAgent.ResetPath ();
-			_animator.SetTrigger ("walk");
-		}
-		Time.timeScale = 5;
+        EnableDisableColliders(false);
+    }
 
-		//Execute Actions
-		if (_isExecutingActions)
-		{
-			while (_zomzActionPoints.Count > 0)
-			{
-				UpdateZomzActions ();
+    void EnableDisableColliders(bool pEnable)
+    {
+        Collider coll = GetComponent<Collider>();
+        Rigidbody rb = GetComponent<Rigidbody>();
 
-				if(_zomzAttackCoroutine==null)
-					yield return null;
-				else
-					yield return new WaitForSeconds (_characterStats.AttackRate);
-			}
-			//RelinquishControl ();
-		} 
+        if (coll != null)
+            coll.enabled = pEnable;
 
-		if(_zomzActionPoints.Count==0)
-			_animator.SetTrigger ("idle");
-
-		yield return null;
-	}
-
+        if(rb!=null)
+        {
+            if(!pEnable)
+                rb.constraints = RigidbodyConstraints.FreezePosition;
+            else
+            {
+                rb.constraints = RigidbodyConstraints.None;
+                rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
+            }
+        }
+        
+    }
 
 	public void RelinquishControl()
 	{
@@ -303,50 +305,12 @@ public class AIStateController : MonoBehaviour {
 		points.Clear ();
 		navMeshAgent.speed = _characterStats.WalkSpeed;
 		_animator.SetTrigger ("walk");
+        EnableDisableColliders(true);
+        ToggleAI(true);
 	}
 
-	void UpdateZomzActions()
-	{
-		int i = 0;
-		if (!navMeshAgent.hasPath && _zomzAttackCoroutine==null)
-		{
-			ZomzActionPoint actionPoint = _zomzActionPoints.Dequeue ();
 
-			//Move
-			if (actionPoint.ZomzAction == ZomzAction.MOVE)
-			{
-				navMeshAgent.SetDestination (actionPoint.Position);
-				navMeshAgent.speed = _characterStats.ZomzSpeed;
-
-				//Update Line Renderer
-				if(points.Count>0)
-					points.RemoveAt (i++);
-				_lineRenderer.positionCount = points.Count;
-				_lineRenderer.SetPositions (points.ToArray());
-			} 
-			//Attack
-			else if (actionPoint.ZomzAction == ZomzAction.ATTACK)
-			{
-				if (actionPoint.ActionTarget != null)
-				{
-					/* Commenting out old method of attacking near target */
-
-					if (_zomzAttackCoroutine == null)
-						_zomzAttackCoroutine = StartCoroutine (WaitToEndZomzAttack (actionPoint.ActionTarget));
-
-					transform.LookAt (actionPoint.ActionTarget);
-					_animator.SetTrigger ("attack");
-					DealZomzDamage (actionPoint.ActionTarget);
-
-					/* New attack just points the zombie to chase a particular target */
-//					ChaseTarget = actionPoint.ActionTarget;
-
-				}
-			}
-		}
-	}
-
-	void DealZomzDamage(Transform pTarget)
+	public void DealZomzDamage(Transform pTarget)
 	{
 		if (pTarget.CompareTag ("Enemy"))
 		{
@@ -394,8 +358,9 @@ public class AIStateController : MonoBehaviour {
 						if (_zomzManaAttribute)
 							_zomzManaAttribute.CurrentValue -= _manaForUnitMovement;
 					
-						_zomzActionPoints.Enqueue (new ZomzActionPoint (_zomzModeModel.transform.position, ZomzAction.MOVE, null));
-						points.Add (_zomzActionPoints.Last ().Position);
+						//_zomzActionPoints.Enqueue (new ZomzActionPoint (_zomzModeModel.transform.position, ZomzAction.MOVE, null));
+                        _zomzActionsList.AllActionPoints.Add(new ZomzActionPoint(this, _zomzModeModel.transform.position, ZomzAction.MOVE, null));
+                        points.Add (_zomzActionsList.AllActionPoints.Last ().Position);
 						_lineRenderer.positionCount = points.Count;
 						_lineRenderer.SetPositions (points.ToArray ());
 					}
@@ -424,8 +389,9 @@ public class AIStateController : MonoBehaviour {
 											if (_zomzManaAttribute)
 												_zomzManaAttribute.CurrentValue -= _manaForAttack;
 
-											_zomzActionPoints.Enqueue (new ZomzActionPoint (_zomzModeModel.transform.position, ZomzAction.ATTACK, hit.transform));
-											_zactionSystem.Animator.SetTrigger ("attack");
+											//_zomzActionPoints.Enqueue (new ZomzActionPoint (_zomzModeModel.transform.position, ZomzAction.ATTACK, hit.transform));
+                                            _zomzActionsList.AllActionPoints.Add(new ZomzActionPoint(this, _zomzModeModel.transform.position, ZomzAction.ATTACK, hit.transform));
+											//_zactionSystem.Animator.SetTrigger ("attack");
 										}
 									}
 								}
@@ -463,9 +429,9 @@ public class AIStateController : MonoBehaviour {
 
 	private float DistanceToLastPoint(Vector3 pPoint)
 	{
-		if (!_zomzActionPoints.Any())
+        if (!_zomzActionsList.AllActionPoints.Any())
 			return float.MaxValue;
-		return Vector3.Distance (_zomzActionPoints.Last().Position, pPoint);
+        return Vector3.Distance (_zomzActionsList.AllActionPoints.Last().Position, pPoint);
 	}
 
 	void ResetAI()
@@ -476,7 +442,7 @@ public class AIStateController : MonoBehaviour {
 
 	public void ToggleAI(bool pOnOff)
 	{
-		if (_isAlive)
+        if (_isAlive && !_isExecutingActions)
 		{
 			_isAIOn = pOnOff;	
 

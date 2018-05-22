@@ -2186,6 +2186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _zomzManaAttribute: {fileID: 11400000, guid: f3a6c0e127ede49ad866f88bc2b95abb, type: 2}
+  _zomzActionsList: {fileID: 11400000, guid: 7454997a54f2d40e7b197818a56a48b7, type: 2}
   _debugCanvas: {fileID: 0}
   _zomzStartEvent: {fileID: 11400000, guid: 955a51db9b35444b795c34aefcce8a74, type: 2}
   _zomzEndEvent: {fileID: 11400000, guid: 9bef04880d4c741f786ba635f7878f54, type: 2}

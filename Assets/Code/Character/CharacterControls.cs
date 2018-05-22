@@ -216,7 +216,7 @@ public class CharacterControls : MonoBehaviour {
 
 				Vector3 heading = Vector3.Normalize (rightMovement + upMovement);
 
-				if(_zomzControls.NumZombiesUnderControl>0)
+                if(_zomzControls.ZomzMode)
 					heading = Vector3.zero;
 
 				if (heading != Vector3.zero)

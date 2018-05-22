@@ -11,14 +11,24 @@ public enum ZomzAction
 	ATTACK = 2
 }
 
+[System.Serializable]
 public class ZomzActionPoint
 {
+	public AIStateController Zomz;
 	public Vector3 Position;
 	public ZomzAction ZomzAction;
 	public Transform ActionTarget;
 
 	public ZomzActionPoint(Vector3 pPosition, ZomzAction pAction, Transform pTarget)
 	{
+		Position = pPosition;
+		ZomzAction = pAction;
+		ActionTarget = pTarget;
+	}
+
+	public ZomzActionPoint(AIStateController pZomz, Vector3 pPosition, ZomzAction pAction, Transform pTarget)
+	{
+		Zomz = pZomz;
 		Position = pPosition;
 		ZomzAction = pAction;
 		ActionTarget = pTarget;
@@ -51,6 +61,9 @@ public class ZomzControls : MonoBehaviour {
 
 	[SerializeField]
 	private GameFloatAttribute _zomzManaAttribute;
+
+	[SerializeField]
+	private ZomzListAttribute _zomzActionsList;
 
 	[Header("Debug")]
 	[SerializeField]
@@ -130,6 +143,9 @@ public class ZomzControls : MonoBehaviour {
 				if (_zomzStartEvent)
 					_zomzStartEvent.Raise ();
 
+
+                _zomzActionsList.ResetList();
+
 				_zombiesUnderControl.Clear ();
 
 				_animator.SetFloat ("speedPercent",0.0f);
@@ -149,12 +165,77 @@ public class ZomzControls : MonoBehaviour {
 			} 
 			else
 			{
+                Dictionary<AIStateController, int> _zomzActionCountPerZombie = new Dictionary<AIStateController, int>();
+
+                //count actions for each zombie
+                for (int i = 0; i < _zomzActionsList.AllActionPoints.Count; i++)
+                {
+                    if (!_zomzActionCountPerZombie.ContainsKey(_zomzActionsList.AllActionPoints[i].Zomz))
+                        _zomzActionCountPerZombie.Add(_zomzActionsList.AllActionPoints[i].Zomz, 1);
+                    else
+                        _zomzActionCountPerZombie[_zomzActionsList.AllActionPoints[i].Zomz]++;
+                }
+
+
+                for (int i = 0; i < _zombiesUnderControl.Count; i++)
+                {
+                    if(_zomzActionCountPerZombie.ContainsKey(_zombiesUnderControl[i]))
+                    {
+                        if(_zomzActionCountPerZombie[_zombiesUnderControl[i]]>0) 
+                            _zombiesUnderControl[i].Animator.SetTrigger("walk");
+                    }
+                }
+
+
+                for (int i = 0; i < _zombiesUnderControl.Count; i++)
+                {
+                    _zombiesUnderControl[i].BeforeExecuting();
+                    _zombiesUnderControl[i].navMeshAgent.ResetPath();
+                }
+
 				_canUseZomzMode = false;
 
-				for (int i = 0; i < _zombiesUnderControl.Count; i++)
-				{
-					yield return StartCoroutine(_zombiesUnderControl [i].ExecuteActions ());
-				}
+                AIStateController currentZomz = null;
+                ZomzAction currentAction = ZomzAction.NONE;
+
+                if (_zomzActionsList.AllActionPoints.Count > 0)
+                    currentZomz = _zomzActionsList.AllActionPoints[0].Zomz;
+
+                if (_zomzEndEvent != null)
+                    _zomzEndEvent.Raise();
+
+                for (int i = 0; i < _zomzActionsList.AllActionPoints.Count; i++)
+                {
+                    //MOVE
+                    if (_zomzActionsList.AllActionPoints[i].ZomzAction == ZomzAction.MOVE)
+                    {
+                        if(currentZomz!=_zomzActionsList.AllActionPoints[i].Zomz)
+                        {
+                            currentZomz.Animator.SetTrigger("idle");
+                            _zomzActionsList.AllActionPoints[i].Zomz.Animator.SetTrigger("walk");
+                            currentZomz = _zomzActionsList.AllActionPoints[i].Zomz;
+                        }
+
+                        if(currentZomz==_zomzActionsList.AllActionPoints[i].Zomz && currentAction==ZomzAction.ATTACK)
+                        {
+                            currentZomz.Animator.SetTrigger("walk");
+                        }
+
+                        currentAction = ZomzAction.MOVE;
+                        _zomzActionsList.AllActionPoints[i].Zomz.navMeshAgent.SetDestination(_zomzActionsList.AllActionPoints[i].Position);
+                        yield return new WaitUntil(() => _zomzActionsList.AllActionPoints[i].Zomz.navMeshAgent.hasPath == false);
+                    }
+                    //ATTACK
+                    else if (_zomzActionsList.AllActionPoints[i].ZomzAction == ZomzAction.ATTACK)
+                    {
+                        currentAction = ZomzAction.ATTACK;
+                        _zomzActionsList.AllActionPoints[i].Zomz.Animator.SetTrigger("attack");
+                        yield return new WaitForSeconds(1f);
+                        _zomzActionsList.AllActionPoints[i].Zomz.DealZomzDamage(_zomzActionsList.AllActionPoints[i].ActionTarget);
+                        yield return new WaitForSeconds(1f);
+                    }
+                }                    
+
 
 				for (int i = 0; i < _zombiesUnderControl.Count; i++)
 				{
@@ -163,10 +244,10 @@ public class ZomzControls : MonoBehaviour {
 
 				_zombiesUnderControl.Clear ();
 
-				if (_zomzEndEvent!=null)
-					_zomzEndEvent.Raise ();
 
 				StartCoroutine (ZomzCoolDown ());
+
+                yield return null;
 			}
 		}
 	}
