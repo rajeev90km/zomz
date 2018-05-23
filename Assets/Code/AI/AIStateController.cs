@@ -24,6 +24,9 @@ public class AIStateController : MonoBehaviour {
 		get { return _selectedForControl; }
 	}
 
+    [SerializeField]
+    private GameData _gameData;
+
 	[SerializeField]
 	private CharacterStats _characterStats;
 	public CharacterStats CharacterStats
@@ -353,95 +356,98 @@ public class AIStateController : MonoBehaviour {
 		_animator.SetTrigger ("walk");
 	}
 
-	void Update () 
-	{ 
-		if (_isAlive)
-		{
-			if(_isAIOn)
-				CurrentState.UpdateState (this);
-			
-			if (_zomzManaAttribute.CurrentValue > 0)
-			{
-				//Under Zomz mode and selected by clicking
-				if (_beingControlled && _selectedForControl)
-				{
-					_zomzModeModel.SetActive (true);
-					_zactionSystem.IsSelected = true;
+    void Update()
+    {
+        if(!_gameData.IsPaused)
+        {
+            if (_isAlive)
+            {
+                if (_isAIOn)
+                    CurrentState.UpdateState(this);
 
-					if (DistanceToLastPoint (_zomzModeModel.transform.position) > 0.5f)
-					{
-						if (_zomzManaAttribute)
-							_zomzManaAttribute.CurrentValue -= _manaForUnitMovement;
-					
-						//_zomzActionPoints.Enqueue (new ZomzActionPoint (_zomzModeModel.transform.position, ZomzAction.MOVE, null));
-                        _zomzActionsList.AllActionPoints.Add(new ZomzActionPoint(this, _zomzModeModel.transform.position, ZomzAction.MOVE, null));
-                        ToggleZomzAttackMode(false);
-                        points.Add (_zomzActionsList.AllActionPoints.Last ().Position);
-						_lineRenderer.positionCount = points.Count;
-						_lineRenderer.SetPositions (points.ToArray ());
-					}
+                if (_zomzManaAttribute.CurrentValue > 0)
+                {
+                    //Under Zomz mode and selected by clicking
+                    if (_beingControlled && _selectedForControl)
+                    {
+                        _zomzModeModel.SetActive(true);
+                        _zactionSystem.IsSelected = true;
 
-					//Show attack sphere
-					if (Input.GetKeyDown (KeyCode.Alpha1))
-					{
-                        ToggleZomzAttackMode(true);
-						//_zomzAttack = true;
-					}
+                        if (DistanceToLastPoint(_zomzModeModel.transform.position) > 0.5f)
+                        {
+                            if (_zomzManaAttribute)
+                                _zomzManaAttribute.CurrentValue -= _manaForUnitMovement;
 
-					if (_zomzAttack)
-					{
-						if (Input.GetMouseButtonDown (1))
-						{
-							RaycastHit hit; 
-							Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition); 
-							if (Physics.Raycast (ray, out hit, Mathf.Infinity, _enemyPlayerMask))
-							{
-								if (hit.transform != null)
-								{
-									if (hit.collider.gameObject != this.gameObject)
-									{
+                            //_zomzActionPoints.Enqueue (new ZomzActionPoint (_zomzModeModel.transform.position, ZomzAction.MOVE, null));
+                            _zomzActionsList.AllActionPoints.Add(new ZomzActionPoint(this, _zomzModeModel.transform.position, ZomzAction.MOVE, null));
+                            ToggleZomzAttackMode(false);
+                            points.Add(_zomzActionsList.AllActionPoints.Last().Position);
+                            _lineRenderer.positionCount = points.Count;
+                            _lineRenderer.SetPositions(points.ToArray());
+                        }
 
-										if (Vector3.Distance (_zomzModeModel.transform.position, hit.transform.position) <= _characterStats.AttackRange)
-										{
-											if (_zomzManaAttribute)
-												_zomzManaAttribute.CurrentValue -= _manaForAttack;
+                        //Show attack sphere
+                        if (Input.GetKeyDown(KeyCode.Alpha1))
+                        {
+                            ToggleZomzAttackMode(true);
+                            //_zomzAttack = true;
+                        }
 
-											//_zomzActionPoints.Enqueue (new ZomzActionPoint (_zomzModeModel.transform.position, ZomzAction.ATTACK, hit.transform));
-                                            _zomzActionsList.AllActionPoints.Add(new ZomzActionPoint(this, _zomzModeModel.transform.position, ZomzAction.ATTACK, hit.transform));
-											_zactionSystem.Animator.SetTrigger ("attack");
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			} 
-			else
-			{
-				_zactionSystem.enabled = false;
-			}
+                        if (_zomzAttack)
+                        {
+                            if (Input.GetMouseButtonDown(1))
+                            {
+                                RaycastHit hit;
+                                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                                if (Physics.Raycast(ray, out hit, Mathf.Infinity, _enemyPlayerMask))
+                                {
+                                    if (hit.transform != null)
+                                    {
+                                        if (hit.collider.gameObject != this.gameObject)
+                                        {
 
-			//Released from zomz mode
-			if (!_beingControlled)
-			{
-				_zomzModeModel.SetActive (false);
-				_zactionSystem.IsSelected = false;
-				_zomzActionPoints.Clear ();
-				points.Clear ();
-				_lineRenderer.positionCount = points.Count;
-				_lineRenderer.SetPositions (points.ToArray ());
-				_selectedForControl = false;
-                ToggleZomzAttackMode(false);
-			}
+                                            if (Vector3.Distance(_zomzModeModel.transform.position, hit.transform.position) <= _characterStats.AttackRange)
+                                            {
+                                                if (_zomzManaAttribute)
+                                                    _zomzManaAttribute.CurrentValue -= _manaForAttack;
 
-			//Different Zombie Selected
-			if (!_selectedForControl)
-			{
-				_zactionSystem.IsSelected = false;
-			}
+                                                //_zomzActionPoints.Enqueue (new ZomzActionPoint (_zomzModeModel.transform.position, ZomzAction.ATTACK, hit.transform));
+                                                _zomzActionsList.AllActionPoints.Add(new ZomzActionPoint(this, _zomzModeModel.transform.position, ZomzAction.ATTACK, hit.transform));
+                                                _zactionSystem.Animator.SetTrigger("attack");
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    _zactionSystem.enabled = false;
+                }
 
-		}
+                //Released from zomz mode
+                if (!_beingControlled)
+                {
+                    _zomzModeModel.SetActive(false);
+                    _zactionSystem.IsSelected = false;
+                    _zomzActionPoints.Clear();
+                    points.Clear();
+                    _lineRenderer.positionCount = points.Count;
+                    _lineRenderer.SetPositions(points.ToArray());
+                    _selectedForControl = false;
+                    ToggleZomzAttackMode(false);
+                }
+
+                //Different Zombie Selected
+                if (!_selectedForControl)
+                {
+                    _zactionSystem.IsSelected = false;
+                }
+
+            }
+        }
 	}
 
     public void ToggleZomzAttackMode(bool pEnable)

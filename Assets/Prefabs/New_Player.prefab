@@ -2154,6 +2154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce655aeb3bba4e63bdebafd04bd9c97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameData: {fileID: 11400000, guid: fe25c4c301c7243a3b0300d6eb01a3f9, type: 2}
   _characterStats: {fileID: 11400000, guid: c682e1c04a4fd4413af6edf9c32031db, type: 2}
   _eyes: {fileID: 4770185826346238}
   _currentHealth: 0
@@ -2185,6 +2186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3f48a0b1f7584473bb54870dd891967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameData: {fileID: 11400000, guid: fe25c4c301c7243a3b0300d6eb01a3f9, type: 2}
   _zomzManaAttribute: {fileID: 11400000, guid: f3a6c0e127ede49ad866f88bc2b95abb, type: 2}
   _zomzActionsList: {fileID: 11400000, guid: 7454997a54f2d40e7b197818a56a48b7, type: 2}
   _debugCanvas: {fileID: 0}

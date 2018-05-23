@@ -7,6 +7,9 @@ using System.Linq;
 [RequireComponent(typeof(Animator))]
 public class CharacterControls : MonoBehaviour {
 
+    [SerializeField]
+    private GameData _gameData;
+
 	[SerializeField]
 	private CharacterStats _characterStats;
 	public CharacterStats CharacterStats
@@ -194,60 +197,63 @@ public class CharacterControls : MonoBehaviour {
 
 	void Update () 
 	{
-		if (_isAlive)
-		{
-			//Attack
-			if (Input.GetKeyDown (KeyCode.Space) && !_zomzControls.ZomzMode)
-			{
-				if (_canAttack)
-				{
-					Attack ();
-				}
-			}
+        if (!_gameData.IsPaused)
+        {
+            if (_isAlive)
+            {
+                //Attack
+                if (Input.GetKeyDown(KeyCode.Space) && !_zomzControls.ZomzMode)
+                {
+                    if (_canAttack)
+                    {
+                        Attack();
+                    }
+                }
 
-			if (!_isAttacking && !_isHurting)
-			{
-				bool running = Input.GetKey (KeyCode.LeftShift);
-				float targetSpeed = ((running) ? _characterStats.RunSpeed : _characterStats.WalkSpeed);
-				_currentSpeed = Mathf.SmoothDamp (_currentSpeed, targetSpeed, ref _speedSmoothVelocity, _speedSmoothTime);
+                if (!_isAttacking && !_isHurting)
+                {
+                    bool running = Input.GetKey(KeyCode.LeftShift);
+                    float targetSpeed = ((running) ? _characterStats.RunSpeed : _characterStats.WalkSpeed);
+                    _currentSpeed = Mathf.SmoothDamp(_currentSpeed, targetSpeed, ref _speedSmoothVelocity, _speedSmoothTime);
 
-				Vector3 rightMovement = right * _currentSpeed * Time.deltaTime * Input.GetAxis ("Horizontal");
-				Vector3 upMovement = forward * _currentSpeed * Time.deltaTime * Input.GetAxis ("Vertical");
+                    Vector3 rightMovement = right * _currentSpeed * Time.deltaTime * Input.GetAxis("Horizontal");
+                    Vector3 upMovement = forward * _currentSpeed * Time.deltaTime * Input.GetAxis("Vertical");
 
-				Vector3 heading = Vector3.Normalize (rightMovement + upMovement);
+                    Vector3 heading = Vector3.Normalize(rightMovement + upMovement);
 
-                if(_zomzControls.ZomzMode)
-					heading = Vector3.zero;
+                    if (_zomzControls.ZomzMode)
+                        heading = Vector3.zero;
 
-				if (heading != Vector3.zero)
-				{
-					transform.forward = heading;
-					transform.position += rightMovement + upMovement;
-				}
-
-
-				float animationSpeedPercent = ((running) ? 1 : 0.5f) * heading.magnitude;
-
-				if (_animator)
-					_animator.SetFloat ("speedPercent", animationSpeedPercent, _speedSmoothTime, Time.deltaTime);
-			}
-		}
+                    if (heading != Vector3.zero)
+                    {
+                        transform.forward = heading;
+                        transform.position += rightMovement + upMovement;
+                    }
 
 
-		//DEBUG MODE
-		if (_debugMode)
-		{
-			//Die
-			if (Input.GetKeyDown (KeyCode.X))
-			{
-				Die ();
-			}
+                    float animationSpeedPercent = ((running) ? 1 : 0.5f) * heading.magnitude;
 
-			//Hurt
-			if (Input.GetKeyDown (KeyCode.H))
-			{
-				//Hurt ();
-			}
-		}
+                    if (_animator)
+                        _animator.SetFloat("speedPercent", animationSpeedPercent, _speedSmoothTime, Time.deltaTime);
+                }
+            }
+
+
+            //DEBUG MODE
+            if (_debugMode)
+            {
+                //Die
+                if (Input.GetKeyDown(KeyCode.X))
+                {
+                    Die();
+                }
+
+                //Hurt
+                if (Input.GetKeyDown(KeyCode.H))
+                {
+                    //Hurt ();
+                }
+            }
+        }
 	}
 }

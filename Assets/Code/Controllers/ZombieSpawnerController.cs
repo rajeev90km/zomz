@@ -11,6 +11,9 @@ public class ZombieSpawnerController : MonoBehaviour {
 	
 	private List<Transform> _allSpawnPoints = new List<Transform>();
 
+    [SerializeField]
+    private GameData _gameData;
+
 	[Header("Spawn Configuration")]
 	[SerializeField]
 	private SpawnMode _spawnMode;
@@ -78,18 +81,21 @@ public class ZombieSpawnerController : MonoBehaviour {
 	//Spawn Index -1 : Randomly select a spawn point.
 	void SpawnNewZombie(int pSpawnIndex = -1)
 	{
-        if (!_zomzModeOn)
+        if (!_gameData.IsPaused)
         {
-            int newSpawnIndex;
+            if (!_zomzModeOn)
+            {
+                int newSpawnIndex;
 
-            if (pSpawnIndex == -1)
-                newSpawnIndex = Random.Range(0, _allSpawnPoints.Count - 1);
-            else
-                newSpawnIndex = pSpawnIndex;
+                if (pSpawnIndex == -1)
+                    newSpawnIndex = Random.Range(0, _allSpawnPoints.Count - 1);
+                else
+                    newSpawnIndex = pSpawnIndex;
 
-            int newZombieIndex = Random.Range(0, _zombieSpawnTypes.Count - 1);
-            GameObject newZombie = Instantiate(_zombieSpawnTypes[newZombieIndex], _allSpawnPoints[newSpawnIndex].position, Quaternion.identity) as GameObject;
-            _allZombies.Add(newZombie.GetComponent<AIStateController>());
+                int newZombieIndex = Random.Range(0, _zombieSpawnTypes.Count - 1);
+                GameObject newZombie = Instantiate(_zombieSpawnTypes[newZombieIndex], _allSpawnPoints[newSpawnIndex].position, Quaternion.identity) as GameObject;
+                _allZombies.Add(newZombie.GetComponent<AIStateController>());
+            }
         }
 	}
 

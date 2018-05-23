@@ -59,6 +59,9 @@ public class ZomzControls : MonoBehaviour {
 
 	private const float ZOMZ_COOLDOWN_TIME = 5f;
 
+    [SerializeField]
+    private GameData _gameData;
+
 	[SerializeField]
 	private GameFloatAttribute _zomzManaAttribute;
 
@@ -96,34 +99,37 @@ public class ZomzControls : MonoBehaviour {
 
 	void Update () 
 	{
-		RaycastHit hit; 
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); 
-		if (_zomzMode)
-		{
-			if (Input.GetMouseButtonDown (0))
-			{
-				if (Physics.Raycast (ray, out hit, Mathf.Infinity, _enemyLayerMask))
-				{
-					if (hit.transform != null)
-					{
-						for (int i = 0; i < _zombiesUnderControl.Count; i++)
-						{
-							if (hit.collider.gameObject != _zombiesUnderControl [i].gameObject)
-								_zombiesUnderControl [i].ClearCurrentControl ();
-							else
-								_zombiesUnderControl [i].SelectCurrentForControl ();
-						}
+        if (!_gameData.IsPaused)
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (_zomzMode)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    if (Physics.Raycast(ray, out hit, Mathf.Infinity, _enemyLayerMask))
+                    {
+                        if (hit.transform != null)
+                        {
+                            for (int i = 0; i < _zombiesUnderControl.Count; i++)
+                            {
+                                if (hit.collider.gameObject != _zombiesUnderControl[i].gameObject)
+                                    _zombiesUnderControl[i].ClearCurrentControl();
+                                else
+                                    _zombiesUnderControl[i].SelectCurrentForControl();
+                            }
 
-					}
-				}
-			}
-		}
+                        }
+                    }
+                }
+            }
 
-		if (Input.GetKeyDown (KeyCode.Z))
-		{
-			//TODO check for null and override
-			StartCoroutine(ToggleZomzMode ());
-		}
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                //TODO check for null and override
+                StartCoroutine(ToggleZomzMode());
+            }
+        }
 	}
 
 	IEnumerator ToggleZomzMode()
