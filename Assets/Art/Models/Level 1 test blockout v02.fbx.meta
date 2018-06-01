@@ -11850,7 +11850,12 @@ ModelImporter:
     4304344: pCylinder25
     4304346: Interactable
     9500000: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Chain_fence_material
+    second: {fileID: 2100000, guid: d21004acf2274354c94ffca3128f6dac, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
