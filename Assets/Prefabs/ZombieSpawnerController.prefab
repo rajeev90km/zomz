@@ -34,11 +34,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4711719486963134}
-  - component: {fileID: 114162500053284358}
-  - component: {fileID: 114716139227267808}
-  - component: {fileID: 114897316986745032}
-  - component: {fileID: 114395446787004300}
-  - component: {fileID: 114083387734479620}
+  - component: {fileID: 114463423551054722}
+  - component: {fileID: 114207478520654640}
   m_Layer: 0
   m_Name: ZombieSpawnerController
   m_TagString: Untagged
@@ -189,7 +186,7 @@ Transform:
   m_Father: {fileID: 4711719486963134}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114083387734479620
+--- !u!114 &114207478520654640
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -200,13 +197,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 9bef04880d4c741f786ba635f7878f54, type: 2}
+  Event: {fileID: 11400000, guid: e1e8f4f42e00e49b5bee0fe1a331bd99, type: 2}
   Response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114162500053284358}
-        m_MethodName: ToggleZomzMode
-        m_Mode: 6
+      - m_Target: {fileID: 114463423551054722}
+        m_MethodName: StartNextWave
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -217,7 +214,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114162500053284358
+--- !u!114 &114463423551054722
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -225,96 +222,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 1305141651639980}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6e18fed3395b45839513d9ab7c46db1, type: 3}
+  m_Script: {fileID: 11500000, guid: 85f2e741090864cdbaafb8f45d7a4f4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _gameData: {fileID: 11400000, guid: fe25c4c301c7243a3b0300d6eb01a3f9, type: 2}
-  _spawnMode: -1
-  _spawnInterval: 10
-  _maxZombies: 10
-  _zombieSpawnTypes:
-  - {fileID: 1448135709913774, guid: 03232391d9dc74788998011d805ed451, type: 2}
---- !u!114 &114395446787004300
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1305141651639980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 955a51db9b35444b795c34aefcce8a74, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114162500053284358}
-        m_MethodName: ToggleZomzMode
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
---- !u!114 &114716139227267808
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1305141651639980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 930d815983fcc4098b12660acb7c2142, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114162500053284358}
-        m_MethodName: LevelEnd
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
---- !u!114 &114897316986745032
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1305141651639980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 503bccaec16a24f83a8a34728473ac9b, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114162500053284358}
-        m_MethodName: LevelStart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  _zombieWaveInfo:
+  - waveNum: Wave1
+    ZombieSpawns:
+    - SpawnPoint: {fileID: 4415994044393670}
+      ZombieToSpawn: {fileID: 1448135709913774, guid: 03232391d9dc74788998011d805ed451,
+        type: 2}
+    PlayInterstitalAfterWave: 1
+    InterstitalToPlay: {fileID: 11400000, guid: 2d194cf893af949cda1ec816f4cc2482,
+      type: 2}
+  - waveNum: Wave2
+    ZombieSpawns:
+    - SpawnPoint: {fileID: 4322313051542892}
+      ZombieToSpawn: {fileID: 1448135709913774, guid: 03232391d9dc74788998011d805ed451,
+        type: 2}
+    PlayInterstitalAfterWave: 0
+    InterstitalToPlay: {fileID: 0}
+  _conversationStartEvent: {fileID: 11400000, guid: 6723b9a3db46344bc973ce4b5f66c62d,
+    type: 2}
+  _levelEndEvent: {fileID: 11400000, guid: 930d815983fcc4098b12660acb7c2142, type: 2}

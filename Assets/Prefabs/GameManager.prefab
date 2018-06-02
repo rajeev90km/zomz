@@ -19,8 +19,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4663302240904544}
-  - component: {fileID: 114676649266151240}
+  - component: {fileID: 114471394880641996}
   - component: {fileID: 114112096250447214}
+  - component: {fileID: 114307310004676170}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -56,9 +57,9 @@ MonoBehaviour:
   Response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114676649266151240}
-        m_MethodName: TogglePauseGame
-        m_Mode: 6
+      - m_Target: {fileID: 114471394880641996}
+        m_MethodName: EndConversation
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -69,7 +70,35 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114676649266151240
+--- !u!114 &114307310004676170
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1120131487472466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 930d815983fcc4098b12660acb7c2142, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114471394880641996}
+        m_MethodName: OnLevelEnd
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &114471394880641996
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -81,9 +110,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameData: {fileID: 11400000, guid: fe25c4c301c7243a3b0300d6eb01a3f9, type: 2}
-  _gameStartConversation: {fileID: 11400000, guid: 96e7c75f8b21d43aca11e2126e4530f3,
+  _nextLevel: {fileID: 102900000, guid: c43fba98c0c9c144a8f471f53f4159af, type: 3}
+  _levelStartInterstitial: {fileID: 11400000, guid: 96e7c75f8b21d43aca11e2126e4530f3,
+    type: 2}
+  _levelEndInterstitial: {fileID: 11400000, guid: 282188f6e34264dd78b178f5fb566975,
     type: 2}
   _conversationStartEvent: {fileID: 11400000, guid: 6723b9a3db46344bc973ce4b5f66c62d,
     type: 2}
   _conversationEndEvent: {fileID: 11400000, guid: e1e8f4f42e00e49b5bee0fe1a331bd99,
     type: 2}
+  _levelStartEvent: {fileID: 11400000, guid: 503bccaec16a24f83a8a34728473ac9b, type: 2}

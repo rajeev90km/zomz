@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c58695af59ef74d829c45523a8fb414f, type: 3}
+  m_Name: CNV_Debug_Mid
+  m_EditorClassIdentifier: 
+  AllDialogues:
+  - CharacterName: Abe
+    Text: This is an example of Mid Game Conversation. The conversation ends and the
+      zombie spawner takes back control and continues with the next wave
+    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    CharPosition: 0
+    BackgroundImage: {fileID: 0}
+    DialogueVO: {fileID: 0}
+    BackgroundMusic: {fileID: 0}
+    SFX: {fileID: 0}
+    ExitSFX: {fileID: 0}
+  PauseGamePlay: 1

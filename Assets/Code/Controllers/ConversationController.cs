@@ -39,7 +39,6 @@ public class ConversationController : MonoBehaviour {
     [SerializeField]
     private Image[] _avatars;
 
-
     [Header("Events")]
     [SerializeField]
     private GameEvent _conversationEndEvent;
@@ -51,13 +50,10 @@ public class ConversationController : MonoBehaviour {
 
     private int currentConversationIndex = 0;
 
-
-
 	private void Start()
 	{
         
 	}
-
 
 	public void ProcessCurrentConversation()
     {
@@ -137,7 +133,6 @@ public class ConversationController : MonoBehaviour {
         {
             _avatars[i].gameObject.SetActive(pEnable);
         }
-
     }
 
     void Display(ConversationEntity pEntity)
@@ -285,29 +280,32 @@ public class ConversationController : MonoBehaviour {
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (_typeTextCoroutine != null)
+            if (_gameData.CurrentConversation.Conversation != null)
             {
-                StopCoroutine(_typeTextCoroutine);
-                _typeTextCoroutine = null;
-                DisplayFullText(_fullText[_textIndex]);
-            }
-            else
-            {
-                _textIndex++;
-
-                if (_textIndex >= _fullText.Count)
+                if (_typeTextCoroutine != null)
                 {
-                    if (currentConversationIndex < _gameData.CurrentConversation.Conversation.AllDialogues.Count - 1)
-                    {
-                        currentConversationIndex++;
-                        BeginProcessingConversation();
-                    }
-                    else
-                        EndConversation();
+                    StopCoroutine(_typeTextCoroutine);
+                    _typeTextCoroutine = null;
+                    DisplayFullText(_fullText[_textIndex]);
                 }
                 else
                 {
-                    RunText(_fullText[_textIndex]);
+                    _textIndex++;
+
+                    if (_textIndex >= _fullText.Count)
+                    {
+                        if (currentConversationIndex < _gameData.CurrentConversation.Conversation.AllDialogues.Count - 1)
+                        {
+                            currentConversationIndex++;
+                            BeginProcessingConversation();
+                        }
+                        else
+                            EndConversation();
+                    }
+                    else
+                    {
+                        RunText(_fullText[_textIndex]);
+                    }
                 }
             }
         }	
