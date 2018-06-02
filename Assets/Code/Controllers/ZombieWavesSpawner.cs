@@ -42,16 +42,26 @@ public class ZombieWavesSpawner : ZombieBaseSpawner
     [SerializeField]
     private GameEvent _levelEndEvent;
 
+    [SerializeField]
+    private GameEvent _levelLostEvent;
+
     private bool _levelEnded = false;
+    private bool _levelLost = false;
+
+    private GameObject _playerObj;
+    private CharacterControls _playerControls;
 
 	private void Start()
     {
         _deadZombies.Add(null);
+        _playerObj = GameObject.FindWithTag("Player");
+        if (_playerObj)
+            _playerControls = _playerObj.GetComponent<CharacterControls>();
     }
 
 	public void StartNextWave()
     {
-        if (!_levelEnded)
+        if (!_levelEnded && !_levelLost)
         {
             //Increment Current Wave
             currentWave += 1;
@@ -84,7 +94,7 @@ public class ZombieWavesSpawner : ZombieBaseSpawner
 
 	private void Update()
 	{
-        if (!_levelEnded)
+        if (!_levelEnded && !_levelLost)
         {
             for (int i = 0; i < _allZombies.Count; i++)
             {
@@ -116,6 +126,16 @@ public class ZombieWavesSpawner : ZombieBaseSpawner
                 }
             }
         }
+
+        if(!_playerControls.IsAlive && !_levelLost)
+        {
+            _levelLost = true;
+            _allZombies.Clear();
+            _deadZombies.Clear();
+            _levelLostEvent.Raise();
+            _levelEnded = true;
+        }
+
 	}
 
 }

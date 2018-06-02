@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 114471394880641996}
   - component: {fileID: 114112096250447214}
   - component: {fileID: 114307310004676170}
+  - component: {fileID: 114661915930864490}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -115,8 +116,38 @@ MonoBehaviour:
     type: 2}
   _levelEndInterstitial: {fileID: 11400000, guid: 282188f6e34264dd78b178f5fb566975,
     type: 2}
+  _levelLostInterstitial: {fileID: 11400000, guid: 7bffd3cf8991e43a0908736ca64c76a4,
+    type: 2}
   _conversationStartEvent: {fileID: 11400000, guid: 6723b9a3db46344bc973ce4b5f66c62d,
     type: 2}
   _conversationEndEvent: {fileID: 11400000, guid: e1e8f4f42e00e49b5bee0fe1a331bd99,
     type: 2}
   _levelStartEvent: {fileID: 11400000, guid: 503bccaec16a24f83a8a34728473ac9b, type: 2}
+--- !u!114 &114661915930864490
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1120131487472466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 057cee1969d384f2e8f50fda609f6423, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114471394880641996}
+        m_MethodName: OnLevelLost
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null

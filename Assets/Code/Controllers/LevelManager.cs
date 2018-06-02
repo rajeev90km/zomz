@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelManager : MonoBehaviour {
+public class LevelManager : MonoBehaviour
+{
 
     [SerializeField]
     private GameData _gameData;
@@ -18,6 +19,9 @@ public class LevelManager : MonoBehaviour {
     [SerializeField]
     private Conversation _levelEndInterstitial;
 
+    [SerializeField]
+    private Conversation _levelLostInterstitial;
+
     [Header("Events")]
     [SerializeField]
     private GameEvent _conversationStartEvent;
@@ -28,11 +32,11 @@ public class LevelManager : MonoBehaviour {
     [SerializeField]
     private GameEvent _levelStartEvent;
 
-	
-	void Start () 
+
+    void Start()
     {
         OnLevelStart();
-	}
+    }
 
     public void OnLevelStart()
     {
@@ -43,6 +47,12 @@ public class LevelManager : MonoBehaviour {
     {
         Debug.Log("Level End");
         StartConversation(_levelEndInterstitial);
+    }
+
+    public void OnLevelLost()
+    {
+        Debug.Log("Level Lost");
+        StartConversation(_levelLostInterstitial);
     }
 
     void StartConversation (Conversation pConversation)
@@ -58,6 +68,9 @@ public class LevelManager : MonoBehaviour {
 
         if (_gameData.CurrentConversation.Conversation == _levelEndInterstitial)
             SceneManager.LoadScene(_nextLevel.ToString());
+
+        if (_gameData.CurrentConversation.Conversation == _levelLostInterstitial)
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
         _gameData.CurrentConversation.Conversation = null;
         TogglePauseLevel(false);

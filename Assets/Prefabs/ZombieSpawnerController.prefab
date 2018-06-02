@@ -245,3 +245,4 @@ MonoBehaviour:
   _conversationStartEvent: {fileID: 11400000, guid: 6723b9a3db46344bc973ce4b5f66c62d,
     type: 2}
   _levelEndEvent: {fileID: 11400000, guid: 930d815983fcc4098b12660acb7c2142, type: 2}
+  _levelLostEvent: {fileID: 11400000, guid: 057cee1969d384f2e8f50fda609f6423, type: 2}

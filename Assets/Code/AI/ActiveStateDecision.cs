@@ -18,6 +18,7 @@ public class ActiveStateDecision : Decision
 //		if (pController.ChaseTarget == null)
 //			pController.ChaseTarget = _player.transform;
 
+        _player = GameObject.FindWithTag("Player");
 		_playerStats = _player.GetComponent<CharacterControls> ();
 
 		bool chaseTargetIsActive = _playerStats.IsAlive;
