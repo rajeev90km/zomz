@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Name: CS_Player
   m_EditorClassIdentifier: 
   Health: 100
-  WalkSpeed: 2
-  RunSpeed: 3
+  WalkSpeed: 4
+  RunSpeed: 6
   AttackRate: 1.2
   AttackStrength: 20
   AttackRange: 1.5
+  ZomzRange: 12
   ZomzSpeed: 5
+  AttackDamageToSelf: 0
