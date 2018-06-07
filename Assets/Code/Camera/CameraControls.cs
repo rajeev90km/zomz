@@ -39,6 +39,7 @@ public class CameraControls : MonoBehaviour {
 	Renderer oldRenderer;
 	Renderer r;
 	ChangedObject changedObject;
+    CharacterControls _playerCharacter;
 
 	void Start () 
 	{
@@ -46,6 +47,11 @@ public class CameraControls : MonoBehaviour {
 
 		if(_mask!=null)
 			_mask.SetActive (false);
+
+        if (_targetTransform != null)
+            _playerCharacter = _targetTransform.gameObject.GetComponent<CharacterControls>();
+
+
 	}
 
 
@@ -99,14 +105,17 @@ public class CameraControls : MonoBehaviour {
 	void LateUpdate () {
 
 		if (_targetTransform != null) {
-//			if (Input.GetMouseButton (0)) {
-//				transform.RotateAround (_targetTransform.position, Vector3.up, Input.GetAxis ("Mouse X") * _rotateSpeed * Time.deltaTime);
-//				_cameraOffset = transform.position - _targetTransform.position;		
-//			} else {			
+
+            _playerCharacter.ResetDirectionVectors();
+
+			if (Input.GetMouseButton (0)) {
+				transform.RotateAround (_targetTransform.position, Vector3.up, Input.GetAxis ("Mouse X") * _rotateSpeed * Time.deltaTime);
+				_cameraOffset = transform.position - _targetTransform.position;		
+			} else {			
 				Vector3 newPos = _targetTransform.position + _cameraOffset;
 				transform.position = Vector3.Slerp (transform.position, newPos, _smoothnessFactor);
 				transform.LookAt (_targetTransform);
-//			}
+			}
 		}
 	}
 }
