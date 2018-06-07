@@ -106,7 +106,8 @@ public class CameraControls : MonoBehaviour {
 
 		if (_targetTransform != null) {
 
-            _playerCharacter.ResetDirectionVectors();
+            if(_playerCharacter!=null)
+                _playerCharacter.ResetDirectionVectors();
 
 			if (Input.GetMouseButton (0)) {
 				transform.RotateAround (_targetTransform.position, Vector3.up, Input.GetAxis ("Mouse X") * _rotateSpeed * Time.deltaTime);
