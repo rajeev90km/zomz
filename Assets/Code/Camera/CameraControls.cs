@@ -24,7 +24,7 @@ public class CameraControls : MonoBehaviour {
 	private Transform _rayCastPlayerTransform;
 
 	[SerializeField]
-	private float _rotateSpeed;
+	private float _rotateSpeed = 1000f;
 
 	[SerializeField]
 	[Range(0f,1f)]
