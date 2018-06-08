@@ -35,6 +35,15 @@ public class CameraControls : MonoBehaviour {
 	[SerializeField]
 	private GameObject _mask;
 
+    [SerializeField]
+    private float _minFov = 45f;
+
+    [SerializeField]
+    private float _maxFov = 90f;
+
+    [SerializeField]
+    private float _zoomSensitivity = 10f;
+
 	RaycastHit _hit;
 	Renderer oldRenderer;
 	Renderer r;
@@ -108,6 +117,11 @@ public class CameraControls : MonoBehaviour {
 
             if(_playerCharacter!=null)
                 _playerCharacter.ResetDirectionVectors();
+
+            float fov = Camera.main.fieldOfView;
+            fov += Input.GetAxis("Mouse ScrollWheel") * _zoomSensitivity;
+            fov = Mathf.Clamp(fov, _minFov, _maxFov);
+            Camera.main.fieldOfView = fov;
 
 			if (Input.GetMouseButton (0)) {
 				transform.RotateAround (_targetTransform.position, Vector3.up, Input.GetAxis ("Mouse X") * _rotateSpeed * Time.deltaTime);
