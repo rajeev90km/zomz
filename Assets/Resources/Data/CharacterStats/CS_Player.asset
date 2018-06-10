@@ -16,5 +16,7 @@ MonoBehaviour:
   RunSpeed: 3
   AttackRate: 1.2
   AttackStrength: 20
-  AttackRange: 1.5
+  AttackRange: 2
+  ZomzRange: 12
   ZomzSpeed: 5
+  AttackDamageToSelf: 0
