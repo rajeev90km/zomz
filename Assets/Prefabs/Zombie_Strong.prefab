@@ -1934,7 +1934,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1883101649495508
 GameObject:
   m_ObjectHideFlags: 1
@@ -2191,7 +2191,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1875776018789522}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -3.357593, y: 0.00000011920929, z: 9.965788}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4638487539201914}
@@ -4127,6 +4127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e68cdc0f19ef142eaaecb16f4457b96c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameData: {fileID: 11400000, guid: fe25c4c301c7243a3b0300d6eb01a3f9, type: 2}
   _characterStats: {fileID: 11400000, guid: a357b1408fc484236a53f8a787de49e1, type: 2}
   _zomzActionsList: {fileID: 11400000, guid: 7454997a54f2d40e7b197818a56a48b7, type: 2}
   _currentSelectedZombie: {fileID: 11400000, guid: 819903b2282a74b9291d8042e677cdb5,

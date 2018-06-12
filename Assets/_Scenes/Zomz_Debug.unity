@@ -348,9 +348,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _targetTransform: {fileID: 131591945}
   _rayCastPlayerTransform: {fileID: 1575071041}
-  _rotateSpeed: 50
+  _rotateSpeed: 1000
   _smoothnessFactor: 0.17
   _mask: {fileID: 0}
+  _minFov: 45
+  _maxFov: 90
+  _zoomSensitivity: 10
 --- !u!1 &334433572
 GameObject:
   m_ObjectHideFlags: 0

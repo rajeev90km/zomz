@@ -24,7 +24,7 @@ public class CameraControls : MonoBehaviour {
 	private Transform _rayCastPlayerTransform;
 
 	[SerializeField]
-	private float _rotateSpeed;
+	private float _rotateSpeed = 1000f;
 
 	[SerializeField]
 	[Range(0f,1f)]
@@ -35,10 +35,20 @@ public class CameraControls : MonoBehaviour {
 	[SerializeField]
 	private GameObject _mask;
 
+    [SerializeField]
+    private float _minFov = 45f;
+
+    [SerializeField]
+    private float _maxFov = 90f;
+
+    [SerializeField]
+    private float _zoomSensitivity = 10f;
+
 	RaycastHit _hit;
 	Renderer oldRenderer;
 	Renderer r;
 	ChangedObject changedObject;
+    CharacterControls _playerCharacter;
 
 	void Start () 
 	{
@@ -46,6 +56,11 @@ public class CameraControls : MonoBehaviour {
 
 		if(_mask!=null)
 			_mask.SetActive (false);
+
+        if (_targetTransform != null)
+            _playerCharacter = _targetTransform.gameObject.GetComponent<CharacterControls>();
+
+
 	}
 
 
@@ -99,14 +114,23 @@ public class CameraControls : MonoBehaviour {
 	void LateUpdate () {
 
 		if (_targetTransform != null) {
-//			if (Input.GetMouseButton (0)) {
-//				transform.RotateAround (_targetTransform.position, Vector3.up, Input.GetAxis ("Mouse X") * _rotateSpeed * Time.deltaTime);
-//				_cameraOffset = transform.position - _targetTransform.position;		
-//			} else {			
+
+            if(_playerCharacter!=null)
+                _playerCharacter.ResetDirectionVectors();
+
+            float fov = Camera.main.fieldOfView;
+            fov += Input.GetAxis("Mouse ScrollWheel") * _zoomSensitivity;
+            fov = Mathf.Clamp(fov, _minFov, _maxFov);
+            Camera.main.fieldOfView = fov;
+
+			if (Input.GetMouseButton (0)) {
+				transform.RotateAround (_targetTransform.position, Vector3.up, Input.GetAxis ("Mouse X") * _rotateSpeed * Time.deltaTime);
+				_cameraOffset = transform.position - _targetTransform.position;		
+			} else {			
 				Vector3 newPos = _targetTransform.position + _cameraOffset;
 				transform.position = Vector3.Slerp (transform.position, newPos, _smoothnessFactor);
 				transform.LookAt (_targetTransform);
-//			}
+			}
 		}
 	}
 }

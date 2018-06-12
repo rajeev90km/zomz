@@ -5,75 +5,81 @@ using System.Linq;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Animator))]
-public class CharacterControls : MonoBehaviour {
+public class CharacterControls : MonoBehaviour
+{
 
     [SerializeField]
     private GameData _gameData;
 
-	[SerializeField]
-	private CharacterStats _characterStats;
-	public CharacterStats CharacterStats
-	{
-		get { return _characterStats; }
-	}
+    [SerializeField]
+    private CharacterStats _characterStats;
+    public CharacterStats CharacterStats
+    {
+        get { return _characterStats; }
+    }
 
-	[SerializeField]
-	private Transform _eyes;
-	public Transform Eyes
-	{
-		get{ return _eyes;}	
-	}
+    [SerializeField]
+    private Transform _eyes;
+    public Transform Eyes
+    {
+        get { return _eyes; }
+    }
 
-	public float _currentHealth;
+    public float _currentHealth;
 
-	private float _speedSmoothTime = 0.1f;
-	private float _speedSmoothVelocity;
-	private float _currentSpeed;
+    private float _speedSmoothTime = 0.1f;
+    private float _speedSmoothVelocity;
+    private float _currentSpeed;
 
-	[SerializeField]
-	private bool _debugMode = false;
+    [SerializeField]
+    private bool _debugMode = false;
 
-	public bool _isAlive = true;
-	public bool IsAlive
-	{
-		get { return _isAlive; }
-	}
+    public bool _isAlive = true;
+    public bool IsAlive
+    {
+        get { return _isAlive; }
+    }
 
-	Vector3 forward,right;
+    Vector3 forward, right;
 
-	private Animator _animator;
+    private Animator _animator;
 
-	private ZomzControls _zomzControls;
+    private ZomzControls _zomzControls;
 
-	private bool _isAttacking = false;
-	private bool _isHurting = false;
-	private bool _canAttack = true;
+    private bool _isAttacking = false;
+    private bool _isHurting = false;
+    private bool _canAttack = true;
 
-	private Coroutine _attackCoroutine;
-	private Coroutine _hurtCoroutine;
+    private Coroutine _attackCoroutine;
+    private Coroutine _hurtCoroutine;
 
-	private string[] _attackAnimations = {"attack1","attack2","attack3","attackcombo1","attackcombo2"};
-	private string[] _hurtAnimations = {"hurt1","hurt2","hurt3"};
+    private string[] _attackAnimations = { "attack1", "attack2", "attack3", "attackcombo1", "attackcombo2" };
+    private string[] _hurtAnimations = { "hurt1", "hurt2", "hurt3" };
 
-	[Header("FX")]
-	[SerializeField]
-	private GameObject _hurtFX;
+    [Header("FX")]
+    [SerializeField]
+    private GameObject _hurtFX;
 
 
 
-	void Start () 
-	{
-		_zomzControls = GetComponent<ZomzControls> ();
-		_currentHealth = _characterStats.Health;
+    void Start()
+    {
+        _zomzControls = GetComponent<ZomzControls>();
+        _currentHealth = _characterStats.Health;
 
-		forward = Camera.main.transform.forward;
-		forward.y = 0;
-		forward = Vector3.Normalize (forward);
+        _animator = GetComponent<Animator>();
 
-		right = Quaternion.Euler (new Vector3 (0, 90, 0)) * forward;
+        ResetDirectionVectors();
+    }
 
-		_animator = GetComponent<Animator> ();
-	}
+    public void ResetDirectionVectors()
+    {
+        forward = Camera.main.transform.forward;
+        forward.y = 0;
+        forward = Vector3.Normalize(forward);
+
+        right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
+    }
 
 
 	public void Attack()
