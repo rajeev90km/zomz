@@ -2172,9 +2172,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 175d9afbe35034f9cb718a693f9b6d95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _material: {fileID: 2100000, guid: 96cc172843c4042c8b2c80bc6f93576c, type: 2}
+  _material: {fileID: 2100000, guid: d0b6b10c79c1e43e4bbdf9828b2b7b18, type: 2}
   _propertyName: _CharacterPosition
-  _transform: {fileID: 0}
+  _transform: {fileID: 4604407619888464}
 --- !u!114 &114957666113408444
 MonoBehaviour:
   m_ObjectHideFlags: 1
