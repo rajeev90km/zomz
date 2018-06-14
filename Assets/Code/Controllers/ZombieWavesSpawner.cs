@@ -25,6 +25,11 @@ public class ZombieWave
     public bool PlayInterstitalAfterWave;
 
     public Conversation InterstitalToPlay;
+
+    public bool TimeBasedWave = false;
+
+    [DrawIf("TimeBasedWave", true)]
+    public float timeTillNextWave;
 }
 
 public class ZombieWavesSpawner : ZombieBaseSpawner 
@@ -80,6 +85,11 @@ public class ZombieWavesSpawner : ZombieBaseSpawner
                     if (asc != null)
                         _allZombies.Add(asc);
                 }
+
+                if(_zombieWaveInfo[currentWave].TimeBasedWave)
+                {
+                    StartCoroutine(WaitAndProcessNextWave());
+                }
             }
             //All Waves complete for this level
             else
@@ -90,6 +100,26 @@ public class ZombieWavesSpawner : ZombieBaseSpawner
                 _levelEnded = true;
             }
         }
+    }
+
+    public IEnumerator WaitAndProcessNextWave()
+    {
+        yield return new WaitForSeconds(_zombieWaveInfo[currentWave].timeTillNextWave);
+
+        if (_zombieWaveInfo[currentWave].PlayInterstitalAfterWave)
+        {
+            if (_zombieWaveInfo[currentWave].InterstitalToPlay != null)
+            {
+                _gameData.CurrentConversation.Conversation = _zombieWaveInfo[currentWave].InterstitalToPlay;
+                _conversationStartEvent.Raise();
+            }
+        }
+        else
+            StartNextWave();
+
+        _deadZombies.Clear();
+        _deadZombies.Add(null);
+
     }
 
 	private void Update()
@@ -105,7 +135,8 @@ public class ZombieWavesSpawner : ZombieBaseSpawner
                 }
             }
 
-            if (_deadZombies.Count == _allZombies.Count)
+
+            if (currentWave > -1 && !_zombieWaveInfo[currentWave].TimeBasedWave && _deadZombies.Count == _allZombies.Count)
             {
                 if (currentWave <= _zombieWaveInfo.Count - 1)
                 {

@@ -15,7 +15,7 @@ MonoBehaviour:
   WalkSpeed: 2
   RunSpeed: 3
   AttackRate: 2
-  AttackStrength: 5
+  AttackStrength: 20
   AttackRange: 1.5
   ZomzRange: 10
   ZomzSpeed: 5
