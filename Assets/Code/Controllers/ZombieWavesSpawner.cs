@@ -15,6 +15,13 @@ public class ZombieSpawn
     }
 }
 
+public enum WaveType
+{
+    TIME_BASED = 0,
+    PROXIMITY_BASED = 1,
+    KILL_ALL_ZOMBIES = 2
+}
+
 [System.Serializable]
 public class ZombieWave
 {
@@ -26,9 +33,9 @@ public class ZombieWave
 
     public Conversation InterstitalToPlay;
 
-    public bool TimeBasedWave = false;
+    public WaveType WaveType;
 
-    [DrawIf("TimeBasedWave", true)]
+    [DrawIf("WaveType", WaveType.TIME_BASED)]
     public float timeTillNextWave;
 }
 
@@ -86,7 +93,7 @@ public class ZombieWavesSpawner : ZombieBaseSpawner
                         _allZombies.Add(asc);
                 }
 
-                if(_zombieWaveInfo[currentWave].TimeBasedWave)
+                if(_zombieWaveInfo[currentWave].WaveType == WaveType.TIME_BASED)
                 {
                     StartCoroutine(WaitAndProcessNextWave());
                 }
@@ -136,7 +143,7 @@ public class ZombieWavesSpawner : ZombieBaseSpawner
             }
 
 
-            if (currentWave > -1 && !_zombieWaveInfo[currentWave].TimeBasedWave && _deadZombies.Count == _allZombies.Count)
+            if (currentWave > -1 && _zombieWaveInfo[currentWave].WaveType == WaveType.KILL_ALL_ZOMBIES && _deadZombies.Count == _allZombies.Count)
             {
                 if (currentWave <= _zombieWaveInfo.Count - 1)
                 {

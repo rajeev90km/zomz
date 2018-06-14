@@ -1035,8 +1035,8 @@ MonoBehaviour:
     PlayInterstitalAfterWave: 1
     InterstitalToPlay: {fileID: 11400000, guid: 2d194cf893af949cda1ec816f4cc2482,
       type: 2}
-    TimeBasedWave: 1
-    timeTillNextWave: 20
+    WaveType: 0
+    timeTillNextWave: 2
   - waveNum: Wave2
     ZombieSpawns:
     - SpawnPoint: {fileID: 1048033115}
@@ -1044,7 +1044,7 @@ MonoBehaviour:
         type: 2}
     PlayInterstitalAfterWave: 0
     InterstitalToPlay: {fileID: 0}
-    TimeBasedWave: 0
+    WaveType: 2
     timeTillNextWave: 2
   _conversationStartEvent: {fileID: 11400000, guid: 6723b9a3db46344bc973ce4b5f66c62d,
     type: 2}
