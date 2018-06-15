@@ -34,8 +34,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4711719486963134}
-  - component: {fileID: 114463423551054722}
   - component: {fileID: 114207478520654640}
+  - component: {fileID: 114463423551054722}
+  - component: {fileID: 114075497337799862}
   m_Layer: 0
   m_Name: ZombieSpawnerController
   m_TagString: Untagged
@@ -186,6 +187,34 @@ Transform:
   m_Father: {fileID: 4711719486963134}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114075497337799862
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1305141651639980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: d66ecea7d0b4a4ac788b34cfdba535d6, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114463423551054722}
+        m_MethodName: ProcessTriggeredWave
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114207478520654640
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -235,6 +264,8 @@ MonoBehaviour:
     PlayInterstitalAfterWave: 1
     InterstitalToPlay: {fileID: 11400000, guid: 2d194cf893af949cda1ec816f4cc2482,
       type: 2}
+    WaveType: 1
+    timeTillNextWave: 2
   - waveNum: Wave2
     ZombieSpawns:
     - SpawnPoint: {fileID: 4322313051542892}
@@ -242,6 +273,8 @@ MonoBehaviour:
         type: 2}
     PlayInterstitalAfterWave: 0
     InterstitalToPlay: {fileID: 0}
+    WaveType: 2
+    timeTillNextWave: 2
   _conversationStartEvent: {fileID: 11400000, guid: 6723b9a3db46344bc973ce4b5f66c62d,
     type: 2}
   _levelEndEvent: {fileID: 11400000, guid: 930d815983fcc4098b12660acb7c2142, type: 2}

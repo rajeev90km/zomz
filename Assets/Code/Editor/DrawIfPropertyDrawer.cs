@@ -24,7 +24,7 @@ public class DrawIfPropertyDrawer : PropertyDrawer
             return 0f;
 
         // The height of the property should be defaulted to the default height.
-        return 25f;
+        return 20f;
     }
 
     /// <summary>

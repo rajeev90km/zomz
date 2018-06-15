@@ -109,6 +109,14 @@ public class ZombieWavesSpawner : ZombieBaseSpawner
         }
     }
 
+    public void ProcessTriggeredWave()
+    {
+        if (_zombieWaveInfo[currentWave].WaveType == WaveType.PROXIMITY_BASED)
+        {
+            Debug.Log("New Wave Triggered");
+        }
+    }
+
     public IEnumerator WaitAndProcessNextWave()
     {
         yield return new WaitForSeconds(_zombieWaveInfo[currentWave].timeTillNextWave);
