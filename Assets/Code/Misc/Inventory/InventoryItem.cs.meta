@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 91c734732e473447082365ab5c81412b
+timeCreated: 1529378967
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _inventoryObject: {instanceID: 0}
+  - _triggerEnterEvent: {fileID: 11400000, guid: 671b9eadfc31f4b92b5ff29c44602347,
+      type: 2}
+  - _triggerExitEvent: {fileID: 11400000, guid: 52b293da8528242bf8589e989402d190,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

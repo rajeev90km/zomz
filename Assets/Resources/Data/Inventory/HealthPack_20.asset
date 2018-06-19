@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8646f19176fd4952847937b0e7cb42a, type: 3}
+  m_Name: HealthPack_20
+  m_EditorClassIdentifier: 
+  Inventory: {fileID: 11400000, guid: a022edf6031e646e087e17396de0f9af, type: 2}
+  Health: 20

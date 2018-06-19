@@ -25,8 +25,22 @@ public class UIController : MonoBehaviour {
     [SerializeField]
     private GameObject _attackUI;
 
+    [Header("Inventory UI")]
+    [SerializeField]
+    private Text _inventoryMessages;
+
+    [Header("Events")]
+    [SerializeField]
+    private GameEvent _inventoryTriggerEnter;
+
+    [SerializeField]
+    private GameEvent _inventoryTriggerExit;
+
 	private CharacterControls _playerStats;
 	private GameObject _playerObj;
+
+    private const string INVENTORY_EQUIP_MESSAGE = "Press 'X' to Equip Item.";
+    private const string INVENTORY_FULL_WARNING = "No Inventory slots available. Use some to free up slots.";
 
 	private void Start()
 	{
@@ -34,7 +48,6 @@ public class UIController : MonoBehaviour {
 
 		if (_playerObj != null)
 			_playerStats = _playerObj.GetComponent<CharacterControls> ();
-			
 	}
 
 	public void DisplayZomzUI(bool pEnable)
@@ -42,6 +55,18 @@ public class UIController : MonoBehaviour {
 		if (_zomzText)
 			_zomzText.gameObject.SetActive (pEnable);
 	}
+
+    public void ToggleInventoryMessage(bool pEnable)
+    {
+        if(pEnable)
+        {
+            _inventoryMessages.text = INVENTORY_EQUIP_MESSAGE;    
+        }
+        else
+        {
+            _inventoryMessages.text = "";    
+        }
+    }
 
 	void Update()
 	{
