@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: Weapon_Meele1
   m_EditorClassIdentifier: 
   Inventory: {fileID: 11400000, guid: a022edf6031e646e087e17396de0f9af, type: 2}
+  PlayerStats: {fileID: 11400000, guid: 03de282f5363149deae921d331f3bfa9, type: 2}
   Model: {fileID: 0}
   AttackStrength: 20
   Durability: 5

@@ -9,8 +9,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8646f19176fd4952847937b0e7cb42a, type: 3}
-  m_Name: HealthPack_20
+  m_Name: HealthPack_50
   m_EditorClassIdentifier: 
   Inventory: {fileID: 11400000, guid: a022edf6031e646e087e17396de0f9af, type: 2}
   PlayerStats: {fileID: 11400000, guid: 03de282f5363149deae921d331f3bfa9, type: 2}
-  Health: 20
+  Health: 50
