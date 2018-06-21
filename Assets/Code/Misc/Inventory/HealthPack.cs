@@ -7,9 +7,12 @@ public class HealthPack : InventoryObject
 {
     public float Health;
 
-    public override void Use()
+    public override void Use(CharacterControls pControls)
     {
-        Debug.Log("Health Pack Use");
+        pControls._currentHealth += Health;
+
+        if (pControls._currentHealth > 100)
+            pControls._currentHealth = 100;
     }
 
     public override void Equip()

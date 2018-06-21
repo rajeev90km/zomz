@@ -11,7 +11,7 @@ public class Weapon : InventoryObject
 
     public float Durability;
 
-    public override void Use()
+    public override void Use(CharacterControls pControls)
     {
         Debug.Log("Weapon Use");
     }
