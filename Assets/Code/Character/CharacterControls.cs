@@ -19,9 +19,19 @@ public class CharacterControls : MonoBehaviour
     }
 
     [SerializeField]
+    private Inventory _inventory;
+
+    [SerializeField]
     private int _attackModifier;
     public int AttackModifier{
         get { return _attackModifier; }
+        set { _attackModifier = value; }
+    }
+
+    private InventoryItem _currentWeapon;
+    public InventoryItem CurrentWeapon {
+        get { return _currentWeapon; }
+        set { _currentWeapon = value; }
     }
 
     [SerializeField]
@@ -148,11 +158,25 @@ public class CharacterControls : MonoBehaviour
 		{
 			AIStateController zombieControls = closestEnemy.GetComponent<AIStateController> ();
 			if (zombieControls)
-				zombieControls.TakeDamage (_characterStats.AttackStrength);
+                zombieControls.TakeDamage (_characterStats.AttackStrength + _attackModifier);
 		}
 
 		yield return new WaitForSeconds(_characterStats.AttackRate);
-		_canAttack = true;
+        _canAttack = true;
+
+        //Update Weapon Durability if Any
+        if(_currentWeapon!=null)
+        {
+            if(_currentWeapon.CurrentDurability > 1)
+                _currentWeapon.CurrentDurability -= 1;
+            else
+            {
+                _inventory._weapons.Remove(_currentWeapon);
+                _currentWeapon = null;
+                _attackModifier = 0;
+            }
+        }
+
 
 		yield return new WaitForSeconds(0.6f);
 		_isAttacking = false;

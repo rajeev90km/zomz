@@ -36,6 +36,7 @@ public class InventoryItem : MonoBehaviour {
     private int _currentDurability;
     public int CurrentDurability {
         get { return _currentDurability; }
+        set { _currentDurability = value; }
     }
 
     [Header("Events")]

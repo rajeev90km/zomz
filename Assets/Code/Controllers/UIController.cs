@@ -123,7 +123,7 @@ public class UIController : MonoBehaviour {
             attackText.text = "Attack:   " + _inventory._weapons[i].Weapon.AttackStrength;
 
             Text durabilityText = wp.transform.Find("DurabilityText").gameObject.GetComponent<Text>();
-            durabilityText.text = "Durability:   " + _inventory._weapons[i].Weapon.Durability;
+            durabilityText.text = "Durability:   " + _inventory._weapons[i].CurrentDurability;
 
             Button hpButton = wp.transform.Find("Button").gameObject.GetComponent<Button>();
             Weapon w = _inventory._weapons[i].Weapon;
@@ -137,7 +137,7 @@ public class UIController : MonoBehaviour {
         {
             _inventory._healthPacks.Remove(pItem);
 
-            pHealthPack.Use(_playerStats);
+            pHealthPack.Use(pItem,_playerStats);
             Debug.Log("Using Healthpack");
             Destroy(pRow);
         }
@@ -145,11 +145,8 @@ public class UIController : MonoBehaviour {
 
     public void UseWeapon(InventoryItem pItem, Weapon pWeapon, GameObject pRow)
     {
-        if (_playerStats._currentHealth < 100)
-        {
-            pWeapon.Use(_playerStats);
-            Debug.Log("Using Weapon");
-        }
+        pWeapon.Use(pItem, _playerStats);
+        Debug.Log("Using Weapon");
     }
 
     public void CloseInventory()
@@ -157,6 +154,11 @@ public class UIController : MonoBehaviour {
         for (int i = 0; i < _healthPackParent.transform.childCount;i++)
         {
             Destroy(_healthPackParent.transform.GetChild(i).gameObject);
+        }
+
+        for (int i = 0; i < _weaponsParent.transform.childCount; i++)
+        {
+            Destroy(_weaponsParent.transform.GetChild(i).gameObject);
         }
 
         _inventoryCanvas.SetActive(false);

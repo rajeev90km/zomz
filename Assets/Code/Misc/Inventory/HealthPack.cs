@@ -7,7 +7,7 @@ public class HealthPack : InventoryObject
 {
     public float Health;
 
-    public override void Use(CharacterControls pControls)
+    public override void Use(InventoryItem pItem,CharacterControls pControls)
     {
         pControls._currentHealth += Health;
 

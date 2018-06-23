@@ -2156,6 +2156,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameData: {fileID: 11400000, guid: fe25c4c301c7243a3b0300d6eb01a3f9, type: 2}
   _characterStats: {fileID: 11400000, guid: 03de282f5363149deae921d331f3bfa9, type: 2}
+  _inventory: {fileID: 11400000, guid: a022edf6031e646e087e17396de0f9af, type: 2}
+  _attackModifier: 0
   _eyes: {fileID: 4770185826346238}
   _currentHealth: 0
   _debugMode: 0

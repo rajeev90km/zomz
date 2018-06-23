@@ -7,13 +7,14 @@ public class Weapon : InventoryObject
 {
     public GameObject Model;
 
-    public float AttackStrength;
+    public int AttackStrength;
 
     public int Durability;
 
-    public override void Use(CharacterControls pControls)
+    public override void Use(InventoryItem pItem, CharacterControls pControls)
     {
-        Debug.Log("Weapon Use");
+        pControls.CurrentWeapon = pItem;
+        pControls.AttackModifier = AttackStrength;
     }
 
     public override void Equip(InventoryItem pItem)
