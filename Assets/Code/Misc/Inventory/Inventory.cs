@@ -9,9 +9,9 @@ public class Inventory : ScriptableObject
 
     public int MAX_WEAPONS = 3;
 
-    public List<HealthPack> _healthPacks;
+    public List<InventoryItem> _healthPacks;
 
-    public List<Weapon> _weapons;
+    public List<InventoryItem> _weapons;
 
 	private void OnEnable()
 	{

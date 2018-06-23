@@ -8,7 +8,7 @@ public abstract class InventoryObject : ScriptableObject
 
     public abstract void Use(CharacterControls pControls);
 
-    public abstract void Equip();
+    public abstract void Equip(InventoryItem pItem);
 
     public abstract bool CanAddToInventory();
 }

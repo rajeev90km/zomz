@@ -19,6 +19,12 @@ public class CharacterControls : MonoBehaviour
     }
 
     [SerializeField]
+    private int _attackModifier;
+    public int AttackModifier{
+        get { return _attackModifier; }
+    }
+
+    [SerializeField]
     private Transform _eyes;
     public Transform Eyes
     {

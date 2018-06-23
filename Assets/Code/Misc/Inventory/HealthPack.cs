@@ -15,9 +15,9 @@ public class HealthPack : InventoryObject
             pControls._currentHealth = 100;
     }
 
-    public override void Equip()
+    public override void Equip(InventoryItem pItem)
     {
-        Inventory._healthPacks.Add(this);
+        Inventory._healthPacks.Add(pItem);
     }
 
     public override bool CanAddToInventory()

@@ -30,6 +30,12 @@ public class UIController : MonoBehaviour {
     private GameObject _inventoryCanvas;
 
     [SerializeField]
+    private GameObject _healthPackParent;
+
+    [SerializeField]
+    private GameObject _weaponsParent;
+
+    [SerializeField]
     private Inventory _inventory;
 
     [SerializeField]
@@ -85,33 +91,74 @@ public class UIController : MonoBehaviour {
     {
         _inventoryCanvas.SetActive(true);
 
+        //Show Health Packs
         for (int i = 0; i < _inventory._healthPacks.Count; i++)
         {
             GameObject hp = Instantiate(_healthPackRow) as GameObject;
-            hp.transform.parent = _inventoryCanvas.transform;
+            hp.transform.parent = _healthPackParent.transform;
             hp.GetComponent<RectTransform>().localPosition = new Vector3(0, -i * INVENTORY_UI_ROW_OFFSET, 0);
             hp.GetComponent<RectTransform>().localScale = Vector3.one;
 
+            InventoryItem item = _inventory._healthPacks[i];
+
             Text hpText = hp.transform.Find("HealthText").gameObject.GetComponent<Text>();
-            hpText.text = "Health:   " + _inventory._healthPacks[i].Health;
+            hpText.text = "Health:   " + _inventory._healthPacks[i].HealthPack.Health;
 
             Button hpButton = hp.transform.Find("Button").gameObject.GetComponent<Button>();
-            HealthPack h = _inventory._healthPacks[i];
-            hpButton.onClick.AddListener(delegate { UseHealthPack(h,hp); });
+            HealthPack h = _inventory._healthPacks[i].HealthPack;
+            hpButton.onClick.AddListener(delegate { UseHealthPack(item,h,hp); });
+        }
+
+        //Show Weapons
+        for (int i = 0; i < _inventory._weapons.Count; i++)
+        {
+            GameObject wp = Instantiate(_weaponRow) as GameObject;
+            wp.transform.parent = _weaponsParent.transform;
+            wp.GetComponent<RectTransform>().localPosition = new Vector3(380, -i * INVENTORY_UI_ROW_OFFSET, 0);
+            wp.GetComponent<RectTransform>().localScale = Vector3.one;
+
+            InventoryItem item = _inventory._weapons[i];
+
+            Text attackText = wp.transform.Find("AttackText").gameObject.GetComponent<Text>();
+            attackText.text = "Attack:   " + _inventory._weapons[i].Weapon.AttackStrength;
+
+            Text durabilityText = wp.transform.Find("DurabilityText").gameObject.GetComponent<Text>();
+            durabilityText.text = "Durability:   " + _inventory._weapons[i].Weapon.Durability;
+
+            Button hpButton = wp.transform.Find("Button").gameObject.GetComponent<Button>();
+            Weapon w = _inventory._weapons[i].Weapon;
+            hpButton.onClick.AddListener(delegate { UseWeapon(item, w, wp); });
         }
     }
 
-    public void UseHealthPack(HealthPack pHealthPack, GameObject pRow)
+    public void UseHealthPack(InventoryItem pItem, HealthPack pHealthPack, GameObject pRow)
     {
         if (_playerStats._currentHealth < 100)
         {
+            _inventory._healthPacks.Remove(pItem);
+
             pHealthPack.Use(_playerStats);
-            DestroyImmediate(pRow);
+            Debug.Log("Using Healthpack");
+            Destroy(pRow);
+        }
+    }
+
+    public void UseWeapon(InventoryItem pItem, Weapon pWeapon, GameObject pRow)
+    {
+        if (_playerStats._currentHealth < 100)
+        {
+            pWeapon.Use(_playerStats);
+            Debug.Log("Using Weapon");
         }
     }
 
     public void CloseInventory()
     {
+        for (int i = 0; i < _healthPackParent.transform.childCount;i++)
+        {
+            Destroy(_healthPackParent.transform.GetChild(i).gameObject);
+        }
+
         _inventoryCanvas.SetActive(false);
     }
 

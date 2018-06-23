@@ -107,6 +107,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91c734732e473447082365ab5c81412b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inventoryObject: {fileID: 11400000, guid: 4599d75f660d64d0d82a449f8ee69ef3, type: 2}
+  _inventoryType: 0
+  _healthPack: {fileID: 11400000, guid: 4599d75f660d64d0d82a449f8ee69ef3, type: 2}
+  _weapon: {fileID: 0}
+  CurrentDurability: 0
   _triggerEnterEvent: {fileID: 11400000, guid: 671b9eadfc31f4b92b5ff29c44602347, type: 2}
   _triggerExitEvent: {fileID: 11400000, guid: 52b293da8528242bf8589e989402d190, type: 2}

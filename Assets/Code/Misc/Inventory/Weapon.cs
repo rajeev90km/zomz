@@ -9,16 +9,16 @@ public class Weapon : InventoryObject
 
     public float AttackStrength;
 
-    public float Durability;
+    public int Durability;
 
     public override void Use(CharacterControls pControls)
     {
         Debug.Log("Weapon Use");
     }
 
-    public override void Equip()
+    public override void Equip(InventoryItem pItem)
     {
-        Inventory._weapons.Add(this);
+        Inventory._weapons.Add(pItem);
     }
 
 	public override bool CanAddToInventory()
