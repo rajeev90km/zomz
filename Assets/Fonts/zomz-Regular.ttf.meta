@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 6306717bb2bb940f79089c7bd7e0c362
+timeCreated: 1529909478
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: ZOMZ HEAD
+  fontNames:
+  - ZOMZ HEAD
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
