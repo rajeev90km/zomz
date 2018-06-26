@@ -1,18 +1,31 @@
 fileFormatVersion: 2
-guid: ae17e413ec480b947a6a290df307137d
-timeCreated: 1526259230
+guid: 00af3d4d148e6da4181cb6ff4b5b3840
+timeCreated: 1529936586
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Health_pack_bottom
+    100004: Health_pack_lid
     400000: //RootNode
-    2100000: lambert1
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Health_pack1
+    400002: Health_pack_bottom
+    400004: Health_pack_lid
+    2100000: Health_kit_mat
+    2300000: Health_pack_bottom
+    2300002: Health_pack_lid
+    3300000: Health_pack_bottom
+    3300002: Health_pack_lid
+    4300000: Health_pack_lid
+    4300002: Health_pack_bottom
+    7400000: Take 001
     9500000: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Health_kit_mat
+    second: {fileID: 2100000, guid: 96efa84a7574490449e254d8b4c5d9f1, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -42,7 +55,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 1.3
     meshCompression: 0
     addColliders: 0
     importVisibility: 1
@@ -61,7 +74,7 @@ ModelImporter:
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
-    useFileScale: 1
+    useFileScale: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0

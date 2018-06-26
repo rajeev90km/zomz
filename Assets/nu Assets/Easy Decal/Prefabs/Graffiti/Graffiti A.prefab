@@ -54,7 +54,7 @@ Transform:
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 94.9, y: 36.8, z: 65.7}
-  m_LocalScale: {x: 2, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 1, z: 0.80855614}
   m_Children:
   - {fileID: 400000}
   m_Father: {fileID: 0}
@@ -69,6 +69,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 1
@@ -84,6 +85,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -118,6 +120,7 @@ MonoBehaviour:
   angleConstraint: 180
   technique: 4
   deferredFlags: 0
+  inclusion: 0
   transformObserver:
     lastPosition: {x: 0, y: 0, z: 0}
     lastScale: {x: 0, y: 0, z: 0}
@@ -133,7 +136,7 @@ MonoBehaviour:
   skinningQuality: 0
   material: {fileID: 2100000, guid: 6ba704a18b63aa042a38a44ba8b4f589, type: 2}
   atlas: {fileID: 11400000, guid: bfbb2eceb6eddfe4fbed8a7e3cb4066f, type: 2}
-  atlasRegionIndex: 0
+  atlasRegionIndex: 16
   maxDistance: 5
   projectionDistance: 1
   smoothNormals: 0
