@@ -14,7 +14,7 @@ MonoBehaviour:
   AllDialogues:
   - CharacterName: Ringmaster Jalali
     Text: Bring the little one to me! I want her to see her papa from the front row!
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -23,7 +23,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Serwa
     Text: Nanyamka! Let her go!
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: d7f95946467e1db458607b976d7946a3, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}

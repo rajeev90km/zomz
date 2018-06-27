@@ -14,7 +14,7 @@ MonoBehaviour:
   AllDialogues:
   - CharacterName: Ringmaster Jalali
     Text: Doc, we got another one for ya.
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 26286ef078e20ce48b0a4f85f6a14a38, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -23,7 +23,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Doctor Lyon
     Text: "What\u2019s the injury?"
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 86e8c91693e79c249a0059e5398fd8de, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -32,7 +32,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Ringmaster Jalali
     Text: He got bit.
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 26286ef078e20ce48b0a4f85f6a14a38, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -41,7 +41,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Doctor Lyon
     Text: "A bite? Hm. There\u2019s nothing I can do."
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: a3b3297a9e1d5b74aaca77e940b21613, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -50,7 +50,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Ringmaster Jalali
     Text: Achm.
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: cbf5c5b59234fb442aab361ef238dc49, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -59,7 +59,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Ringmaster Jalali
     Text: Hm. Sophia. Bow.
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: cbf5c5b59234fb442aab361ef238dc49, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -68,7 +68,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Ringmaster Jalali
     Text: When I saved you and your family what was my payment again?
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: cbf5c5b59234fb442aab361ef238dc49, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -77,7 +77,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Doctor Lyon
     Text: Issa, I owe you everything for saving my family. I owe you my life.
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: b831b8080be5ac640922fc4e7b8e1690, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -86,7 +86,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Ringmaster Jalali
     Text: Hmm. And how is your family?
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -95,7 +95,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Doctor Lyon
     Text: They are doing fine thanks to your generosity.
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: e68c4caf26dcf654c9610079c1b0db58, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -104,7 +104,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Ringmaster Jalali
     Text: Even your son?
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -114,7 +114,7 @@ MonoBehaviour:
   - CharacterName: Doctor Lyon
     Text: "(Stuttering) Charles is still sick but he\u2019s improving everyday. Thank
       you so much for your kindness, Issa."
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: e68c4caf26dcf654c9610079c1b0db58, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -125,7 +125,7 @@ MonoBehaviour:
     Text: I am kind and to show you just how kind. I have an idea! You know, when
       Abe dies, a cage will be empty. I think putting that boy in the pit will strengthen
       him up. What do you say?
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -135,7 +135,7 @@ MonoBehaviour:
   - CharacterName: Doctor Lyon
     Text: No, Issa please. I work the cages day and night healing the fighters so
       that he can stay there and heal himself.
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: b831b8080be5ac640922fc4e7b8e1690, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -145,7 +145,7 @@ MonoBehaviour:
   - CharacterName: Ringmaster Jalali
     Text: You disagree with my idea? Do you believe you know better? Is that why you
       ignored me when I first arrived?
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -155,7 +155,7 @@ MonoBehaviour:
   - CharacterName: Doctor Lyon
     Text: "I\u2019m sorry. Please forgive me. I don\u2019t know more than you. I just
       believe that Charles just needs time to rest."
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: e68c4caf26dcf654c9610079c1b0db58, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -164,7 +164,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Ringmaster Jalali
     Text: "Don\u2019t ever disrespect me again."
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -173,7 +173,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Doctor Lyon
     Text: Yes, Issa. Never again
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: b831b8080be5ac640922fc4e7b8e1690, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -183,7 +183,7 @@ MonoBehaviour:
   - CharacterName: Doctor Lyon
     Text: "This doesn\u2019t look good. I can do something about the bleeding but
       the bite will surely be his demise."
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 86e8c91693e79c249a0059e5398fd8de, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -193,7 +193,7 @@ MonoBehaviour:
   - CharacterName: Ringmaster Jalali
     Text: Damn Abe! And I had such high hopes for you. Your family will surely be
       disappointed.
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -202,7 +202,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Serwa
     Text: "Abe beat your trial. We\u2019re leaving now."
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: d7f95946467e1db458607b976d7946a3, type: 3}
     CharPosition: 4
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -211,7 +211,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Ringmaster Jalali
     Text: You will address me as Issa.
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -220,8 +220,8 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Namyamka
     Text: Mama!
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
-    CharPosition: 0
+    Avatar: {fileID: 21300000, guid: 4b7f823f5f0284640be9fa741e0e9632, type: 3}
+    CharPosition: 5
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
     BackgroundMusic: {fileID: 0}
@@ -229,7 +229,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Ringmaster Jalali
     Text: "...And you\u2019re right. A deals a deal. You\u2019re free to go."
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -238,7 +238,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Serwa
     Text: '(Coughing) Abe come on, we have to go! '
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 7be49eaa304fd9f499e1c32e138d5298, type: 3}
     CharPosition: 4
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -248,7 +248,7 @@ MonoBehaviour:
   - CharacterName: Doctor Lyon
     Text: "He can\u2019t move. He\u2019s lost too much blood and the infection isn\u2019t
       helping."
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: e68c4caf26dcf654c9610079c1b0db58, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -257,7 +257,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Serwa
     Text: Infection? No...
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 7be49eaa304fd9f499e1c32e138d5298, type: 3}
     CharPosition: 4
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -266,7 +266,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Doctor Lyon
     Text: Abe was bit and he will die.
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 86e8c91693e79c249a0059e5398fd8de, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -275,7 +275,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Ringmaster Jalali
     Text: Serwa, as to our deal. You are free to go.
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: cbf5c5b59234fb442aab361ef238dc49, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -284,7 +284,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Serwa
     Text: "We can\u2019t leave without Abe. "
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 31ab6024cbc6462438959e410bb96067, type: 3}
     CharPosition: 4
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -296,7 +296,7 @@ MonoBehaviour:
       only two battles but there are three of you. Since it doesn\u2019t seem like
       he\u2019ll be winning the next, you might as well leave while you still can.
       Before you become property up for grabs."
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -306,7 +306,7 @@ MonoBehaviour:
   - CharacterName: Serwa
     Text: "(Stuttering) That wasn\u2019t the deal! Jalali snaps his fingers again.
       The guard punches her in the gut again. This time she falls to her knees."
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 7be49eaa304fd9f499e1c32e138d5298, type: 3}
     CharPosition: 4
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -315,7 +315,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Ringmaster Jalali
     Text: 'Hapa mimi ni Mungu! I make the rules here. '
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -324,7 +324,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Serwa
     Text: (Crying) This is all your fault! You demon!
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 7be49eaa304fd9f499e1c32e138d5298, type: 3}
     CharPosition: 4
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -333,7 +333,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Doctor Lyon
     Text: Issa! Please!
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: b831b8080be5ac640922fc4e7b8e1690, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -342,7 +342,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Doctor Lyon
     Text: What? He can barely stand let alone fight.
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: e68c4caf26dcf654c9610079c1b0db58, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -351,7 +351,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Ringmaster Jalali
     Text: I might as well get the most out of my investment.
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -360,7 +360,7 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Serwa
     Text: (Coughing) Abraham!
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 7be49eaa304fd9f499e1c32e138d5298, type: 3}
     CharPosition: 4
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}

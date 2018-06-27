@@ -15,16 +15,16 @@ MonoBehaviour:
   - CharacterName: Ringmaster Jalali
     Text: (Clapping) You won Abe! Now your family has a place here. Just keep surviving
       the Pit and they will continue to be welcome.
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Wife Serwa
+  - CharacterName: Serwa
     Text: What! What do you mean? You said he only needed to do this once!
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 31ab6024cbc6462438959e410bb96067, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -34,16 +34,16 @@ MonoBehaviour:
   - CharacterName: Ringmaster Jalali
     Text: (Laughing) Once? No no no. Every morning we all start over. Each day that
       you wish to stay here, he must fight.
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Wife Serwa
+  - CharacterName: Serwa
     Text: "That wasn\u2019t the deal! This isn\u2019t humane!"
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: d7f95946467e1db458607b976d7946a3, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -55,16 +55,16 @@ MonoBehaviour:
       defined as compassionate. No more lies. Do yourself a favor and stop living
       in the past. This new world is different. Either die out there or follow my
       rules
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Wife Serwa
+  - CharacterName: Serwa
     Text: "No! We\u2019re leaving. We have to go."
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 7be49eaa304fd9f499e1c32e138d5298, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -74,17 +74,17 @@ MonoBehaviour:
   - CharacterName: Ringmaster Jalali
     Text: Leaving? The only way out is through the same process Serwa. You should
       feel lucky that I have given you this opportunity at all. You should be bowing.
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: cbf5c5b59234fb442aab361ef238dc49, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Wife Serwa
+  - CharacterName: Serwa
     Text: If we stay here, you will kill my husband with your silly games. We have
       to go.
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 7be49eaa304fd9f499e1c32e138d5298, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -94,7 +94,7 @@ MonoBehaviour:
   - CharacterName: Ringmaster Jalali
     Text: Silly? Fine. Go. But, leave the little one. I always like to keep the young
       ones around. They tend to sell at high prices.
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 7be49eaa304fd9f499e1c32e138d5298, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -103,16 +103,16 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Namyanka
     Text: Mama?
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 51a26187637216e4b97e5fbce039fda8, type: 3}
     CharPosition: 4
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Wife Serwa
+  - CharacterName: Serwa
     Text: Leave my daughter out of this!
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 31ab6024cbc6462438959e410bb96067, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -122,16 +122,16 @@ MonoBehaviour:
   - CharacterName: Ringmaster Jalali
     Text: The contract was signed the second you stepped through my walls! Anything
       you want, you must prove your worth it in the pit!
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: cbf5c5b59234fb442aab361ef238dc49, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Wife Serwa
+  - CharacterName: Serwa
     Text: So if we want to leave and Abe wins his next fight, will you let us go?
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 7be49eaa304fd9f499e1c32e138d5298, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -140,16 +140,16 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Ringmaster Jalali
     Text: Those are my rules.
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: cbf5c5b59234fb442aab361ef238dc49, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Wife Serwa
+  - CharacterName: Serwa
     Text: "Then we\u2019ll do it. When he wins, we leave."
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -158,17 +158,17 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Ringmaster Jalali
     Text: "Look, you\u2019re already fitting in perfectly."
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Wife Serwa
+  - CharacterName: Serwa
     Text: Please God, save us. Please give Abe the power he needs to survive. Please
       give us the unity of fami...
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 7be49eaa304fd9f499e1c32e138d5298, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -177,16 +177,16 @@ MonoBehaviour:
     ExitSFX: {fileID: 0}
   - CharacterName: Ringmaster Jalali
     Text: "Praying won\u2019t do anything for you."
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: cbf5c5b59234fb442aab361ef238dc49, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Wife Serwa
+  - CharacterName: Serwa
     Text: "You\u2019re wrong. God has saved us before and he will save us again."
-    Avatar: {fileID: 21300000, guid: eca4aac97ec3b46f3801190348567d48, type: 3}
+    Avatar: {fileID: 21300000, guid: 31ab6024cbc6462438959e410bb96067, type: 3}
     CharPosition: 3
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
@@ -196,7 +196,7 @@ MonoBehaviour:
   - CharacterName: Ringmaster Jalali
     Text: No. God is dead and someone new has taken his place. Now, I must go to the
       pit to punish the non-believers for questioning my rule.
-    Avatar: {fileID: 21300000, guid: 1ac618e87b0f348378e0d7ff548e36cd, type: 3}
+    Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
