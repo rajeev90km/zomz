@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: CNV_Level_1_End
   m_EditorClassIdentifier: 
   AllDialogues:
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: (Clapping) You won Abe! Now your family has a place here. Just keep surviving
       the Pit and they will continue to be welcome.
     Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
@@ -31,7 +31,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: (Laughing) Once? No no no. Every morning we all start over. Each day that
       you wish to stay here, he must fight.
     Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
@@ -50,7 +50,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: Humane? Humanity sits on a thrown of death and chaos but somehow we are
       defined as compassionate. No more lies. Do yourself a favor and stop living
       in the past. This new world is different. Either die out there or follow my
@@ -71,7 +71,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: Leaving? The only way out is through the same process Serwa. You should
       feel lucky that I have given you this opportunity at all. You should be bowing.
     Avatar: {fileID: 21300000, guid: cbf5c5b59234fb442aab361ef238dc49, type: 3}
@@ -91,7 +91,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: Silly? Fine. Go. But, leave the little one. I always like to keep the young
       ones around. They tend to sell at high prices.
     Avatar: {fileID: 21300000, guid: 7be49eaa304fd9f499e1c32e138d5298, type: 3}
@@ -119,7 +119,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: The contract was signed the second you stepped through my walls! Anything
       you want, you must prove your worth it in the pit!
     Avatar: {fileID: 21300000, guid: cbf5c5b59234fb442aab361ef238dc49, type: 3}
@@ -138,7 +138,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: Those are my rules.
     Avatar: {fileID: 21300000, guid: cbf5c5b59234fb442aab361ef238dc49, type: 3}
     CharPosition: 0
@@ -156,7 +156,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: "Look, you\u2019re already fitting in perfectly."
     Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
     CharPosition: 0
@@ -175,7 +175,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: "Praying won\u2019t do anything for you."
     Avatar: {fileID: 21300000, guid: cbf5c5b59234fb442aab361ef238dc49, type: 3}
     CharPosition: 0
@@ -193,7 +193,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: No. God is dead and someone new has taken his place. Now, I must go to the
       pit to punish the non-believers for questioning my rule.
     Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}

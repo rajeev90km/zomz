@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: CNV_Level_2_End
   m_EditorClassIdentifier: 
   AllDialogues:
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: Doc, we got another one for ya.
     Avatar: {fileID: 21300000, guid: 26286ef078e20ce48b0a4f85f6a14a38, type: 3}
     CharPosition: 0
@@ -30,7 +30,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: He got bit.
     Avatar: {fileID: 21300000, guid: 26286ef078e20ce48b0a4f85f6a14a38, type: 3}
     CharPosition: 0
@@ -48,7 +48,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: Achm.
     Avatar: {fileID: 21300000, guid: cbf5c5b59234fb442aab361ef238dc49, type: 3}
     CharPosition: 0
@@ -57,7 +57,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: Hm. Sophia. Bow.
     Avatar: {fileID: 21300000, guid: cbf5c5b59234fb442aab361ef238dc49, type: 3}
     CharPosition: 0
@@ -66,7 +66,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: When I saved you and your family what was my payment again?
     Avatar: {fileID: 21300000, guid: cbf5c5b59234fb442aab361ef238dc49, type: 3}
     CharPosition: 0
@@ -84,7 +84,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: Hmm. And how is your family?
     Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
     CharPosition: 0
@@ -102,7 +102,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: Even your son?
     Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
     CharPosition: 0
@@ -121,7 +121,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: I am kind and to show you just how kind. I have an idea! You know, when
       Abe dies, a cage will be empty. I think putting that boy in the pit will strengthen
       him up. What do you say?
@@ -142,7 +142,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: You disagree with my idea? Do you believe you know better? Is that why you
       ignored me when I first arrived?
     Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
@@ -162,7 +162,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: "Don\u2019t ever disrespect me again."
     Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
     CharPosition: 0
@@ -190,7 +190,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: Damn Abe! And I had such high hopes for you. Your family will surely be
       disappointed.
     Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
@@ -209,7 +209,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: You will address me as Issa.
     Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
     CharPosition: 0
@@ -227,7 +227,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: "...And you\u2019re right. A deals a deal. You\u2019re free to go."
     Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
     CharPosition: 0
@@ -273,7 +273,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: Serwa, as to our deal. You are free to go.
     Avatar: {fileID: 21300000, guid: cbf5c5b59234fb442aab361ef238dc49, type: 3}
     CharPosition: 0
@@ -291,7 +291,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: "Abe? No. You misunderstand. He is not free to go. Only you are. Abe won
       only two battles but there are three of you. Since it doesn\u2019t seem like
       he\u2019ll be winning the next, you might as well leave while you still can.
@@ -313,7 +313,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: 'Hapa mimi ni Mungu! I make the rules here. '
     Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
     CharPosition: 0
@@ -349,7 +349,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: I might as well get the most out of my investment.
     Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
     CharPosition: 0

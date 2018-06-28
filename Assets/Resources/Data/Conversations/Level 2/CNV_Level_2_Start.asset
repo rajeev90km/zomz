@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: CNV_Level_2_Start
   m_EditorClassIdentifier: 
   AllDialogues:
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: Bring the little one to me! I want her to see her papa from the front row!
     Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
     CharPosition: 0

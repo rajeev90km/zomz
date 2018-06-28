@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: CNV_Level_1_Start
   m_EditorClassIdentifier: 
   AllDialogues:
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: Yes! The time has come!
     Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
     CharPosition: 0
@@ -21,7 +21,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: 'This man, just like so many of you, came to me seeking sanctuary! But,
       we do not let the weak reside here without reason. He must prove himself worthy! '
     Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
@@ -31,7 +31,7 @@ MonoBehaviour:
     BackgroundMusic: {fileID: 0}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
-  - CharacterName: Ringmaster Jalali
+  - CharacterName: Jalali
     Text: "I, your new God grace you. Here\u2019s your chance. Show me I\u2019m not
       wasting my time."
     Avatar: {fileID: 21300000, guid: 3b8767c9d31c0ce41943f8a67bcd60e7, type: 3}
