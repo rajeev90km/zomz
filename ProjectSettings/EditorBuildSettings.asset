@@ -8,3 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Zomz_Debug.unity
     guid: d18132cb5cd87467fb5ffa3da71a0bd4
+  - enabled: 1
+    path: Assets/_Scenes/_title.unity
+    guid: 6a6aa98f4797b44aca7474dbb12f0ee3
+  - enabled: 1
+    path: Assets/_Scenes/Level_1[Tim].unity
+    guid: c43fba98c0c9c144a8f471f53f4159af

@@ -8,10 +8,11 @@ public class ConversationController : MonoBehaviour {
     [SerializeField]
     private GameData _gameData;
 
-    private int MAX_CHAR_LIMIT = 70;
-    private float AVATAR_FADE_IN_TIME = 1f;
-    private float BG_FADE_INOUT_TIME = 1.5f;
-    private float FADE_BG_OPACTIY = 0.75f;
+    private const int MAX_CHAR_LIMIT = 60;
+    private const float AVATAR_FADE_IN_TIME = 1f;
+    private const float BG_FADE_IN_TIME = 1.5f;
+    private const float BG_FADE_OUT_TIME = 0.75f;
+    private const float FADE_BG_OPACTIY = 0.75f;
 
     [SerializeField]
     [Range(0.01f, 0.1f)]
@@ -67,6 +68,7 @@ public class ConversationController : MonoBehaviour {
     public void EndConversation()
     {
         currentConversationIndex = 0;
+        _gameData.CurrentConversation.Conversation = null;
         ToggleDisplayElements(false);
 
         StartCoroutine(FadeInOutBg(false));
@@ -86,7 +88,10 @@ public class ConversationController : MonoBehaviour {
                 c.a = Mathf.Lerp(FADE_BG_OPACTIY, 0, time);
             _fadeBg.color = c;
 
-            time += Time.deltaTime / BG_FADE_INOUT_TIME;
+            if(fadeIn)
+                time += Time.deltaTime / BG_FADE_IN_TIME;
+            else
+                time += Time.deltaTime / BG_FADE_OUT_TIME;
             yield return null;
         }
 

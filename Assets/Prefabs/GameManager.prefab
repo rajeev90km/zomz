@@ -112,11 +112,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameData: {fileID: 11400000, guid: fe25c4c301c7243a3b0300d6eb01a3f9, type: 2}
   _nextLevel: {fileID: 102900000, guid: c43fba98c0c9c144a8f471f53f4159af, type: 3}
-  _levelStartInterstitial: {fileID: 11400000, guid: 96e7c75f8b21d43aca11e2126e4530f3,
+  _levelStartInterstitial: {fileID: 11400000, guid: 7de58a84087772f48870118d85d439fb,
     type: 2}
-  _levelEndInterstitial: {fileID: 11400000, guid: 282188f6e34264dd78b178f5fb566975,
+  _levelEndInterstitial: {fileID: 11400000, guid: 829c561fce32ee041955ee2deccc4c1c,
     type: 2}
-  _levelLostInterstitial: {fileID: 11400000, guid: 7bffd3cf8991e43a0908736ca64c76a4,
+  _levelLostInterstitial: {fileID: 11400000, guid: 282188f6e34264dd78b178f5fb566975,
     type: 2}
   _conversationStartEvent: {fileID: 11400000, guid: 6723b9a3db46344bc973ce4b5f66c62d,
     type: 2}
