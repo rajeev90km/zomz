@@ -116,7 +116,7 @@ MonoBehaviour:
     type: 2}
   _levelEndInterstitial: {fileID: 11400000, guid: 829c561fce32ee041955ee2deccc4c1c,
     type: 2}
-  _levelLostInterstitial: {fileID: 11400000, guid: 282188f6e34264dd78b178f5fb566975,
+  _levelLostInterstitial: {fileID: 11400000, guid: 9882b2679b817984dbe52ca99b480bcb,
     type: 2}
   _conversationStartEvent: {fileID: 11400000, guid: 6723b9a3db46344bc973ce4b5f66c62d,
     type: 2}
