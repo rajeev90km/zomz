@@ -606,6 +606,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameData: {fileID: 11400000, guid: fe25c4c301c7243a3b0300d6eb01a3f9, type: 2}
+  _audioData: {fileID: 11400000, guid: a7b093140466a4ae8baba59724da7e65, type: 2}
   _characterInterval: 0.05
   _conversationCanvas: {fileID: 1191502414783132}
   _conversationPanel: {fileID: 1874490329107014}
