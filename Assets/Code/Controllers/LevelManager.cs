@@ -15,8 +15,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private AudioClip _levelBGM;
 
-    [SerializeField]
-    private UnityEditor.SceneAsset _nextLevel;
+    //[SerializeField]
+    //private UnityEditor.SceneAsset _nextLevel;
 
     [Header("Interstitials")]
     [SerializeField]
@@ -69,14 +69,18 @@ public class LevelManager : MonoBehaviour
 
 	public void EndConversation()
 	{
+        Debug.Log(_gameData.CurrentConversation.Conversation);
+
         if (_gameData.CurrentConversation.Conversation == _levelStartInterstitial)
             _levelStartEvent.Raise();
 
         if (_gameData.CurrentConversation.Conversation == _levelEndInterstitial)
-            SceneManager.LoadScene(_nextLevel.ToString());
+        {
+            SceneManager.LoadScene(2);
+        }
 
         if (_gameData.CurrentConversation.Conversation == _levelLostInterstitial)
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene(1);
 
         _audioData.CurrentPlayingBGM = _levelBGM;
 

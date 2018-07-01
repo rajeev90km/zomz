@@ -69,8 +69,8 @@ public class CharacterControls : MonoBehaviour
     private Coroutine _attackCoroutine;
     private Coroutine _hurtCoroutine;
 
-    private string[] _attackAnimations = { "attack1", "attack2", "attack3", "attackcombo1", "attackcombo2" };
-    private string[] _hurtAnimations = { "hurt1", "hurt2", "hurt3" };
+    private string[] _attackAnimations = { "attack1", "attack2" };
+    private string[] _hurtAnimations = { "hurt1"};
 
     [Header("FX")]
     [SerializeField]

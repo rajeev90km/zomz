@@ -261,18 +261,9 @@ MonoBehaviour:
     - SpawnPoint: {fileID: 4415994044393670}
       ZombieToSpawn: {fileID: 1448135709913774, guid: 03232391d9dc74788998011d805ed451,
         type: 2}
-    PlayInterstitalAfterWave: 1
+    PlayInterstitalAfterWave: 0
     InterstitalToPlay: {fileID: 11400000, guid: 2d194cf893af949cda1ec816f4cc2482,
       type: 2}
-    WaveType: 1
-    timeTillNextWave: 2
-  - waveNum: Wave2
-    ZombieSpawns:
-    - SpawnPoint: {fileID: 4322313051542892}
-      ZombieToSpawn: {fileID: 1448135709913774, guid: 03232391d9dc74788998011d805ed451,
-        type: 2}
-    PlayInterstitalAfterWave: 0
-    InterstitalToPlay: {fileID: 0}
     WaveType: 2
     timeTillNextWave: 2
   _conversationStartEvent: {fileID: 11400000, guid: 6723b9a3db46344bc973ce4b5f66c62d,

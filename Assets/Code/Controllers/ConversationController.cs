@@ -72,7 +72,6 @@ public class ConversationController : MonoBehaviour {
     public void EndConversation()
     {
         currentConversationIndex = 0;
-        _gameData.CurrentConversation.Conversation = null;
         ToggleDisplayElements(false);
 
         StartCoroutine(FadeInOutBg(false));
@@ -110,6 +109,7 @@ public class ConversationController : MonoBehaviour {
         {
             _conversationCanvas.SetActive(false);
             _conversationEndEvent.Raise();
+            _gameData.CurrentConversation.Conversation = null;
         }
         else
         {
@@ -155,7 +155,7 @@ public class ConversationController : MonoBehaviour {
         _avatarName.text = pEntity.CharacterName.ToUpper() + ":";
 
         Color c = Color.white;
-        c.a = 0.5f;
+        c.a = 0.3f;
         for (int i = 0; i < _avatars.Length; i++){
             if(_avatars[i].color.a > 0f && i!=(int) pEntity.CharPosition)
                 _avatars[i].color = c;

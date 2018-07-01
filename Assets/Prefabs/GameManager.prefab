@@ -113,7 +113,7 @@ MonoBehaviour:
   _gameData: {fileID: 11400000, guid: fe25c4c301c7243a3b0300d6eb01a3f9, type: 2}
   _audioData: {fileID: 11400000, guid: a7b093140466a4ae8baba59724da7e65, type: 2}
   _levelBGM: {fileID: 8300000, guid: f9d928ca99fc4aa4cbef7c9b1c4f9626, type: 3}
-  _nextLevel: {fileID: 102900000, guid: c43fba98c0c9c144a8f471f53f4159af, type: 3}
+  _nextLevel: {fileID: 102900000, guid: 6a6aa98f4797b44aca7474dbb12f0ee3, type: 3}
   _levelStartInterstitial: {fileID: 11400000, guid: 7de58a84087772f48870118d85d439fb,
     type: 2}
   _levelEndInterstitial: {fileID: 11400000, guid: 829c561fce32ee041955ee2deccc4c1c,

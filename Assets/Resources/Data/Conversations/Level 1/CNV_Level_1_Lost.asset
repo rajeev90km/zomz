@@ -18,7 +18,7 @@ MonoBehaviour:
     CharPosition: 0
     BackgroundImage: {fileID: 0}
     DialogueVO: {fileID: 0}
-    BackgroundMusic: {fileID: 0}
+    BackgroundMusic: {fileID: 8300000, guid: 854dcc4dbe0c4e2469558f407a7c552e, type: 3}
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
   PauseGamePlay: 1
