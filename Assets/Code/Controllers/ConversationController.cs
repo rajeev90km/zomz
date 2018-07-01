@@ -8,6 +8,9 @@ public class ConversationController : MonoBehaviour {
     [SerializeField]
     private GameData _gameData;
 
+    [SerializeField]
+    private AudioData _audioData;
+
     private const int MAX_CHAR_LIMIT = 60;
     private const float AVATAR_FADE_IN_TIME = 1f;
     private const float BG_FADE_IN_TIME = 1.5f;
@@ -39,6 +42,7 @@ public class ConversationController : MonoBehaviour {
 
     [SerializeField]
     private Image[] _avatars;
+
 
     [Header("Events")]
     [SerializeField]
@@ -148,7 +152,7 @@ public class ConversationController : MonoBehaviour {
         ToggleDisplayElements(true);
 
         _textIndex = 0;
-        _avatarName.text = pEntity.CharacterName.ToUpper() + " :";
+        _avatarName.text = pEntity.CharacterName.ToUpper() + ":";
 
         Color c = Color.white;
         c.a = 0.5f;
@@ -159,6 +163,8 @@ public class ConversationController : MonoBehaviour {
 
         _avatars[(int)pEntity.CharPosition].sprite = pEntity.Avatar;
         StartCoroutine(FadeInAvatar(_avatars[(int)pEntity.CharPosition]));
+
+        _audioData.CurrentPlayingBGM = pEntity.BackgroundMusic;
 
         if (pEntity.BackgroundImage != null)
         {

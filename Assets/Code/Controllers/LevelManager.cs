@@ -10,6 +10,12 @@ public class LevelManager : MonoBehaviour
     private GameData _gameData;
 
     [SerializeField]
+    private AudioData _audioData;
+
+    [SerializeField]
+    private AudioClip _levelBGM;
+
+    [SerializeField]
     private UnityEditor.SceneAsset _nextLevel;
 
     [Header("Interstitials")]
@@ -71,6 +77,8 @@ public class LevelManager : MonoBehaviour
 
         if (_gameData.CurrentConversation.Conversation == _levelLostInterstitial)
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        _audioData.CurrentPlayingBGM = _levelBGM;
 
         _gameData.CurrentConversation.Conversation = null;
         TogglePauseLevel(false);
