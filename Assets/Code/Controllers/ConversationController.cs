@@ -289,7 +289,7 @@ public class ConversationController : MonoBehaviour {
 
 	void Update () 
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
         {
             if (_gameData.CurrentConversation.Conversation != null)
             {

@@ -23,16 +23,25 @@ public class AttackDecision : Decision
 
 	public bool CanAttack(AIStateController pController)
 	{
-		if (_player == null)
-			_player = GameObject.FindWithTag ("Player");
+        //if (_player == null)
+        //_player = GameObject.FindWithTag ("Player");
 
-		if(_player!=null && _playerStats==null)
-			_playerStats = _player.GetComponent<CharacterControls> ();
+        if (pController.ChaseTarget == null)
+        {
+            return false;
+        }
+        else if (Vector3.Distance(pController.transform.position, pController.ChaseTarget.position) < pController.CharacterStats.AttackRange)
+        {                
+            return true;
+        }
 
-		if ((_playerStats!=null && _playerStats.IsAlive) && (Vector3.Distance (pController.transform.position, _player.transform.position) < pController.CharacterStats.AttackRange))
-		{
-			return true;
-		}
+		//if(_player!=null && _playerStats==null)
+		//	_playerStats = _player.GetComponent<CharacterControls> ();
+
+		//if ((_playerStats!=null && _playerStats.IsAlive) && (Vector3.Distance (pController.transform.position, _player.transform.position) < pController.CharacterStats.AttackRange))
+		//{
+		//	return true;
+		//}
 
 		return false;
 	}

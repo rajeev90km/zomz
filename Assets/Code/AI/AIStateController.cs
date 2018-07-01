@@ -7,284 +7,298 @@ using System.Linq;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(LineRenderer))]
-public class AIStateController : MonoBehaviour {
+public class AIStateController : MonoBehaviour
+{
 
-	private bool _isAIOn = true;
+    private bool _isAIOn = true;
 
-	private bool _beingControlled = false;
-	public bool BeingControlled
-	{
-		get{ return _beingControlled; }	 
-		set{ _beingControlled = value;}
-	}
+    private bool _beingControlled = false;
+    public bool BeingControlled
+    {
+        get { return _beingControlled; }
+        set { _beingControlled = value; }
+    }
 
-	private bool _selectedForControl = false;
-	public bool IsSelectedForControl
-	{
-		get { return _selectedForControl; }
-	}
+    private bool _selectedForControl = false;
+    public bool IsSelectedForControl
+    {
+        get { return _selectedForControl; }
+    }
 
     [SerializeField]
     private GameData _gameData;
 
-	[SerializeField]
-	private CharacterStats _characterStats;
-	public CharacterStats CharacterStats
-	{
-		get { return _characterStats; }
-	}
+    [SerializeField]
+    private CharacterStats _characterStats;
+    public CharacterStats CharacterStats
+    {
+        get { return _characterStats; }
+    }
 
-	[SerializeField]
-	private ZomzListAttribute _zomzActionsList;
+    [SerializeField]
+    private ZomzListAttribute _zomzActionsList;
 
     [SerializeField]
     private SelectedZombie _currentSelectedZombie;
 
-	private bool _isAlive = true;
-	public bool IsAlive
-	{
-		get { return _isAlive; }
-	}
+    private bool _isAlive = true;
+    public bool IsAlive
+    {
+        get { return _isAlive; }
+    }
 
-	public float _currentHealth;
+    public float _currentHealth;
 
-	[SerializeField]
-	private Transform _eyes;
-	public Transform Eyes
-	{
-		get { return _eyes; }
-		set { _eyes = value; }
-	}
+    [SerializeField]
+    private Transform _eyes;
+    public Transform Eyes
+    {
+        get { return _eyes; }
+        set { _eyes = value; }
+    }
 
-	[SerializeField]
-	private Image _zombieHealthBar;
+    [SerializeField]
+    private Image _zombieHealthBar;
 
-	[Header("Models")]
-	[SerializeField]
-	private GameObject _normalModeModel;
-	[SerializeField]
-	private GameObject _zomzModeModel;
-	[SerializeField]
-	private Material _normalModeMaterial;
-	[SerializeField]
-	private Material _zomzModeMaterial;
-	[SerializeField]
-	private GameObject _selectionQuad;
+    [Header("Models")]
+    [SerializeField]
+    private GameObject _normalModeModel;
+    [SerializeField]
+    private GameObject _zomzModeModel;
+    [SerializeField]
+    private Material _normalModeMaterial;
+    [SerializeField]
+    private Material _zomzModeMaterial;
+    [SerializeField]
+    private GameObject _selectionQuad;
 
-	[SerializeField]
-	private float _lookRange = 10f;
-	public float LookRange
-	{
-		get{ return _lookRange; }
-		set{ _lookRange = value; }
-	}
+    [SerializeField]
+    private float _lookRange = 10f;
+    public float LookRange
+    {
+        get { return _lookRange; }
+        set { _lookRange = value; }
+    }
 
-	[SerializeField]
-	private float _lookSphere = 10f;
-	public float LookSphere
-	{
-		get{ return _lookSphere; }
-		set{ _lookSphere = value; }
-	}
+    [SerializeField]
+    private float _lookSphere = 10f;
+    public float LookSphere
+    {
+        get { return _lookSphere; }
+        set { _lookSphere = value; }
+    }
 
-	[SerializeField]
-	private float _attackRange = 1f;
-	public float AttackRange
-	{
-		get{ return _attackRange; }
-		set{ _attackRange = value; }
-	}
+    [SerializeField]
+    private float _attackRange = 1f;
+    public float AttackRange
+    {
+        get { return _attackRange; }
+        set { _attackRange = value; }
+    }
 
-	[SerializeField]
-	private float _attackRate = 1f;
-	public float AttackRate
-	{
-		get{ return _attackRate; }
-		set{ _attackRate = value; }
-	}
+    [SerializeField]
+    private float _attackRate = 1f;
+    public float AttackRate
+    {
+        get { return _attackRate; }
+        set { _attackRate = value; }
+    }
 
-	[Header("AI States")]
-	[SerializeField]
-	private State _initState;
-	public State InitState
-	{
-		get{ return _initState; }
-		set{ InitState = value; }
-	}
+    [Header("AI States")]
+    [SerializeField]
+    private State _initState;
+    public State InitState
+    {
+        get { return _initState; }
+        set { InitState = value; }
+    }
 
-	[SerializeField]
-	private State _currentState;
-	public State CurrentState
-	{
-		get{ return _currentState; }
-		set{ _currentState = value; }
-	}
+    [SerializeField]
+    private State _currentState;
+    public State CurrentState
+    {
+        get { return _currentState; }
+        set { _currentState = value; }
+    }
 
-	[SerializeField]
-	private State _remainState;
-	public State RemainState
-	{
-		get{ return _remainState; }
-		set{ _remainState = value; }
-	}
+    [SerializeField]
+    private State _remainState;
+    public State RemainState
+    {
+        get { return _remainState; }
+        set { _remainState = value; }
+    }
 
-	[SerializeField]
-	private State _deadState;
-	public State DeadState
-	{
-		get{ return _deadState; }
-		set{ _deadState = value; }
-	}
+    [SerializeField]
+    private State _deadState;
+    public State DeadState
+    {
+        get { return _deadState; }
+        set { _deadState = value; }
+    }
 
-	[Header("FX")]
-	[SerializeField]
-	private GameObject _hurtFX;
+    [Header("FX")]
+    [SerializeField]
+    private GameObject _hurtFX;
 
-	private Animator _animator;
-	public Animator Animator
-	{
-		get{ return _animator;}
-	}
+    private Animator _animator;
+    public Animator Animator
+    {
+        get { return _animator; }
+    }
 
-	[HideInInspector]
-	public NavMeshAgent navMeshAgent;
+    [HideInInspector]
+    public NavMeshAgent navMeshAgent;
 
-	[HideInInspector]
-	public Transform ChaseTarget;
+    [HideInInspector]
+    public Transform ChaseTarget;
 
-	[HideInInspector]
-	public float StateTimeElapsed = 0f;
+    [HideInInspector]
+    public float StateTimeElapsed = 0f;
 
-	[SerializeField]
-	private GameObject _wayPointsObj;
+    [SerializeField]
+    private GameObject _wayPointsObj;
 
-	[HideInInspector]
-	public List<Transform> wayPoints;
+    [HideInInspector]
+    public List<Transform> wayPoints;
 
-	private float period = float.MaxValue;
+    private float period = float.MaxValue;
 
-	private CharacterControls _playerControls;
-	private GameObject _player;
+    private CharacterControls _playerControls;
+    private GameObject _player;
 
-	private bool _zomzAttack = false;
+    private bool _zomzAttack = false;
 
-	private int _nextWayPoint;
-	public int NextWayPoint
-	{
-		get{ return _nextWayPoint; }
-		set{ _nextWayPoint = value; }
-	}
+    private int _nextWayPoint;
+    public int NextWayPoint
+    {
+        get { return _nextWayPoint; }
+        set { _nextWayPoint = value; }
+    }
 
-	[Header("Mana Costs")]
-	[SerializeField]
-	private GameFloatAttribute _zomzManaAttribute;
+    [Header("Mana Costs")]
+    [SerializeField]
+    private GameFloatAttribute _zomzManaAttribute;
 
-	[SerializeField]
-	private float _manaForUnitMovement = 2f;
+    [SerializeField]
+    private float _manaForUnitMovement = 2f;
 
-	[SerializeField]
-	private float _manaForAttack = 10f;
+    [SerializeField]
+    private float _manaForAttack = 10f;
 
-	private LineRenderer _lineRenderer;
+    [SerializeField]
+    private float _zomzAttackCooldown = 10f;
 
-	private Queue<ZomzActionPoint> _zomzActionPoints = new Queue<ZomzActionPoint>();
+    private LineRenderer _lineRenderer;
 
+    private Queue<ZomzActionPoint> _zomzActionPoints = new Queue<ZomzActionPoint>();
 
-	private List<Vector3> points = new List<Vector3> ();
-
-	private int _groundLayerMask;
-	private int _enemyPlayerMask;
-	private ZomzActionSystem _zactionSystem;
-	private Renderer _renderer;
-
-	private bool _isExecutingActions = false;
+    public int NumActionPoints{
+        get { return _zomzActionPoints.Count; }
+    }
 
 
-	private Coroutine _zomzAttackCoroutine;
-	private Coroutine _hurtPlayerCoroutine;
+    private List<Vector3> points = new List<Vector3>();
 
-	void Start () 
-	{
-		_renderer = _normalModeModel.GetComponent<Renderer> ();
-		_zactionSystem = _zomzModeModel.GetComponent<ZomzActionSystem> ();	
+    private int _groundLayerMask;
+    private int _enemyPlayerMask;
+    private ZomzActionSystem _zactionSystem;
+    private Renderer _renderer;
 
-		_groundLayerMask |= (1 << LayerMask.NameToLayer ("Ground"));
-		_enemyPlayerMask = (1 << LayerMask.NameToLayer ("Enemy")) | (1 << LayerMask.NameToLayer ("Player")); 
+    private bool _isExecutingActions = false;
 
-		_lineRenderer = GetComponent<LineRenderer> ();
-		_currentState = _initState;
-		_currentHealth = _characterStats.Health;
-		_player = GameObject.FindWithTag ("Player");
-		_playerControls = _player.GetComponent<CharacterControls> ();
 
-		//Get all waypoints
-		if (_wayPointsObj != null)
-		{
-			for(int i=0;i<_wayPointsObj.transform.childCount;i++)
-			{
-				wayPoints.Add(_wayPointsObj.transform.GetChild(i));
-			}
-		}
+    private Coroutine _zomzAttackCoroutine;
+    private Coroutine _hurtPlayerCoroutine;
 
-		//Get Navmesh Agent
-		navMeshAgent = GetComponent<NavMeshAgent>();
+    void Start()
+    {
+        _renderer = _normalModeModel.GetComponent<Renderer>();
+        _zactionSystem = _zomzModeModel.GetComponent<ZomzActionSystem>();
 
-		//Set Animator
-		_animator = GetComponent<Animator>();
-		_animator.SetTrigger (_currentState.AnimationTrigger);
-	}
+        _groundLayerMask |= (1 << LayerMask.NameToLayer("Ground"));
+        _enemyPlayerMask = (1 << LayerMask.NameToLayer("Enemy")) | (1 << LayerMask.NameToLayer("Player"));
 
-	public void SelectCurrentForControl()
-	{
-		_selectedForControl = true;
+        _lineRenderer = GetComponent<LineRenderer>();
+        _currentState = _initState;
+        _currentHealth = _characterStats.Health;
+        _player = GameObject.FindWithTag("Player");
+        _playerControls = _player.GetComponent<CharacterControls>();
+
+        //Get all waypoints
+        if (_wayPointsObj != null)
+        {
+            for (int i = 0; i < _wayPointsObj.transform.childCount; i++)
+            {
+                wayPoints.Add(_wayPointsObj.transform.GetChild(i));
+            }
+        }
+
+        //Get Navmesh Agent
+        navMeshAgent = GetComponent<NavMeshAgent>();
+
+        //Set Animator
+        _animator = GetComponent<Animator>();
+        _animator.SetTrigger(_currentState.AnimationTrigger);
+    }
+
+    public void SelectCurrentForControl()
+    {
+        _selectedForControl = true;
 
         _currentSelectedZombie.CurrentSelectedZombie = this;
 
-		if (_selectionQuad)
-			_selectionQuad.SetActive (true);
-	}
+        if (_selectionQuad)
+            _selectionQuad.SetActive(true);
+    }
 
-	public void ClearCurrentControl()
-	{
+    public void ClearCurrentControl()
+    {
 
         //_currentSelectedZombie.ResetSelection();
 
-		_selectedForControl = false;
-		if (_selectionQuad)
-			_selectionQuad.SetActive (false);
-	}
+        _selectedForControl = false;
+        if (_selectionQuad)
+            _selectionQuad.SetActive(false);
+    }
 
-	public void TakeControl()
-	{
-		_renderer.sharedMaterial = _zomzModeMaterial;
+    public void TakeControl()
+    {
+        _renderer.sharedMaterial = _zomzModeMaterial;
 
-		if(_zactionSystem)
-			_zactionSystem.enabled = true;
-		
+        if (_zactionSystem)
+            _zactionSystem.enabled = true;
 
-		_beingControlled = true;
-        _zomzActionsList.AllActionPoints.Clear ();
-		_zomzActionPoints.Enqueue(new ZomzActionPoint(_zomzModeModel.transform.position,ZomzAction.MOVE,null));
+
+        _beingControlled = true;
+        //_zomzActionsList.AllActionPoints.Clear ();
+        _zomzActionPoints.Enqueue(new ZomzActionPoint(_zomzModeModel.transform.position, ZomzAction.MOVE, null));
         ToggleZomzAttackMode(false);
         //_zomzActionsList.AllActionPoints.Add(new ZomzActionPoint(this,_zomzModeModel.transform.position, ZomzAction.MOVE, null));
 
-		points.Clear ();
-        points.Add (_zomzModeModel.transform.position);
-	}
+        points.Clear();
+        points.Add(_zomzModeModel.transform.position);
+    }
 
     public void BeforeExecuting()
     {
         ClearCurrentControl();
         _zomzModeModel.SetActive(false);
         _zactionSystem.IsSelected = false;
-        _isExecutingActions = true;    
+        _isExecutingActions = true;
         _currentSelectedZombie.ResetSelection();
+
+        navMeshAgent.isStopped = true;
+        navMeshAgent.ResetPath();
 
         //points.Clear();
         //_lineRenderer.positionCount = points.Count;
         //_lineRenderer.SetPositions(points.ToArray());
 
+        StartCoroutine(ExecuteActions());
+
         EnableDisableColliders(false);
+
     }
 
     void EnableDisableColliders(bool pEnable)
@@ -295,9 +309,9 @@ public class AIStateController : MonoBehaviour {
         if (coll != null)
             coll.enabled = pEnable;
 
-        if(rb!=null)
+        if (rb != null)
         {
-            if(!pEnable)
+            if (!pEnable)
                 rb.constraints = RigidbodyConstraints.FreezePosition;
             else
             {
@@ -305,14 +319,88 @@ public class AIStateController : MonoBehaviour {
                 rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
             }
         }
-        
+
     }
+
+    public IEnumerator ExecuteActions()
+    {
+        _animator.SetTrigger("walk");
+
+        if (_isExecutingActions)
+        {
+            while (_zomzActionPoints.Count > 0)
+            {
+                yield return StartCoroutine(UpdateZomzActions());
+            }
+
+            RelinquishControl();
+
+            if (!ChaseTarget.CompareTag("Player"))
+            {
+                yield return new WaitForSeconds(_zomzAttackCooldown);
+                ChaseTarget = GameObject.FindWithTag("Player").transform;
+            }
+
+            //_animator.SetTrigger("idle");
+        }
+
+        yield return null;
+    }
+
+    IEnumerator UpdateZomzActions()
+   {
+       int i = 0;
+       
+        if (!navMeshAgent.hasPath)// && _zomzAttackCoroutine==null)
+        {
+           ZomzActionPoint actionPoint = _zomzActionPoints.Dequeue();
+
+           //Move
+           if (actionPoint.ZomzAction == ZomzAction.MOVE)
+           {
+               navMeshAgent.SetDestination(actionPoint.Position);
+               navMeshAgent.speed = _characterStats.ZomzSpeed;
+
+               //Update Line Renderer
+               if(points.Count>0)
+                   points.RemoveAt(i++);
+               _lineRenderer.positionCount = points.Count;
+               _lineRenderer.SetPositions(points.ToArray());
+           } 
+           //Attack
+           else if (actionPoint.ZomzAction == ZomzAction.ATTACK)
+           {
+
+                points.Clear();
+                _lineRenderer.positionCount = points.Count;
+                _lineRenderer.SetPositions(points.ToArray());
+
+                ChaseTarget = actionPoint.ActionTarget;
+                _zomzActionPoints.Clear();
+               
+
+                //if (actionPoint.ActionTarget != null)
+               //{
+               //    transform.LookAt(actionPoint.ActionTarget);
+               //    _animator.SetTrigger("attack");
+
+               //    DealZomzDamage(actionPoint.ActionTarget);
+
+               //    if (_zomzAttackCoroutine == null)
+               //        _zomzAttackCoroutine = StartCoroutine(WaitToEndZomzAttack ());
+               //}
+           }
+
+            yield return null;
+        }
+   }
+
 
 	public void RelinquishControl()
 	{
+        _zomzModeModel.SetActive(false);
 		_isExecutingActions = false;
 		_renderer.sharedMaterial = _normalModeMaterial;
-		Time.timeScale = 1;
 		_beingControlled = false;
 		_zomzModeModel.transform.localPosition = Vector3.zero;
 		_zomzModeModel.transform.localRotation = Quaternion.identity;
@@ -348,7 +436,7 @@ public class AIStateController : MonoBehaviour {
 
 	}
 
-	IEnumerator WaitToEndZomzAttack(Transform pTarget)
+	IEnumerator WaitToEndZomzAttack()
 	{
 		yield return new WaitForSeconds (_characterStats.AttackRate);
 
@@ -378,10 +466,10 @@ public class AIStateController : MonoBehaviour {
                             if (_zomzManaAttribute)
                                 _zomzManaAttribute.CurrentValue -= _manaForUnitMovement;
 
-                            //_zomzActionPoints.Enqueue (new ZomzActionPoint (_zomzModeModel.transform.position, ZomzAction.MOVE, null));
-                            _zomzActionsList.AllActionPoints.Add(new ZomzActionPoint(this, _zomzModeModel.transform.position, ZomzAction.MOVE, null));
+                            _zomzActionPoints.Enqueue (new ZomzActionPoint (_zomzModeModel.transform.position, ZomzAction.MOVE, null));
+                            //_zomzActionsList.AllActionPoints.Add(new ZomzActionPoint(this, _zomzModeModel.transform.position, ZomzAction.MOVE, null));
                             ToggleZomzAttackMode(false);
-                            points.Add(_zomzActionsList.AllActionPoints.Last().Position);
+                            points.Add(_zomzActionPoints.Last().Position);
                             _lineRenderer.positionCount = points.Count;
                             _lineRenderer.SetPositions(points.ToArray());
                         }
@@ -405,16 +493,14 @@ public class AIStateController : MonoBehaviour {
                                     {
                                         if (hit.collider.gameObject != this.gameObject)
                                         {
-
-                                            if (Vector3.Distance(_zomzModeModel.transform.position, hit.transform.position) <= _characterStats.AttackRange)
+                                            if (_zomzManaAttribute.CurrentValue - _manaForAttack > 0)
                                             {
                                                 if (_zomzManaAttribute)
                                                     _zomzManaAttribute.CurrentValue -= _manaForAttack;
 
-                                                //_zomzActionPoints.Enqueue (new ZomzActionPoint (_zomzModeModel.transform.position, ZomzAction.ATTACK, hit.transform));
-                                                _zomzActionsList.AllActionPoints.Add(new ZomzActionPoint(this, _zomzModeModel.transform.position, ZomzAction.ATTACK, hit.transform));
-                                                _zactionSystem.Animator.SetTrigger("attack");
+                                                _zomzActionPoints.Enqueue(new ZomzActionPoint(_zomzModeModel.transform.position, ZomzAction.ATTACK, hit.transform));
                                             }
+
                                         }
                                     }
                                 }
@@ -457,9 +543,9 @@ public class AIStateController : MonoBehaviour {
 
 	private float DistanceToLastPoint(Vector3 pPoint)
 	{
-        if (!_zomzActionsList.AllActionPoints.Any())
+        if (!_zomzActionPoints.Any())
 			return float.MaxValue;
-        return Vector3.Distance (_zomzActionsList.AllActionPoints.Last().Position, pPoint);
+        return Vector3.Distance (_zomzActionPoints.Last().Position, pPoint);
 	}
 
 	void ResetAI()
@@ -508,35 +594,38 @@ public class AIStateController : MonoBehaviour {
 	{
 		if (_isAlive)
 		{
-			if (_currentHealth - pDamage > 0)
-			{
-				_currentHealth -= pDamage;
-			}
-			else
-				_currentHealth = 0;
+            if (pDamage > 0)
+            {
+                if (_currentHealth - pDamage > 0)
+                {
+                    _currentHealth -= pDamage;
+                }
+                else
+                    _currentHealth = 0;
 
-			if (_currentHealth > 0)
-			{
-				yield return new WaitForSeconds(0.7f);
+                if (_currentHealth > 0)
+                {
+                    yield return new WaitForSeconds(0.7f);
 
-				if (_hurtFX != null)
-					Instantiate (_hurtFX, _eyes.transform.position, Quaternion.identity);
+                    if (_hurtFX != null)
+                        Instantiate(_hurtFX, _eyes.transform.position, Quaternion.identity);
 
-				//Update UI Element
-				if (_zombieHealthBar)
-					_zombieHealthBar.fillAmount = _currentHealth / 100;
-			} 
-			else
-			{
-				yield return new WaitForSeconds(0.7f);
+                    //Update UI Element
+                    if (_zombieHealthBar)
+                        _zombieHealthBar.fillAmount = _currentHealth / 100;
+                }
+                else
+                {
+                    yield return new WaitForSeconds(0.7f);
 
-				//Update UI Element
-				if (_zombieHealthBar)
-					_zombieHealthBar.fillAmount = 0;
+                    //Update UI Element
+                    if (_zombieHealthBar)
+                        _zombieHealthBar.fillAmount = 0;
 
-				TransitionToState (DeadState);
-				_isAlive = false;
-			}
+                    TransitionToState(DeadState);
+                    _isAlive = false;
+                }
+            }
 		}
 	}
 
@@ -555,13 +644,22 @@ public class AIStateController : MonoBehaviour {
 			{
 				_animator.SetTrigger ("attack");
 
-				if (_playerControls)
+                if (ChaseTarget.CompareTag("Player"))
 				{
 					_playerControls.StartCoroutine (_playerControls.Hurt (transform, _characterStats.AttackStrength));
-
-                    if(_characterStats.AttackDamageToSelf>0)
-                        TakeDamage(_characterStats.AttackDamageToSelf);
 				}
+                else if(ChaseTarget.CompareTag("Enemy"))
+                {
+                    AIStateController enemyCtrl = ChaseTarget.GetComponent<AIStateController>();
+
+                    if(enemyCtrl!=null)
+                    {
+                        enemyCtrl.StartCoroutine(enemyCtrl.DamageCoroutine(_characterStats.AttackStrength));
+                    }
+                }
+
+                if (_characterStats.AttackDamageToSelf > 0)
+                    TakeDamage(_characterStats.AttackDamageToSelf);
 
 				period = 0;
 			}

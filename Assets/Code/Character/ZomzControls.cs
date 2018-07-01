@@ -79,6 +79,8 @@ public class ZomzControls : MonoBehaviour {
 	[SerializeField]
 	private GameEvent _zomzEndEvent;
 
+    private List<AIStateController> _allZombies = new List<AIStateController>();    
+
 
 	void Start () 
 	{
@@ -86,6 +88,7 @@ public class ZomzControls : MonoBehaviour {
 		_zombiesUnderControl = new List<AIStateController> ();
 		_characterControls = GetComponent<CharacterControls> ();
 		_enemyLayerMask = (1 << LayerMask.NameToLayer ("Enemy"));
+
 	}
 
 	void OnDrawGizmos()
@@ -174,79 +177,101 @@ public class ZomzControls : MonoBehaviour {
                 Dictionary<AIStateController, int> _zomzActionCountPerZombie = new Dictionary<AIStateController, int>();
 
                 //count actions for each zombie
-                for (int i = 0; i < _zomzActionsList.AllActionPoints.Count; i++)
+                //for (int i = 0; i < _zomzActionsList.AllActionPoints.Count; i++)
+                //{
+                //    if (!_zomzActionCountPerZombie.ContainsKey(_zomzActionsList.AllActionPoints[i].Zomz))
+                //        _zomzActionCountPerZombie.Add(_zomzActionsList.AllActionPoints[i].Zomz, 1);
+                //    else
+                //        _zomzActionCountPerZombie[_zomzActionsList.AllActionPoints[i].Zomz]++;
+                //}
+
+
+                //for (int i = 0; i < _zombiesUnderControl.Count; i++)
+                //{
+                //    if(_zomzActionCountPerZombie.ContainsKey(_zombiesUnderControl[i]))
+                //    {
+                //        if(_zomzActionCountPerZombie[_zombiesUnderControl[i]]>0) 
+                //            _zombiesUnderControl[i].Animator.SetTrigger("walk");
+                //    }
+                //}
+
+                GameObject[] allEnemyObjects = GameObject.FindGameObjectsWithTag("Enemy");
+
+                for (int i = 0; i < allEnemyObjects.Length; i++)
                 {
-                    if (!_zomzActionCountPerZombie.ContainsKey(_zomzActionsList.AllActionPoints[i].Zomz))
-                        _zomzActionCountPerZombie.Add(_zomzActionsList.AllActionPoints[i].Zomz, 1);
-                    else
-                        _zomzActionCountPerZombie[_zomzActionsList.AllActionPoints[i].Zomz]++;
+                    _allZombies.Add(allEnemyObjects[i].GetComponent<AIStateController>());
                 }
 
-
-                for (int i = 0; i < _zombiesUnderControl.Count; i++)
+                for (int i = 0; i < _allZombies.Count; i++)
                 {
-                    if(_zomzActionCountPerZombie.ContainsKey(_zombiesUnderControl[i]))
+                    if (_allZombies[i].NumActionPoints <= 1)
                     {
-                        if(_zomzActionCountPerZombie[_zombiesUnderControl[i]]>0) 
-                            _zombiesUnderControl[i].Animator.SetTrigger("walk");
+                        _allZombies[i].RelinquishControl();
+                    }
+                    else
+                    {
+                        _zombiesUnderControl[i].BeforeExecuting();
                     }
                 }
 
+                //for (int i = 0; i < _zombiesUnderControl.Count; i++)
+                //{
+                //    if(_zombiesUnderControl[i].NumActionPoints > 1)
+                //        yield return StartCoroutine(_zombiesUnderControl[i].ExecuteActions());
+                //}
 
-                for (int i = 0; i < _zombiesUnderControl.Count; i++)
-                {
-                    _zombiesUnderControl[i].BeforeExecuting();
-                    _zombiesUnderControl[i].navMeshAgent.ResetPath();
-                }
+                //for (int i = 0; i < _zombiesUnderControl.Count; i++)
+                //{
+                //    _zombiesUnderControl[i].RelinquishControl();
+                //}
+
 
 				_canUseZomzMode = false;
 
-                AIStateController currentZomz = null;
-                ZomzAction currentAction = ZomzAction.NONE;
+                //AIStateController currentZomz = null;
+                //ZomzAction currentAction = ZomzAction.NONE;
 
-                if (_zomzActionsList.AllActionPoints.Count > 0)
-                    currentZomz = _zomzActionsList.AllActionPoints[0].Zomz;
-
-                if (_zomzEndEvent != null)
-                    _zomzEndEvent.Raise();
-
-                for (int i = 0; i < _zomzActionsList.AllActionPoints.Count; i++)
-                {
-                    //MOVE
-                    if (_zomzActionsList.AllActionPoints[i].ZomzAction == ZomzAction.MOVE)
-                    {
-                        if(currentZomz!=_zomzActionsList.AllActionPoints[i].Zomz)
-                        {
-                            currentZomz.Animator.SetTrigger("idle");
-                            _zomzActionsList.AllActionPoints[i].Zomz.Animator.SetTrigger("walk");
-                            currentZomz = _zomzActionsList.AllActionPoints[i].Zomz;
-                        }
-
-                        if(currentZomz==_zomzActionsList.AllActionPoints[i].Zomz && currentAction==ZomzAction.ATTACK)
-                        {
-                            currentZomz.Animator.SetTrigger("walk");
-                        }
-
-                        currentAction = ZomzAction.MOVE;
-                        _zomzActionsList.AllActionPoints[i].Zomz.navMeshAgent.SetDestination(_zomzActionsList.AllActionPoints[i].Position);
-                        yield return new WaitUntil(() => _zomzActionsList.AllActionPoints[i].Zomz.navMeshAgent.hasPath == false);
-                    }
-                    //ATTACK
-                    else if (_zomzActionsList.AllActionPoints[i].ZomzAction == ZomzAction.ATTACK)
-                    {
-                        currentAction = ZomzAction.ATTACK;
-                        _zomzActionsList.AllActionPoints[i].Zomz.Animator.SetTrigger("attack");
-                        yield return new WaitForSeconds(1f);
-                        _zomzActionsList.AllActionPoints[i].Zomz.DealZomzDamage(_zomzActionsList.AllActionPoints[i].ActionTarget);
-                        yield return new WaitForSeconds(1f);
-                    }
-                }                    
+                //if (_zomzActionsList.AllActionPoints.Count > 0)
+                    //currentZomz = _zomzActionsList.AllActionPoints[0].Zomz;
 
 
-				for (int i = 0; i < _zombiesUnderControl.Count; i++)
-				{
-					_zombiesUnderControl [i].RelinquishControl ();
-				}
+                //for (int i = 0; i < _zomzActionsList.AllActionPoints.Count; i++)
+                //{
+                //    //MOVE
+                //    if (_zomzActionsList.AllActionPoints[i].ZomzAction == ZomzAction.MOVE)
+                //    {
+                //        if(currentZomz!=_zomzActionsList.AllActionPoints[i].Zomz)
+                //        {
+                //            currentZomz.Animator.SetTrigger("idle");
+                //            _zomzActionsList.AllActionPoints[i].Zomz.Animator.SetTrigger("walk");
+                //            currentZomz = _zomzActionsList.AllActionPoints[i].Zomz;
+                //        }
+
+                //        if(currentZomz==_zomzActionsList.AllActionPoints[i].Zomz && currentAction==ZomzAction.ATTACK)
+                //        {
+                //            currentZomz.Animator.SetTrigger("walk");
+                //        }
+
+                //        currentAction = ZomzAction.MOVE;
+                //        _zomzActionsList.AllActionPoints[i].Zomz.navMeshAgent.SetDestination(_zomzActionsList.AllActionPoints[i].Position);
+                //        yield return new WaitUntil(() => _zomzActionsList.AllActionPoints[i].Zomz.navMeshAgent.hasPath == false);
+                //    }
+                //    //ATTACK
+                //    else if (_zomzActionsList.AllActionPoints[i].ZomzAction == ZomzAction.ATTACK)
+                //    {
+                //        currentAction = ZomzAction.ATTACK;
+                //        _zomzActionsList.AllActionPoints[i].Zomz.Animator.SetTrigger("attack");
+                //        yield return new WaitForSeconds(1f);
+                //        _zomzActionsList.AllActionPoints[i].Zomz.DealZomzDamage(_zomzActionsList.AllActionPoints[i].ActionTarget);
+                //        yield return new WaitForSeconds(1f);
+                //    }
+                //}                    
+
+
+				//for (int i = 0; i < _zombiesUnderControl.Count; i++)
+				//{
+    //                _zombiesUnderControl [i].ExecuteActions();
+				//}
 
 				_zombiesUnderControl.Clear ();
 

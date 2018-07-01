@@ -2191,7 +2191,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1875776018789522}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.357593, y: 0.00000011920929, z: 9.965788}
+  m_LocalPosition: {x: 3.44, y: 0, z: -10.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4638487539201914}
@@ -4157,7 +4157,8 @@ MonoBehaviour:
   wayPoints: []
   _zomzManaAttribute: {fileID: 11400000, guid: f3a6c0e127ede49ad866f88bc2b95abb, type: 2}
   _manaForUnitMovement: 2
-  _manaForAttack: 10
+  _manaForAttack: 50
+  _zomzAttackCooldown: 10
 --- !u!114 &114060543170724854
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -5639,7 +5639,8 @@ MonoBehaviour:
   wayPoints: []
   _zomzManaAttribute: {fileID: 11400000, guid: f3a6c0e127ede49ad866f88bc2b95abb, type: 2}
   _manaForUnitMovement: 2
-  _manaForAttack: 25
+  _manaForAttack: 30
+  _zomzAttackCooldown: 10
 --- !u!114 &114244962565547056
 MonoBehaviour:
   m_ObjectHideFlags: 1
