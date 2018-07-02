@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health: 100
   WalkSpeed: 2
-  RunSpeed: 3.2
+  RunSpeed: 10
   AttackRate: 2
   AttackStrength: 20
   AttackRange: 1.5

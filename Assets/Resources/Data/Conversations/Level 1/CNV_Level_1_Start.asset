@@ -22,8 +22,8 @@ MonoBehaviour:
     SFX: {fileID: 0}
     ExitSFX: {fileID: 0}
   - CharacterName: Jalali
-    Text: 'This man, just like so many of you, came to me seeking sanctuary! But,
-      we do not let the weak reside here without reason. He must prove himself worthy! '
+    Text: This man, just like so many of you, came to me seeking sanctuary! But, we
+      do not let the weak reside here without reason. He must prove himself worthy!
     Avatar: {fileID: 21300000, guid: 854a823e18d69bf49900df83e7826c26, type: 3}
     CharPosition: 0
     BackgroundImage: {fileID: 0}
