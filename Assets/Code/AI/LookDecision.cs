@@ -23,11 +23,17 @@ public class LookDecision : Decision
 		if(_player!=null && _playerStats==null)
 			_playerStats = _player.GetComponent<CharacterControls> ();
 
-		if ((_playerStats!=null && _playerStats.IsAlive) && (Vector3.Distance (pController.transform.position, _player.transform.position) < pController.LookRange))
+        if (pController.ChaseTarget != null && pController.ChaseTarget.CompareTag("Enemy"))
+        {
+            return true;
+        }
+
+        if ((_playerStats!=null && _playerStats.IsAlive) && (Vector3.Distance (pController.transform.position, _player.transform.position) < pController.LookRange))
 		{
 			pController.ChaseTarget = _player.transform;
 			return true;
 		}
+
 
 //		RaycastHit hit;
 //

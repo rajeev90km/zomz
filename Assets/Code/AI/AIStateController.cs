@@ -137,6 +137,14 @@ public class AIStateController : MonoBehaviour
         set { _deadState = value; }
     }
 
+    [SerializeField]
+    private State _chaseState;
+    public State ChaseState
+    {
+        get { return _chaseState; }
+        set { _chaseState = value; }
+    }
+
     [Header("FX")]
     [SerializeField]
     private GameObject _hurtFX;
@@ -150,7 +158,6 @@ public class AIStateController : MonoBehaviour
     [HideInInspector]
     public NavMeshAgent navMeshAgent;
 
-    [HideInInspector]
     public Transform ChaseTarget;
 
     [HideInInspector]
@@ -335,8 +342,10 @@ public class AIStateController : MonoBehaviour
 
             RelinquishControl();
 
-            if (!ChaseTarget.CompareTag("Player"))
+            if (ChaseTarget != null && !ChaseTarget.CompareTag("Player"))
             {
+                Debug.Log(ChaseTarget);
+                //TransitionToState(_chaseState);
                 yield return new WaitForSeconds(_zomzAttackCooldown);
                 ChaseTarget = GameObject.FindWithTag("Player").transform;
             }
@@ -351,7 +360,7 @@ public class AIStateController : MonoBehaviour
    {
        int i = 0;
        
-        if (!navMeshAgent.hasPath)// && _zomzAttackCoroutine==null)
+        if (navMeshAgent.remainingDistance<0.1f)// && _zomzAttackCoroutine==null)
         {
            ZomzActionPoint actionPoint = _zomzActionPoints.Dequeue();
 
@@ -370,7 +379,6 @@ public class AIStateController : MonoBehaviour
            //Attack
            else if (actionPoint.ZomzAction == ZomzAction.ATTACK)
            {
-
                 points.Clear();
                 _lineRenderer.positionCount = points.Count;
                 _lineRenderer.SetPositions(points.ToArray());
@@ -533,6 +541,9 @@ public class AIStateController : MonoBehaviour
                 }
 
             }
+            else{
+                CurrentState = null;
+            }
         }
 	}
 
@@ -624,6 +635,8 @@ public class AIStateController : MonoBehaviour
 
                     TransitionToState(DeadState);
                     _isAlive = false;
+                    //yield return new WaitForSeconds(2f);
+                    //Destroy(gameObject);
                 }
             }
 		}

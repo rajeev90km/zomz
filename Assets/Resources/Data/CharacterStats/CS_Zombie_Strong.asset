@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Name: CS_Zombie_Strong
   m_EditorClassIdentifier: 
   Health: 100
-  WalkSpeed: 3
-  RunSpeed: 3
+  WalkSpeed: 4
+  RunSpeed: 4
   AttackRate: 3
-  AttackStrength: 10
+  AttackStrength: 20
   AttackRange: 2
   ZomzRange: 12
   ZomzSpeed: 5

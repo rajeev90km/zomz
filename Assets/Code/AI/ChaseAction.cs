@@ -19,8 +19,11 @@ public class ChaseAction : Action
 
 	private void Chase(AIStateController pController)
 	{
-		if (pController.ChaseTarget == null)
-			pController.ChaseTarget = _player.transform;
+        if (pController.ChaseTarget == null)
+        {
+            _player = GameObject.FindWithTag("Player");
+            pController.ChaseTarget = _player.transform;
+        }
 		
 		pController.navMeshAgent.destination = pController.ChaseTarget.position;
 		pController.navMeshAgent.isStopped = false;

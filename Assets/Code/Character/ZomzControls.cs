@@ -197,9 +197,12 @@ public class ZomzControls : MonoBehaviour {
 
                 GameObject[] allEnemyObjects = GameObject.FindGameObjectsWithTag("Enemy");
 
+                _allZombies.Clear();
+
                 for (int i = 0; i < allEnemyObjects.Length; i++)
                 {
-                    _allZombies.Add(allEnemyObjects[i].GetComponent<AIStateController>());
+                    if(allEnemyObjects[i].GetComponent<AIStateController>().IsAlive)
+                        _allZombies.Add(allEnemyObjects[i].GetComponent<AIStateController>());
                 }
 
                 for (int i = 0; i < _allZombies.Count; i++)
@@ -210,7 +213,7 @@ public class ZomzControls : MonoBehaviour {
                     }
                     else
                     {
-                        _zombiesUnderControl[i].BeforeExecuting();
+                        _allZombies[i].BeforeExecuting();
                     }
                 }
 

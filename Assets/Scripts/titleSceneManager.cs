@@ -16,8 +16,9 @@ public class titleSceneManager : MonoBehaviour {
 	}
 
 	// Title scene level manager methods
-	public void LoadLevel (string name)	{
-		SceneManager.LoadScene(name);
+	public void LoadLevel (int index)	{
+        Debug.Log("Load Level");
+        SceneManager.LoadScene(index);
 	}
 
 	public void OpenLevelSelector () {

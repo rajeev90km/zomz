@@ -25,6 +25,8 @@ public enum WaveType
 [System.Serializable]
 public class ZombieWave
 {
+    public GameObject Waypoints;
+
     public string waveNum;
 
     public List<ZombieSpawn> ZombieSpawns;
@@ -81,6 +83,8 @@ public class ZombieWavesSpawner : ZombieBaseSpawner
             _deadZombies.Clear();
             _allZombies.Clear();
 
+            //Debug.Log(currentWave);
+
             //Process next wave
             if (currentWave <= _zombieWaveInfo.Count - 1)
             {
@@ -89,6 +93,13 @@ public class ZombieWavesSpawner : ZombieBaseSpawner
                 {
                     GameObject _zombie = Instantiate(_zombieWaveInfo[currentWave].ZombieSpawns[i].ZombieToSpawn, _zombieWaveInfo[currentWave].ZombieSpawns[i].SpawnPoint.position, Quaternion.identity) as GameObject;
                     AIStateController asc = _zombie.GetComponent<AIStateController>();
+                    //asc.wayPoints.Clear();
+                    //for (int j = 0; j < _zombieWaveInfo[currentWave].Waypoints.transform.childCount; j++)
+                    //{
+                    //    asc.wayPoints.Add(_zombieWaveInfo[currentWave].Waypoints.transform.GetChild(j));
+                    //}
+                    //asc.wayPoints = _zombieWaveInfo[currentWave].Waypoints;
+
                     if (asc != null)
                         _allZombies.Add(asc);
                 }

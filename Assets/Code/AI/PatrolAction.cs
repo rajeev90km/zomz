@@ -12,12 +12,19 @@ public class PatrolAction : Action
 
 	private void Patrol(AIStateController pController)
 	{
-		pController.navMeshAgent.destination = pController.wayPoints [pController.NextWayPoint].position;
-		pController.navMeshAgent.isStopped = false;
+        if (pController.IsAlive)
+        {
+            if (pController.navMeshAgent.isActiveAndEnabled)
+            {
 
-		if (pController.navMeshAgent.remainingDistance <= pController.navMeshAgent.stoppingDistance && !pController.navMeshAgent.pathPending)
-		{
-			pController.NextWayPoint = Random.Range (0, pController.wayPoints.Count);
-		}
+                pController.navMeshAgent.destination = pController.wayPoints[pController.NextWayPoint].position;
+                pController.navMeshAgent.isStopped = false;
+
+                if (pController.navMeshAgent.remainingDistance <= 1f)
+                {
+                    pController.NextWayPoint = Random.Range(0, pController.wayPoints.Count);
+                }
+            }
+        }
 	}
 }
