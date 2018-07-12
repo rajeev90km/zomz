@@ -14,9 +14,11 @@ MonoBehaviour:
   Health: 100
   WalkSpeed: 2
   RunSpeed: 3.3
-  AttackRate: 2
+  AttackRate: 0.75
   AttackStrength: 20
   AttackRange: 1.5
   ZomzRange: 10
   ZomzSpeed: 5
   AttackDamageToSelf: 0
+  DiveDistance: 4
+  DiveTime: 1

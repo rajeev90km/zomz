@@ -23,4 +23,8 @@ public class CharacterStats : ScriptableObject
 
     public float AttackDamageToSelf = 0f;
 
+    public float DiveDistance = 3f;
+
+    public float DiveTime = 1f;
+
 }

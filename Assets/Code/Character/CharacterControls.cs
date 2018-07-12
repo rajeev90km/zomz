@@ -65,12 +65,14 @@ public class CharacterControls : MonoBehaviour
     private bool _isAttacking = false;
     private bool _isHurting = false;
     private bool _canAttack = true;
+    private bool _isDiving = false;
 
     private Coroutine _attackCoroutine;
     private Coroutine _hurtCoroutine;
 
     private string[] _attackAnimations = { "attack1", "attack2" };
     private string[] _hurtAnimations = { "hurt1"};
+    private string _dodgeAnimation = "roll";
 
     [Header("FX")]
     [SerializeField]
@@ -231,6 +233,27 @@ public class CharacterControls : MonoBehaviour
 		return closestCollider.gameObject;
 	}
 
+    IEnumerator Dive()
+    {
+        Vector3 startPos = transform.position;
+        Vector3 endPos = transform.position + transform.forward * _characterStats.DiveDistance;
+
+        _animator.SetTrigger("roll");
+
+        float time = 0;
+
+        while(time < 1)
+        {
+            transform.position = Vector3.Lerp(startPos, endPos, time);
+            time = time / _characterStats.DiveTime + Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = endPos;
+
+        _isDiving = false;
+    }
+
 	void Update () 
 	{
         if (!_gameData.IsPaused)
@@ -238,7 +261,7 @@ public class CharacterControls : MonoBehaviour
             if (_isAlive)
             {
                 //Attack
-                if (Input.GetKeyDown(KeyCode.Space) && !_zomzControls.ZomzMode)
+                if (Input.GetKeyDown(KeyCode.Space) && !_zomzControls.ZomzMode && !_isDiving)
                 {
                     if (_canAttack)
                     {
@@ -246,7 +269,16 @@ public class CharacterControls : MonoBehaviour
                     }
                 }
 
-                if (!_isAttacking && !_isHurting)
+                //Debug.Log(_isDiving);
+
+                //DIVE
+                if(Input.GetKeyDown(KeyCode.R) && !_zomzControls.ZomzMode && !_isDiving)
+                {
+                    _isDiving = true;
+                    StartCoroutine(Dive());
+                }
+
+                if (!_isAttacking && !_isHurting && !_isDiving)
                 {
                     bool running = Input.GetKey(KeyCode.LeftShift);
                     float targetSpeed = ((running) ? _characterStats.RunSpeed : _characterStats.WalkSpeed);
