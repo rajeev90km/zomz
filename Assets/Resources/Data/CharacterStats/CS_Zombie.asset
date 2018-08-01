@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Name: CS_Zombie
   m_EditorClassIdentifier: 
   Health: 50
-  WalkSpeed: 2
-  RunSpeed: 4
+  WalkSpeed: 8
+  RunSpeed: 8
   AttackRate: 2
   AttackStrength: 5
   AttackRange: 1.5
   ZomzRange: 10
   ZomzSpeed: 5
   AttackDamageToSelf: 0
+  DiveDistance: 3
+  DiveTime: 1
