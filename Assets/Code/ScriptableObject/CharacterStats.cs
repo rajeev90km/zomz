@@ -11,7 +11,11 @@ public class CharacterStats : ScriptableObject
 
 	public float RunSpeed;
 
+    public float LookRange = 4f;
+
 	public float AttackRate = 1.2f;
+
+    public float HurtRate = 1f;
 
 	public float AttackStrength = 10f;
 

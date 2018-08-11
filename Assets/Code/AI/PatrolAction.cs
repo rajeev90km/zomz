@@ -16,7 +16,6 @@ public class PatrolAction : Action
         {
             if (pController.navMeshAgent.isActiveAndEnabled)
             {
-
                 pController.navMeshAgent.destination = pController.wayPoints[pController.NextWayPoint].position;
                 pController.navMeshAgent.isStopped = false;
 

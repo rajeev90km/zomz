@@ -21,12 +21,6 @@ public class CameraControls : MonoBehaviour
 {
 
     [SerializeField]
-    private AnimationCurve _pitchCurve;
-
-    [SerializeField]
-    private AnimationCurve _distanceCurve;
-
-    [SerializeField]
     private Transform _cameraTopPosition;
 
     [SerializeField]

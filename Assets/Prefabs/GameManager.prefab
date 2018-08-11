@@ -54,21 +54,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: e1e8f4f42e00e49b5bee0fe1a331bd99, type: 2}
+  Event: {fileID: 0}
   Response:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114471394880641996}
-        m_MethodName: EndConversation
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114307310004676170
@@ -82,21 +71,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 930d815983fcc4098b12660acb7c2142, type: 2}
+  Event: {fileID: 0}
   Response:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114471394880641996}
-        m_MethodName: OnLevelEnd
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114471394880641996
@@ -113,12 +91,11 @@ MonoBehaviour:
   _gameData: {fileID: 11400000, guid: fe25c4c301c7243a3b0300d6eb01a3f9, type: 2}
   _audioData: {fileID: 11400000, guid: a7b093140466a4ae8baba59724da7e65, type: 2}
   _levelBGM: {fileID: 8300000, guid: f9d928ca99fc4aa4cbef7c9b1c4f9626, type: 3}
-  _nextLevel: {fileID: 102900000, guid: 6a6aa98f4797b44aca7474dbb12f0ee3, type: 3}
-  _levelStartInterstitial: {fileID: 11400000, guid: 7de58a84087772f48870118d85d439fb,
+  _levelStartInterstitial: {fileID: 11400000, guid: 96e7c75f8b21d43aca11e2126e4530f3,
     type: 2}
-  _levelEndInterstitial: {fileID: 11400000, guid: 829c561fce32ee041955ee2deccc4c1c,
+  _levelEndInterstitial: {fileID: 11400000, guid: 282188f6e34264dd78b178f5fb566975,
     type: 2}
-  _levelLostInterstitial: {fileID: 11400000, guid: 9882b2679b817984dbe52ca99b480bcb,
+  _levelLostInterstitial: {fileID: 11400000, guid: 7bffd3cf8991e43a0908736ca64c76a4,
     type: 2}
   _conversationStartEvent: {fileID: 11400000, guid: 6723b9a3db46344bc973ce4b5f66c62d,
     type: 2}
@@ -136,20 +113,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 057cee1969d384f2e8f50fda609f6423, type: 2}
+  Event: {fileID: 0}
   Response:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114471394880641996}
-        m_MethodName: OnLevelLost
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null

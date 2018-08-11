@@ -13,7 +13,7 @@ public class ConversationController : MonoBehaviour {
 
     private const int MAX_CHAR_LIMIT = 60;
     private const float AVATAR_FADE_IN_TIME = 1f;
-    private const float BG_FADE_IN_TIME = 1.5f;
+    private const float BG_FADE_IN_TIME = 1f;
     private const float BG_FADE_OUT_TIME = 0.75f;
     private const float FADE_BG_OPACTIY = 0.75f;
 

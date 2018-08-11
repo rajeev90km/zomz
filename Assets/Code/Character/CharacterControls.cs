@@ -59,8 +59,7 @@ public class CharacterControls : MonoBehaviour
     Vector3 forward, right;
 
     private Animator _animator;
-
-    private ZomzControls _zomzControls;
+    private ZomzController _zomzControls;
 
     private bool _isAttacking = false;
     private bool _isHurting = false;
@@ -82,7 +81,7 @@ public class CharacterControls : MonoBehaviour
 
     void Start()
     {
-        _zomzControls = GetComponent<ZomzControls>();
+        _zomzControls = GetComponent<ZomzController>();
         _currentHealth = _characterStats.Health;
 
         _animator = GetComponent<Animator>();
@@ -114,62 +113,63 @@ public class CharacterControls : MonoBehaviour
 		}
 	}
 
-	public IEnumerator Hurt(Transform pEnemy,float pDamage = 0.0f)
+	public IEnumerator Hurt(float pDamage = 0.0f)
 	{
-		AIStateController enemyAI = pEnemy.gameObject.GetComponent<AIStateController> ();
+		if (_isAlive)
+        {
+            _isHurting = true;
 
-		if (_isAlive && enemyAI.IsAlive)
-		{
-			yield return new WaitForSeconds (1.5f);
+            if (_currentHealth - pDamage > 0)
+                _currentHealth -= pDamage;
+            else
+                _currentHealth = 0;
 
+            if (_hurtFX != null)
+                Instantiate(_hurtFX, _eyes.transform.position, Quaternion.identity);
 
-			if (Vector3.Distance (transform.position, pEnemy.position) < enemyAI.CharacterStats.AttackRange)
-			{
-				if (_currentHealth - pDamage > 0)
-					_currentHealth -= pDamage;
-				else
-					_currentHealth = 0;
+            if (_currentHealth > 0 && !_isAttacking)
+            {
+                _animator.SetTrigger(_hurtAnimations[Random.Range(0, _hurtAnimations.Length)]);
+            }
+            else if (_currentHealth <= 0)
+            {
+                Die();
+            }
 
-				if (_hurtFX != null)
-					Instantiate (_hurtFX, _eyes.transform.position, Quaternion.identity);
+            yield return new WaitForSeconds(1f);
+            _isHurting = false;
 
-				if (_currentHealth > 0 && !_isAttacking)
-				{
-					_animator.SetTrigger (_hurtAnimations [Random.Range (0, _hurtAnimations.Length)]);
-				} 
-				else if (_currentHealth <= 0)
-				{
-					Die ();
-				}
-			}
-		}
+        }
 
 		yield return null;
 	}
 
 
-	private IEnumerator BeginAttack()
-	{
-		_isAttacking = true;
-		_canAttack = false;
-		_animator.SetTrigger (_attackAnimations[Random.Range(0,_attackAnimations.Length)]);
+    private IEnumerator BeginAttack()
+    {
+        _isAttacking = true;
+        _canAttack = false;
+        _animator.SetTrigger(_attackAnimations[Random.Range(0, _attackAnimations.Length)]);
 
-		GameObject closestEnemy = GetClosestObject ();
+        GameObject closestEnemy = GetClosestObject();
 
-		if (closestEnemy)
-		{
-			AIStateController zombieControls = closestEnemy.GetComponent<AIStateController> ();
-			if (zombieControls)
-                zombieControls.TakeDamage (_characterStats.AttackStrength + _attackModifier);
-		}
+        yield return new WaitForSeconds(_characterStats.AttackRate / 2);
 
-		yield return new WaitForSeconds(_characterStats.AttackRate);
+        if (closestEnemy)
+        {
+            transform.LookAt(closestEnemy.transform);
+            ZombieBase zombieControls = closestEnemy.GetComponent<ZombieBase>();
+            if (zombieControls)
+                StartCoroutine(zombieControls.Hurt(_characterStats.AttackStrength + _attackModifier));
+        }
+
+        yield return new WaitForSeconds(_characterStats.AttackRate/2);
         _canAttack = true;
 
         //Update Weapon Durability if Any
-        if(_currentWeapon!=null)
+        if (_currentWeapon != null)
         {
-            if(_currentWeapon.CurrentDurability > 1)
+            if (_currentWeapon.CurrentDurability > 1)
                 _currentWeapon.CurrentDurability -= 1;
             else
             {
@@ -180,16 +180,9 @@ public class CharacterControls : MonoBehaviour
         }
 
 
-		yield return new WaitForSeconds(0.6f);
-		_isAttacking = false;
-	}
-
-	private IEnumerator BeginHurt(float pDamage = 0.0f)
-	{
-		_isHurting = true;
-		yield return null;
-		_isHurting = false;
-	}
+        yield return new WaitForSeconds(0.35f);
+        _isAttacking = false;
+    }
 
 	public void Die()
 	{
@@ -204,7 +197,7 @@ public class CharacterControls : MonoBehaviour
 
 		foreach (Collider hit in colliders) 
 		{
-			AIStateController zombieControls = hit.gameObject.GetComponent<AIStateController> ();
+            ZombieBase zombieControls = hit.gameObject.GetComponent<ZombieBase> ();
 
 			if((hit.GetComponent<Collider>() == transform.GetComponent<Collider>()) || !hit.transform.CompareTag("Enemy"))
 			{
@@ -261,7 +254,7 @@ public class CharacterControls : MonoBehaviour
             if (_isAlive)
             {
                 //Attack
-                if (Input.GetKeyDown(KeyCode.Space) && !_zomzControls.ZomzMode && !_isDiving)
+                if (Input.GetKeyDown(KeyCode.Space) && !_zomzControls.ZomzMode.CurrentValue && !_isDiving)
                 {
                     if (_canAttack)
                     {
@@ -272,7 +265,7 @@ public class CharacterControls : MonoBehaviour
                 //Debug.Log(_isDiving);
 
                 //DIVE
-                if(Input.GetKeyDown(KeyCode.R) && !_zomzControls.ZomzMode && !_isDiving)
+                if(Input.GetKeyDown(KeyCode.R) && !_zomzControls.ZomzMode.CurrentValue && !_isDiving)
                 {
                     _isDiving = true;
                     StartCoroutine(Dive());
@@ -289,7 +282,7 @@ public class CharacterControls : MonoBehaviour
 
                     Vector3 heading = Vector3.Normalize(rightMovement + upMovement);
 
-                    if (_zomzControls.ZomzMode)
+                    if (_zomzControls.ZomzMode.CurrentValue)
                         heading = Vector3.zero;
 
                     if (heading != Vector3.zero)
@@ -297,7 +290,6 @@ public class CharacterControls : MonoBehaviour
                         transform.forward = heading;
                         transform.position += rightMovement + upMovement;
                     }
-
 
                     float animationSpeedPercent = ((running) ? 1 : 0.5f) * heading.magnitude;
 

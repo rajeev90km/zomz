@@ -69,8 +69,6 @@ public class LevelManager : MonoBehaviour
 
 	public void EndConversation()
 	{
-        Debug.Log(_gameData.CurrentConversation.Conversation);
-
         if (_gameData.CurrentConversation.Conversation == _levelStartInterstitial)
             _levelStartEvent.Raise();
 

@@ -357,7 +357,7 @@ public class AIStateController : MonoBehaviour
     }
 
     IEnumerator UpdateZomzActions()
-   {
+    {
        int i = 0;
        
         if (navMeshAgent.remainingDistance<0.1f)// && _zomzAttackCoroutine==null)
@@ -401,10 +401,10 @@ public class AIStateController : MonoBehaviour
 
             yield return null;
         }
-   }
+    }
 
 
-	public void RelinquishControl()
+    public void RelinquishControl()
 	{
         _zomzModeModel.SetActive(false);
 		_isExecutingActions = false;
@@ -419,29 +419,26 @@ public class AIStateController : MonoBehaviour
         ToggleAI(true);
 	}
 
-
 	public void DealZomzDamage(Transform pTarget)
 	{
-		if (pTarget.CompareTag ("Enemy"))
-		{
-			AIStateController otherZombie = pTarget.GetComponent<AIStateController> ();
-			if (otherZombie != null)
-			{
-				otherZombie.TakeDamage (_characterStats.AttackStrength);
-                TakeDamage(_characterStats.AttackDamageToSelf);
-			}
-		}
+		//if (pTarget.CompareTag ("Enemy"))
+		//{
+		//	AIStateController otherZombie = pTarget.GetComponent<AIStateController> ();
+		//	if (otherZombie != null)
+		//	{
+		//		otherZombie.TakeDamage (_characterStats.AttackStrength);
+  //              TakeDamage(_characterStats.AttackDamageToSelf);
+		//	}
+		//}
 
-		if (pTarget.CompareTag ("Player"))
-		{
-            if (_playerControls)
-            {
-                _playerControls.StartCoroutine(_playerControls.Hurt(transform, _characterStats.AttackStrength));
-                TakeDamage(_characterStats.AttackDamageToSelf);
-            }
-		}
-
-
+		//if (pTarget.CompareTag ("Player"))
+		//{
+  //          if (_playerControls)
+  //          {
+  //              _playerControls.StartCoroutine(_playerControls.Hurt(transform, _characterStats.AttackStrength));
+  //              TakeDamage(_characterStats.AttackDamageToSelf);
+  //          }
+		//}
 	}
 
 	IEnumerator WaitToEndZomzAttack()
@@ -644,41 +641,41 @@ public class AIStateController : MonoBehaviour
 
 	public void Attack()
 	{
-		if (!IsAlive)
-		{
-			StopCoroutine (_hurtPlayerCoroutine);
-			_hurtPlayerCoroutine = null;
-			return;
-		}
+		//if (!IsAlive)
+		//{
+		//	StopCoroutine (_hurtPlayerCoroutine);
+		//	_hurtPlayerCoroutine = null;
+		//	return;
+		//}
 
-		if (_characterStats)
-		{
-			if (period > _characterStats.AttackRate)
-			{
-				_animator.SetTrigger ("attack");
+		//if (_characterStats)
+		//{
+		//	if (period > _characterStats.AttackRate)
+		//	{
+		//		_animator.SetTrigger ("attack");
 
-                if (ChaseTarget.CompareTag("Player"))
-				{
-					_playerControls.StartCoroutine (_playerControls.Hurt (transform, _characterStats.AttackStrength));
-				}
-                else if(ChaseTarget.CompareTag("Enemy"))
-                {
-                    AIStateController enemyCtrl = ChaseTarget.GetComponent<AIStateController>();
+  //              if (ChaseTarget.CompareTag("Player"))
+		//		{
+		//			_playerControls.StartCoroutine (_playerControls.Hurt (transform, _characterStats.AttackStrength));
+		//		}
+  //              else if(ChaseTarget.CompareTag("Enemy"))
+  //              {
+  //                  AIStateController enemyCtrl = ChaseTarget.GetComponent<AIStateController>();
 
-                    if(enemyCtrl!=null)
-                    {
-                        enemyCtrl.StartCoroutine(enemyCtrl.DamageCoroutine(_characterStats.AttackStrength));
-                    }
-                }
+  //                  if(enemyCtrl!=null)
+  //                  {
+  //                      enemyCtrl.StartCoroutine(enemyCtrl.DamageCoroutine(_characterStats.AttackStrength));
+  //                  }
+  //              }
 
-                if (_characterStats.AttackDamageToSelf > 0)
-                    TakeDamage(_characterStats.AttackDamageToSelf);
+  //              if (_characterStats.AttackDamageToSelf > 0)
+  //                  TakeDamage(_characterStats.AttackDamageToSelf);
 
-				period = 0;
-			}
+		//		period = 0;
+		//	}
 
-			period += Time.deltaTime;
-		}
+		//	period += Time.deltaTime;
+		//}
 	}
 
 	public void TransitionToState(State pNextState)

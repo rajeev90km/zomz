@@ -394,8 +394,6 @@ GameObject:
   - component: {fileID: 114471656052151924}
   - component: {fileID: 114283518801146134}
   - component: {fileID: 114474370505592752}
-  - component: {fileID: 114614825828198538}
-  - component: {fileID: 114646392645454234}
   m_Layer: 0
   m_Name: UIController
   m_TagString: Untagged
@@ -789,7 +787,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1604426936647438}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -114.8, y: -92.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224729237434634482}
@@ -1491,17 +1489,14 @@ MonoBehaviour:
   _zomzManaBar: {fileID: 114142125638777246}
   _attackUI: {fileID: 1703951580193300}
   _inventoryCanvas: {fileID: 1981343113033788}
-  _healthPackParent: {fileID: 1607315031544536}
-  _weaponsParent: {fileID: 1057400406781454}
-  _inventory: {fileID: 11400000, guid: a022edf6031e646e087e17396de0f9af, type: 2}
-  _inventoryMessages: {fileID: 114958091449617668}
-  _healthPackRow: {fileID: 1170657694882846, guid: 4fed8cbe6d6c04e8ab3e7ad3c764ad62,
-    type: 2}
-  _weaponRow: {fileID: 1131979939271406, guid: 54249cb16902c40ebb64065138a5e3f7, type: 2}
-  _inventoryTriggerEnter: {fileID: 11400000, guid: 671b9eadfc31f4b92b5ff29c44602347,
-    type: 2}
-  _inventoryTriggerExit: {fileID: 11400000, guid: 52b293da8528242bf8589e989402d190,
-    type: 2}
+  _healthPackParent: {fileID: 0}
+  _weaponsParent: {fileID: 0}
+  _inventory: {fileID: 0}
+  _inventoryMessages: {fileID: 0}
+  _healthPackRow: {fileID: 0}
+  _weaponRow: {fileID: 0}
+  _inventoryTriggerEnter: {fileID: 0}
+  _inventoryTriggerExit: {fileID: 0}
 --- !u!114 &114474370505592752
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1840,34 +1835,6 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &114614825828198538
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1604426936647438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 671b9eadfc31f4b92b5ff29c44602347, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114471656052151924}
-        m_MethodName: ToggleInventoryMessage
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114635110187607346
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1928,34 +1895,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114646392645454234
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1604426936647438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 52b293da8528242bf8589e989402d190, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114471656052151924}
-        m_MethodName: ToggleInventoryMessage
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114675693099590526
 MonoBehaviour:
   m_ObjectHideFlags: 1

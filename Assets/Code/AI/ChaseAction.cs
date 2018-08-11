@@ -23,6 +23,7 @@ public class ChaseAction : Action
         {
             _player = GameObject.FindWithTag("Player");
             pController.ChaseTarget = _player.transform;
+            pController.navMeshAgent.speed = pController.CharacterStats.RunSpeed;
         }
 		
 		pController.navMeshAgent.destination = pController.ChaseTarget.position;
