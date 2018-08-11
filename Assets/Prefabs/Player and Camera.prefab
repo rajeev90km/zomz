@@ -310,6 +310,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4602103503630688}
   - component: {fileID: 114327665763505450}
+  - component: {fileID: 114998632717145078}
+  - component: {fileID: 114233491401564386}
   m_Layer: 11
   m_Name: CameraParent
   m_TagString: Untagged
@@ -2504,11 +2506,39 @@ MonoBehaviour:
   _cameraBottomPosition: {fileID: 4757287346197776}
   _targetTransform: {fileID: 4713699137042698}
   _rayCastPlayerTransform: {fileID: 4404284679108830}
-  _smoothnessFactor: 1
+  _smoothnessFactor: 0.4
   _mask: {fileID: 0}
   _minFov: 45
   _maxFov: 90
-  _zoomSensitivity: 10
+  _zoomSensitivity: 1
+--- !u!114 &114233491401564386
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1271716544495146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 0ddb850c332c84204a55d4353e7a25f1, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114327665763505450}
+        m_MethodName: OnZomzUnregister
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114327665763505450
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2520,9 +2550,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 972f21305928f45adb2c6d3c3ca0a797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _targetTransform: {fileID: 4713699137042698}
+  _targetTransform: {fileID: 0}
+  _defaultFollowTransform: {fileID: 4713699137042698}
   _smoothnessFactor: 1
   _rotateSpeed: 10
+  _zomzMode: {fileID: 11400000, guid: 171a4897d216445ffb1428aab63fe011, type: 2}
 --- !u!114 &114775102625627060
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2599,6 +2631,9 @@ MonoBehaviour:
     type: 2}
   _zomzStartEvent: {fileID: 11400000, guid: 955a51db9b35444b795c34aefcce8a74, type: 2}
   _zomzEndEvent: {fileID: 11400000, guid: 9bef04880d4c741f786ba635f7878f54, type: 2}
+  _zomzRegisterEvent: {fileID: 11400000, guid: e0a1dd3e65881485caf9d33ddf46842f, type: 2}
+  _zomzUnregisterEvent: {fileID: 11400000, guid: 0ddb850c332c84204a55d4353e7a25f1,
+    type: 2}
 --- !u!114 &114949046175824820
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2619,6 +2654,34 @@ MonoBehaviour:
   _debugMode: 1
   _isAlive: 1
   _hurtFX: {fileID: 100000, guid: f7261c1b6aae14ad3bb8800b75e3436b, type: 2}
+--- !u!114 &114998632717145078
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1271716544495146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: e0a1dd3e65881485caf9d33ddf46842f, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114327665763505450}
+        m_MethodName: OnZomzRegister
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!124 &124655001745998740
 Behaviour:
   m_ObjectHideFlags: 1

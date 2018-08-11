@@ -8,25 +8,50 @@ public class SmoothFollow : MonoBehaviour {
     private Transform _targetTransform;
 
     [SerializeField]
+    private Transform _defaultFollowTransform;
+
+    [SerializeField]
     [Range(0f, 1f)]
     private float _smoothnessFactor;
 
     [SerializeField]
     private float _rotateSpeed = 1000f;
 
+    [SerializeField]
+    private ZomzData _zomzMode;
+
     private Vector3 _offset;
     private Vector3 _offsetWithoutY;
 
 	void Start () 
     {
+        _targetTransform = _defaultFollowTransform;
         _offset	= transform.position - _targetTransform.position;     
 	}
-	
-	// Update is called once per frame
-	void LateUpdate () {
 
+    public void OnZomzRegister()
+    {
+        if(_zomzMode.CurrentSelectedZombie)
+        {
+            _targetTransform = _zomzMode.CurrentSelectedZombie.transform;
+            _smoothnessFactor = 0.2f;
+        }
+    }
+
+    public void OnZomzUnregister()
+    {
+        _targetTransform = _defaultFollowTransform;
+        _smoothnessFactor = 0.2f;
+    }
+
+	// Update is called once per frame
+	void LateUpdate () 
+    {
         if (Input.GetMouseButton(0))
+        {
+            _smoothnessFactor = 1;
             _offset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * _rotateSpeed, Vector3.up) * _offset;
+        }
         
         Vector3 newPos = _targetTransform.position + _offset;
         transform.position = Vector3.Slerp(transform.position, newPos, _smoothnessFactor);

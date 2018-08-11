@@ -282,7 +282,7 @@ public class CharacterControls : MonoBehaviour
 
                     Vector3 heading = Vector3.Normalize(rightMovement + upMovement);
 
-                    if (_zomzControls.ZomzMode.CurrentValue)
+                    if (_zomzControls.ZomzMode.CurrentValue || _zomzControls.ZomzMode.CurrentSelectedZombie!=null)
                         heading = Vector3.zero;
 
                     if (heading != Vector3.zero)

@@ -36,9 +36,14 @@ public class ZomzController : MonoBehaviour {
     [SerializeField]
     private GameEvent _zomzEndEvent;
 
+    [SerializeField]
+    private GameEvent _zomzRegisterEvent;
+
+    [SerializeField]
+    private GameEvent _zomzUnregisterEvent;
+
     private List<ZombieBase> _zombiesUnderControl;
     private GameObject _pointerArrowObj;
-    private ZombieBase _currentSelectedZombie;
 
 	void Awake () 
     {
@@ -85,12 +90,20 @@ public class ZomzController : MonoBehaviour {
 
     public void RegisterZomzMode()
     {
-        _currentSelectedZombie.OnZomzModeRegister();
+        if (ZomzMode.CurrentSelectedZombie)
+        {
+            ZomzMode.CurrentSelectedZombie.OnZomzModeRegister();
+            _zomzRegisterEvent.Raise();
+        }
+        _zomzEndEvent.Raise();
+        ZomzMode.CurrentValue = false;
+        _pointerArrowObj.SetActive(false);
     }
 
     public void EndZomzMode()
     {
-        _currentSelectedZombie = null;
+        _pointerArrowObj.SetActive(false);
+        ZomzMode.CurrentSelectedZombie = null;
         ZomzMode.CurrentValue = false;
         _zomzEndEvent.Raise();    
     }
@@ -119,7 +132,7 @@ public class ZomzController : MonoBehaviour {
                         if (hit.transform != null)
                         {
                             _pointerArrowObj.SetActive(true);
-                            _currentSelectedZombie = hit.transform.gameObject.GetComponent<ZombieBase>();
+                            ZomzMode.CurrentSelectedZombie = hit.transform.gameObject.GetComponent<ZombieBase>();
 
                             Vector3 zombiePos = hit.transform.gameObject.transform.position;
                             _pointerArrowObj.transform.position = new Vector3(zombiePos.x, 3, zombiePos.z);

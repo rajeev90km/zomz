@@ -335,7 +335,6 @@ public class ZombieBase : MonoBehaviour
 
     public void EndZomzMode()
     {
-        Debug.Log("End");
         _modelRenderer.material = _defaultMaterial;
     }
 
@@ -352,7 +351,7 @@ public class ZombieBase : MonoBehaviour
 
     public void OnZomzModeUnRegister()
     {
-        _isBeingControlled = true;
+        _isBeingControlled = false;
         _modelRenderer.material = _zomzModeMaterial;
     }
 
