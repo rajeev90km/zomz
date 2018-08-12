@@ -101,13 +101,13 @@ public class ZombieBase : MonoBehaviour
 
     [Header("Miscellaneous")]
     [SerializeField]
-    private GameFloatAttribute _zomzManaAttribute;
+    protected GameFloatAttribute _zomzManaAttribute;
 
     [SerializeField]
-    private float _moveCostPerUnit = 1f;
+    protected float _moveCostPerUnit = 1f;
 
     [SerializeField]
-    private float _attackCost = 10f;
+    protected float _attackCost = 10f;
 
     [SerializeField]
     private GameObject _hurtFx;
@@ -122,7 +122,7 @@ public class ZombieBase : MonoBehaviour
     private float _speedSmoothTime = 0.1f;
     private float _speedSmoothVelocity;
     Vector3 forward, right;
-    private ZombieStates _animState;
+    protected ZombieStates _animState;
 
 	protected virtual void Awake () 
     {
@@ -230,7 +230,7 @@ public class ZombieBase : MonoBehaviour
         if (_playerController.IsAlive && (((distanceToPlayer < _characterStats.LookRange) && (distanceToPlayer > _characterStats.AttackRange)) || (!_isAttacking && _previousState == ZombieStates.ATTACK && distanceToPlayer > _characterStats.AttackRange)))
         {
             _currentState = ZombieStates.CHASE;
-            InitNewState("run",false);
+            InitNewState("run",false);  
             _previousState = _currentState;
         }
         //Transition to ATTACK if in attack range
@@ -304,7 +304,8 @@ public class ZombieBase : MonoBehaviour
             }
             else
             {
-                _zomzManaAttribute.CurrentValue -= _attackCost;
+                if(ZomzMode.ManaConsumeType==ZomzManaConsumeType.ACTION_BASED)
+                    _zomzManaAttribute.CurrentValue -= _attackCost;
 
                 _animState = ZombieStates.ATTACK;
 
@@ -379,7 +380,7 @@ public class ZombieBase : MonoBehaviour
     #endregion
 
     #region ZomzMode
-    public void StartZomzMode()
+    public virtual void StartZomzMode()
     {
         if (_isAlive)
         {
@@ -407,7 +408,7 @@ public class ZombieBase : MonoBehaviour
         ResetDirectionVectors();
     }
 
-    public void OnZomzModeUnRegister()
+    public virtual void OnZomzModeUnRegister()
     {
         _isBeingControlled = false;
         _modelRenderer.material = _zomzModeMaterial;

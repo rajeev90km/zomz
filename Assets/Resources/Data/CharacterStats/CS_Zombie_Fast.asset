@@ -14,11 +14,11 @@ MonoBehaviour:
   Health: 100
   WalkSpeed: 4.5
   RunSpeed: 6.5
-  LookRange: 4
-  AttackRate: 1.2
+  LookRange: 10
+  AttackRate: 3
   HurtRate: 1
-  AttackStrength: 10
-  AttackRange: 1.2
+  AttackStrength: 20
+  AttackRange: 2.5
   ZomzRange: 12
   ZomzSpeed: 5
   AttackDamageToSelf: 0

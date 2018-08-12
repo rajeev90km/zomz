@@ -17,7 +17,7 @@ MonoBehaviour:
   LookRange: 7
   AttackRate: 1.5
   HurtRate: 0.8
-  AttackStrength: 10
+  AttackStrength: 1
   AttackRange: 1.25
   ZomzRange: 10
   ZomzSpeed: 5

@@ -14,4 +14,4 @@ MonoBehaviour:
   CurrentValue: 0
   IsRegistered: 0
   CurrentSelectedZombie: {fileID: 0}
-  ManaConsumeType: 1
+  ManaConsumeType: 0

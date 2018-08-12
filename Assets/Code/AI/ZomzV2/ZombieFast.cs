@@ -17,9 +17,17 @@ public class ZombieFast : ZombieBase
     [SerializeField]
     private float _chargeDistance;
 
+    [SerializeField]
+    private GameObject _chargeFX;
+
+    [SerializeField]
+    private float _chargeFXLifetime = 1.5f;
+
     private Coroutine _chargeCoroutine;
 
     private bool _isCharging = false;
+
+    GameObject _chargeFXObj;
 
 	protected override void Awake()
 	{
@@ -35,7 +43,7 @@ public class ZombieFast : ZombieBase
             StopCoroutine(_chargeCoroutine);
             _chargeCoroutine = null;
         }
-        _chargeCoroutine =StartCoroutine(BeginCharge());
+        _chargeCoroutine = StartCoroutine(BeginCharge());
     }
 
     protected IEnumerator BeginCharge()
@@ -46,17 +54,23 @@ public class ZombieFast : ZombieBase
 
         float time = 0;
 
-        if (!IsHurting)
+        if (!IsHurting && !IsAttacking)
         {
             Vector3 startPos = transform.position;
             Vector3 endPos = transform.position + transform.forward * _chargeDistance;
 
+            _chargeFXObj = Instantiate(_chargeFX);
+            _chargeFXObj.transform.position = new Vector3(transform.position.x,0.5f,transform.position.z);
+
             while (time < 1)
             {
                 transform.position = Vector3.Lerp(startPos, endPos, time);
+                _chargeFXObj.transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
                 time = time / _timeToCharge + Time.deltaTime;
                 yield return null;
             }
+
+            Destroy(_chargeFXObj,1f);
 
             _isCharging = false;
         }
@@ -70,6 +84,127 @@ public class ZombieFast : ZombieBase
         yield return null;
     }
 
+	public override void OnZomzModeUnRegister()
+	{
+        base.OnZomzModeUnRegister();
+        Charge();
+	}
+
+	public override IEnumerator Attack()
+	{
+        if (_chargeCoroutine != null)
+        {
+            StopCoroutine(_chargeCoroutine);
+            _chargeCoroutine = null;
+        }
+
+        IsAttacking = true;
+
+        if (!IsBeingControlled)
+        {
+            transform.LookAt(_player.transform);
+
+            if (Vector3.Distance(_player.transform.position, transform.position) <= CharacterStats.AttackRange && !IsHurting)
+            {
+                float time = 0;
+                Vector3 startPos = transform.position;
+                Vector3 endPos = transform.position + transform.forward * _chargeDistance;
+
+                _chargeFXObj = Instantiate(_chargeFX);
+                _chargeFXObj.transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
+
+                while (time < 1)
+                {
+                    transform.position = Vector3.Lerp(startPos, endPos, time);
+                    _chargeFXObj.transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
+                    time = time / _timeToCharge + Time.deltaTime;
+                    yield return null;
+                }
+
+                Destroy(_chargeFXObj, 1f);
+
+                _animator.SetTrigger("idle");
+                yield return new WaitForSeconds(CharacterStats.AttackRate);
+                IsAttacking = false;
+            }
+        }
+        else
+        {
+            _animator.SetTrigger("attack");
+
+            _animState = ZombieStates.ATTACK;
+
+            if (ZomzMode.ManaConsumeType == ZomzManaConsumeType.ACTION_BASED)
+                _zomzManaAttribute.CurrentValue -= _attackCost;
+
+            GameObject closestEnemy = GetClosestObject();
+
+            if (closestEnemy)
+            {
+                transform.LookAt(closestEnemy.transform);
+                ZombieBase zombieControls = closestEnemy.GetComponent<ZombieBase>();
+            }
+
+            float time = 0;
+            Vector3 startPos = transform.position;
+            Vector3 endPos = transform.position + transform.forward * _chargeDistance;
+
+            _chargeFXObj = Instantiate(_chargeFX);
+            _chargeFXObj.transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
+
+            while (time < 1)
+            {
+                transform.position = Vector3.Lerp(startPos, endPos, time);
+                _chargeFXObj.transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
+                time = time / _timeToCharge + Time.deltaTime;
+                yield return null;
+            }
+
+            Destroy(_chargeFXObj, 1f);
+
+            _animator.SetTrigger("idle");
+            yield return new WaitForSeconds(CharacterStats.AttackRate);
+            IsAttacking = false;
+        }
+
+        yield return null;
+	}
+
+	private void OnCollisionEnter(Collision pOther)
+	{
+        if (!IsBeingControlled)
+        {
+            if (pOther.gameObject.CompareTag("Player"))
+                StartCoroutine(_playerController.Hurt(CharacterStats.AttackStrength));
+        }
+        else
+        {
+            if (pOther.gameObject.CompareTag("Enemy"))
+            {
+                ZombieBase enemy = pOther.gameObject.GetComponent<ZombieBase>();
+                if(enemy)
+                    StartCoroutine(enemy.Hurt(CharacterStats.AttackStrength));
+            }
+        }
+	}
+
+	#region ZomzMode
+
+	public override void StartZomzMode()
+	{
+        base.StartZomzMode();
+
+        if(IsAlive)
+        {
+            if(_chargeCoroutine!=null)
+            {
+                StopCoroutine(_chargeCoroutine);
+                _chargeCoroutine = null;
+            }
+        }
+	}
+
+	#endregion
 
 	protected override void Update()
 	{
