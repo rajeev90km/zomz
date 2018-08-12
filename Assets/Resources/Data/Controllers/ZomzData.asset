@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Name: ZomzData
   m_EditorClassIdentifier: 
   CurrentValue: 0
+  IsRegistered: 0
   CurrentSelectedZombie: {fileID: 0}
+  ManaConsumeType: 1

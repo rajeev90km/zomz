@@ -11,7 +11,14 @@ public enum ZombieStates
     CHASE = 1,
     ATTACK = 2,
     SPECIAL_ATTACK = 3,
-    DIE = 4
+    DIE = 4,
+    HURT = 5
+}
+
+public enum AttackTarget
+{
+    PLAYER = 0,
+    ENEMY = 1
 }
 
 [RequireComponent(typeof(Animator))]
@@ -94,6 +101,18 @@ public class ZombieBase : MonoBehaviour
 
     [Header("Miscellaneous")]
     [SerializeField]
+    private GameFloatAttribute _zomzManaAttribute;
+
+    [SerializeField]
+    private float _moveCostPerUnit = 1f;
+
+    [SerializeField]
+    private float _attackCost = 10f;
+
+    [SerializeField]
+    private float _skillCost = 0f;
+
+    [SerializeField]
     private GameObject _hurtFx;
 
     [SerializeField]
@@ -101,6 +120,12 @@ public class ZombieBase : MonoBehaviour
 
     private Coroutine _attackCoroutine;
     private Coroutine _hurtCoroutine;
+
+    private float _currentSpeed;
+    private float _speedSmoothTime = 0.1f;
+    private float _speedSmoothVelocity;
+    Vector3 forward, right;
+    private ZombieStates _animState;
 
 	void Awake () 
     {
@@ -181,7 +206,6 @@ public class ZombieBase : MonoBehaviour
         {
             _navMeshAgent.destination = transform.position;
             _navMeshAgent.isStopped = true;
-            _isAttacking = true;
             _attackCoroutine = StartCoroutine(Attack());
         }
     }
@@ -215,7 +239,6 @@ public class ZombieBase : MonoBehaviour
         //Transition to ATTACK if in attack range
         else if (_playerController.IsAlive && (distanceToPlayer <= _characterStats.AttackRange))
         {
-            transform.LookAt(_player.transform);
             _currentState = ZombieStates.ATTACK;
             InitNewState("attack",true);
             _previousState = _currentState;
@@ -264,18 +287,46 @@ public class ZombieBase : MonoBehaviour
 
     public virtual IEnumerator Attack()
     {
-        yield return new WaitForSeconds(_characterStats.AttackRate / 2);
-
-        if(Vector3.Distance(_player.transform.position,transform.position)<=_characterStats.AttackRange && !_isHurting)
+        if (!_isAttacking)
         {
-            StartCoroutine(_playerController.Hurt(_characterStats.AttackStrength));
+            _isAttacking = true;
+
+            if (_isBeingControlled)
+                _animator.SetTrigger("attack");
+
+            yield return new WaitForSeconds(_characterStats.AttackRate / 2);
+
+            if (!_isBeingControlled)
+            {
+                transform.LookAt(_player.transform);
+
+                if (Vector3.Distance(_player.transform.position, transform.position) <= _characterStats.AttackRange && !_isHurting)
+                {
+                    StartCoroutine(_playerController.Hurt(_characterStats.AttackStrength));
+                }
+            }
+            else
+            {
+                _animState = ZombieStates.ATTACK;
+
+                GameObject closestEnemy = GetClosestObject();
+
+                if (closestEnemy)
+                {
+                    transform.LookAt(closestEnemy.transform);    
+                    ZombieBase zombieControls = closestEnemy.GetComponent<ZombieBase>();
+
+                    if (zombieControls)
+                        StartCoroutine(zombieControls.Hurt(_characterStats.AttackStrength));
+                }
+
+            }
+
+            yield return StartCoroutine(Hurt(_characterStats.AttackDamageToSelf));
+
+            yield return new WaitForSeconds(_characterStats.AttackRate / 2);
+            _isAttacking = false;
         }
-
-        yield return StartCoroutine(Hurt(_characterStats.AttackDamageToSelf));
-
-        yield return new WaitForSeconds(_characterStats.AttackRate/2);
-        _isAttacking = false;
-
         yield return null;
     }
 
@@ -292,8 +343,12 @@ public class ZombieBase : MonoBehaviour
                     _attackCoroutine = null;
                 }
 
+                _previousState = ZombieStates.HURT;
+                _currentState = ZombieStates.HURT;
+
                 _isHurting = true;
                 _animator.SetTrigger("hurt");
+                _navMeshAgent.isStopped = true;
                 
                 if (_currentHealth - pDamage > 0)
                     _currentHealth -= pDamage;
@@ -327,10 +382,13 @@ public class ZombieBase : MonoBehaviour
     #region ZomzMode
     public void StartZomzMode()
     {
-        _animator.SetTrigger("idle");
-        _previousState = ZombieStates.NONE;
-        _navMeshAgent.destination = transform.position;
-        _navMeshAgent.isStopped = true;
+        if (_isAlive)
+        {
+            _animator.SetTrigger("idle");
+            _previousState = ZombieStates.NONE;
+            _navMeshAgent.destination = transform.position;
+            _navMeshAgent.isStopped = true;
+        }
     }
 
     public void EndZomzMode()
@@ -347,6 +405,7 @@ public class ZombieBase : MonoBehaviour
     {
         _isBeingControlled = true;
         _modelRenderer.material = _zomzModeMaterial;
+        ResetDirectionVectors();
     }
 
     public void OnZomzModeUnRegister()
@@ -355,9 +414,52 @@ public class ZombieBase : MonoBehaviour
         _modelRenderer.material = _zomzModeMaterial;
     }
 
+    public void ResetDirectionVectors()
+    {
+        forward = Camera.main.transform.forward;
+        forward.y = 0;
+        forward = Vector3.Normalize(forward);
+
+        right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
+    }
+
+    public GameObject GetClosestObject()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, _characterStats.AttackRange);
+        Collider closestCollider = null;
+
+        foreach (Collider hit in colliders)
+        {
+            ZombieBase zombieControls = hit.gameObject.GetComponent<ZombieBase>();
+
+            if ((hit.GetComponent<Collider>() == transform.GetComponent<Collider>()) || !hit.transform.CompareTag("Enemy"))
+            {
+                continue;
+            }
+
+            if (zombieControls != null && !zombieControls.IsAlive)
+            {
+                continue;
+            }
+
+            if (!closestCollider)
+            {
+                closestCollider = hit;
+            }
+            //compares distances
+            if (Vector3.Distance(transform.position, hit.transform.position) <= Vector3.Distance(transform.position, closestCollider.transform.position))
+            {
+                closestCollider = hit;
+            }
+        }
+
+        if (!closestCollider)
+            return null;
+
+        return closestCollider.gameObject;
+    }
+
     #endregion
-
-
 
     protected void GetNextWayPoint()
     {
@@ -368,5 +470,57 @@ public class ZombieBase : MonoBehaviour
     {
         if(_isAlive && !_isBeingControlled && !_isAttacking && !_isHurting && !ZomzMode.CurrentValue)
             ExecuteAI();
+
+        //Zomz Mode Registered - MOVEMENt
+        if(_isBeingControlled && !_isAttacking && !_isHurting)
+        {
+            bool running = Input.GetKey(KeyCode.LeftShift);
+            float targetSpeed = ((running) ? _characterStats.RunSpeed : _characterStats.WalkSpeed);
+            _currentSpeed = Mathf.SmoothDamp(_currentSpeed, targetSpeed, ref _speedSmoothVelocity, _speedSmoothTime);
+
+            Vector3 rightMovement = right * _currentSpeed * Time.deltaTime * Input.GetAxis("Horizontal");
+            Vector3 upMovement = forward * _currentSpeed * Time.deltaTime * Input.GetAxis("Vertical");
+
+            Vector3 heading = Vector3.Normalize(rightMovement + upMovement);
+
+            if (heading != Vector3.zero)
+            {
+                transform.forward = heading;
+                transform.position += rightMovement + upMovement;
+            }
+
+            float animationSpeedPercent = ((running) ? 1 : 0.5f) * heading.magnitude;
+
+            if(ZomzMode.ManaConsumeType == ZomzManaConsumeType.ACTION_BASED)
+                _zomzManaAttribute.CurrentValue -= animationSpeedPercent * _moveCostPerUnit;
+
+            if (animationSpeedPercent == 0 && _animState != ZombieStates.NONE)
+            {
+                _animator.SetTrigger("idle");
+                _animState = ZombieStates.NONE;
+            }
+            else if (animationSpeedPercent == 0.5f && _animState != ZombieStates.PATROL)
+            {
+                _animator.SetTrigger("walk");
+                _animState = ZombieStates.PATROL;
+            }
+            if (animationSpeedPercent == 1f && _animState != ZombieStates.CHASE)
+            {
+                _animator.SetTrigger("run");
+                _animState = ZombieStates.CHASE;
+            }
+        }
+
+        //Zomz Registered - ATTACK
+        if(_isBeingControlled)
+        {
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                StartCoroutine(Attack());
+            }
+        }
+
+        if (!_playerController.IsAlive)
+            _isBeingControlled = false;
 	}
 }

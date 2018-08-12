@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ZomzManaConsumeType
+{
+    TIME_BOUND = 0,
+    ACTION_BASED = 1
+}
+
 public class ZomzController : MonoBehaviour {
 
     public ZomzData ZomzMode;
@@ -10,7 +16,7 @@ public class ZomzController : MonoBehaviour {
     private CharacterControls _characterControls;
     private Animator _animator;
 
-    private const float ZOMZ_COOLDOWN_TIME = 5f;
+    private const float ZOMZ_COOLDOWN_TIME = 10f;
 
     private bool _canUseZomzMode = true;
     public bool CanUseZomzMode
@@ -26,6 +32,9 @@ public class ZomzController : MonoBehaviour {
     private GameFloatAttribute _zomzManaAttribute;
 
     [Header("Miscellaneous")]
+    [SerializeField]
+    private float ZomzUseTime = 10f;
+
     [SerializeField]
     private GameObject _arrowPrefab;
 
@@ -44,6 +53,7 @@ public class ZomzController : MonoBehaviour {
 
     private List<ZombieBase> _zombiesUnderControl;
     private GameObject _pointerArrowObj;
+    private Coroutine _zomzManaUseCoroutine;
 
 	void Awake () 
     {
@@ -92,12 +102,30 @@ public class ZomzController : MonoBehaviour {
     {
         if (ZomzMode.CurrentSelectedZombie)
         {
+            ZomzMode.IsRegistered = true;
             ZomzMode.CurrentSelectedZombie.OnZomzModeRegister();
             _zomzRegisterEvent.Raise();
+
+            if(ZomzMode.ManaConsumeType == ZomzManaConsumeType.TIME_BOUND)
+                _zomzManaUseCoroutine = StartCoroutine(UseTimeBasedZomzMana());
         }
         _zomzEndEvent.Raise();
         ZomzMode.CurrentValue = false;
         _pointerArrowObj.SetActive(false);
+    }
+
+    public void UnregisterZomzMode()
+    {
+        ZomzMode.CurrentSelectedZombie.OnZomzModeUnRegister();
+        _zomzUnregisterEvent.Raise();
+        ZomzMode.CurrentSelectedZombie = null;
+        ZomzMode.IsRegistered = false;
+        _characterControls.ResetDirectionVectors();
+        if(_zomzManaUseCoroutine!=null)
+            StopCoroutine(_zomzManaUseCoroutine);
+        _zomzManaUseCoroutine = null;
+
+        StartCoroutine(ZomzCoolDown());
     }
 
     public void EndZomzMode()
@@ -117,6 +145,42 @@ public class ZomzController : MonoBehaviour {
         }
     }
 
+    IEnumerator UseTimeBasedZomzMana()
+    {
+        float time = 0f;
+
+        while (time < 1)
+        {
+            _zomzManaAttribute.CurrentValue = Mathf.Lerp(100, 0, time);     
+            time += Time.deltaTime / ZomzUseTime;
+            yield return null;
+        }
+
+        _zomzManaAttribute.CurrentValue = 0;
+
+        yield return null;
+    }
+
+    IEnumerator ZomzCoolDown()
+    {
+        float time = 0f;
+
+        float curVal = _zomzManaAttribute.CurrentValue;
+        float coolDownTime = ZOMZ_COOLDOWN_TIME - ((curVal / 100) * ZOMZ_COOLDOWN_TIME);
+
+        while (time < 1)
+        {
+            _zomzManaAttribute.CurrentValue = Mathf.Lerp(curVal, 100, time);
+            time += Time.deltaTime / coolDownTime;
+            yield return null;
+        }
+
+        _zomzManaAttribute.CurrentValue = 100;
+        _canUseZomzMode = true;
+
+        yield return null;
+    }
+
 	void Update () 
     {
         if (!_gameData.IsPaused)
@@ -131,30 +195,41 @@ public class ZomzController : MonoBehaviour {
                     {
                         if (hit.transform != null)
                         {
-                            _pointerArrowObj.SetActive(true);
-                            ZomzMode.CurrentSelectedZombie = hit.transform.gameObject.GetComponent<ZombieBase>();
+                            ZombieBase zBase = hit.transform.gameObject.GetComponent<ZombieBase>();
 
-                            Vector3 zombiePos = hit.transform.gameObject.transform.position;
-                            _pointerArrowObj.transform.position = new Vector3(zombiePos.x, 3, zombiePos.z);
+                            if (zBase != null && zBase.IsAlive)
+                            {
+                                _pointerArrowObj.SetActive(true);
+                                ZomzMode.CurrentSelectedZombie = hit.transform.gameObject.GetComponent<ZombieBase>();
 
+                                Vector3 zombiePos = hit.transform.gameObject.transform.position;
+                                _pointerArrowObj.transform.position = new Vector3(zombiePos.x, 3, zombiePos.z);
+                            }
                         }
                     }
                 }
             }
 
             //Request Zomz Mode
-            if (Input.GetKeyDown(KeyCode.Z))
+            if (Input.GetKeyDown(KeyCode.Z) && _zomzManaAttribute.CurrentValue >= 100 && _characterControls.IsAlive)
             {
-                if (!ZomzMode.CurrentValue)
-                    ProcessZomzMode();
-                else
-                    RegisterZomzMode();
+                if (!ZomzMode.IsRegistered)
+                {
+                    if (!ZomzMode.CurrentValue)
+                        ProcessZomzMode();
+                    else
+                        RegisterZomzMode();
+                }
             }
 
-            //End Zomz Mode
-            if (Input.GetKeyDown(KeyCode.Escape))
+            //End Zomz Mode if ESC or if out of mana
+            if (Input.GetKeyDown(KeyCode.Escape) || _zomzManaAttribute.CurrentValue <= 0 && _characterControls.IsAlive)
             {
+                if (ZomzMode.CurrentSelectedZombie)
+                    UnregisterZomzMode();
+                
                 EndZomzMode();
+
             }
         }
 	}

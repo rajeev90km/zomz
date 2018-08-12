@@ -188,6 +188,7 @@ public class CharacterControls : MonoBehaviour
 	{
 		_animator.SetTrigger ("die");
 		_isAlive = false;
+        _zomzControls.EndZomzMode();
 	}
 
 	public GameObject GetClosestObject()
@@ -254,7 +255,7 @@ public class CharacterControls : MonoBehaviour
             if (_isAlive)
             {
                 //Attack
-                if (Input.GetKeyDown(KeyCode.Space) && !_zomzControls.ZomzMode.CurrentValue && !_isDiving)
+                if (Input.GetKeyDown(KeyCode.Space) && !_zomzControls.ZomzMode.CurrentValue && !_isDiving && !_zomzControls.ZomzMode.CurrentSelectedZombie)
                 {
                     if (_canAttack)
                     {
@@ -265,7 +266,7 @@ public class CharacterControls : MonoBehaviour
                 //Debug.Log(_isDiving);
 
                 //DIVE
-                if(Input.GetKeyDown(KeyCode.R) && !_zomzControls.ZomzMode.CurrentValue && !_isDiving)
+                if(Input.GetKeyDown(KeyCode.R) && !_zomzControls.ZomzMode.CurrentValue && !_isDiving && !_zomzControls.ZomzMode.CurrentSelectedZombie)
                 {
                     _isDiving = true;
                     StartCoroutine(Dive());

@@ -35,6 +35,8 @@ public class SmoothFollow : MonoBehaviour {
         {
             _targetTransform = _zomzMode.CurrentSelectedZombie.transform;
             _smoothnessFactor = 0.2f;
+
+            StartCoroutine(ResetSmoothness());
         }
     }
 
@@ -42,6 +44,13 @@ public class SmoothFollow : MonoBehaviour {
     {
         _targetTransform = _defaultFollowTransform;
         _smoothnessFactor = 0.2f;
+
+        StartCoroutine(ResetSmoothness());
+    }
+
+    IEnumerator ResetSmoothness(){
+        yield return new WaitForSeconds(1f);
+        _smoothnessFactor = 1;
     }
 
 	// Update is called once per frame
@@ -49,7 +58,6 @@ public class SmoothFollow : MonoBehaviour {
     {
         if (Input.GetMouseButton(0))
         {
-            _smoothnessFactor = 1;
             _offset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * _rotateSpeed, Vector3.up) * _offset;
         }
         
