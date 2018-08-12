@@ -110,9 +110,6 @@ public class ZombieBase : MonoBehaviour
     private float _attackCost = 10f;
 
     [SerializeField]
-    private float _skillCost = 0f;
-
-    [SerializeField]
     private GameObject _hurtFx;
 
     [SerializeField]
@@ -127,7 +124,7 @@ public class ZombieBase : MonoBehaviour
     Vector3 forward, right;
     private ZombieStates _animState;
 
-	void Awake () 
+	protected virtual void Awake () 
     {
         //Cache Properties
         _navMeshAgent = GetComponent<NavMeshAgent>();
@@ -307,6 +304,8 @@ public class ZombieBase : MonoBehaviour
             }
             else
             {
+                _zomzManaAttribute.CurrentValue -= _attackCost;
+
                 _animState = ZombieStates.ATTACK;
 
                 GameObject closestEnemy = GetClosestObject();
@@ -466,7 +465,7 @@ public class ZombieBase : MonoBehaviour
         _nextWayPoint = Random.Range(0, _wayPoints.Count);
     }
 	
-	void Update () 
+    protected virtual void Update () 
     {
         if(_isAlive && !_isBeingControlled && !_isAttacking && !_isHurting && !ZomzMode.CurrentValue)
             ExecuteAI();

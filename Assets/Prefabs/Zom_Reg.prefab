@@ -2205,8 +2205,8 @@ MonoBehaviour:
   _defaultMaterial: {fileID: 2100000, guid: 5f929e11578277744a46d8e25cfe5c30, type: 2}
   _zomzModeMaterial: {fileID: 2100000, guid: 7444f32d9982f46ab8133da7505097ff, type: 2}
   _zomzManaAttribute: {fileID: 11400000, guid: f3a6c0e127ede49ad866f88bc2b95abb, type: 2}
-  _moveCostPerUnit: 0.5
-  _attackCost: 10
+  _moveCostPerUnit: 0.75
+  _attackCost: 15
   _skillCost: 0
   _hurtFx: {fileID: 100000, guid: bc98890f6028f444eaa7789bde5e2eeb, type: 2}
   _zombieHealthBar: {fileID: 114004714590633312}
