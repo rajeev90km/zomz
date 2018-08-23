@@ -43,6 +43,7 @@ public class ZombieFast : ZombieBase
             StopCoroutine(_chargeCoroutine);
             _chargeCoroutine = null;
         }
+
         _chargeCoroutine = StartCoroutine(BeginCharge());
     }
 
@@ -87,6 +88,8 @@ public class ZombieFast : ZombieBase
 	public override void OnZomzModeUnRegister()
 	{
         base.OnZomzModeUnRegister();
+        IsHurting = false;
+        IsAttacking = false;
         Charge();
 	}
 
@@ -126,6 +129,8 @@ public class ZombieFast : ZombieBase
                 _animator.SetTrigger("idle");
                 yield return new WaitForSeconds(CharacterStats.AttackRate);
                 IsAttacking = false;
+
+                Charge();
             }
         }
         else

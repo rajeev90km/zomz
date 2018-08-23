@@ -2112,7 +2112,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 116
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!95 &95092767257406116
 Animator:
@@ -2278,6 +2278,7 @@ MonoBehaviour:
   _characterStats: {fileID: 11400000, guid: b2f6a99f181cc49449ccb144162889c3, type: 2}
   _currentHealth: 0
   ZomzMode: {fileID: 11400000, guid: 171a4897d216445ffb1428aab63fe011, type: 2}
+  _currentState: 0
   _model: {fileID: 1525115115753824}
   _defaultMaterial: {fileID: 2100000, guid: 0d2dae1243c9c1d4da4309a3eacfbe4e, type: 2}
   _zomzModeMaterial: {fileID: 2100000, guid: 7444f32d9982f46ab8133da7505097ff, type: 2}

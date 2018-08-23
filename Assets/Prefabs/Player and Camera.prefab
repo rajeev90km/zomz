@@ -2627,7 +2627,7 @@ MonoBehaviour:
   ZomzMode: {fileID: 11400000, guid: 171a4897d216445ffb1428aab63fe011, type: 2}
   _gameData: {fileID: 11400000, guid: fe25c4c301c7243a3b0300d6eb01a3f9, type: 2}
   _zomzManaAttribute: {fileID: 11400000, guid: f3a6c0e127ede49ad866f88bc2b95abb, type: 2}
-  ZomzUseTime: 10
+  ZomzUseTime: 20
   _arrowPrefab: {fileID: 1816546336639450, guid: aec7e500038b244d684a01fd65761aa0,
     type: 2}
   _zomzStartEvent: {fileID: 11400000, guid: 955a51db9b35444b795c34aefcce8a74, type: 2}

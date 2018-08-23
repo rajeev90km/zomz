@@ -86,6 +86,8 @@ public class ZombieBase : MonoBehaviour
     public ZomzData ZomzMode;
 
     protected ZombieStates _previousState = ZombieStates.NONE;
+
+    [SerializeField]
     protected ZombieStates _currentState;
 
     [Header("Model Details")]
@@ -110,13 +112,13 @@ public class ZombieBase : MonoBehaviour
     protected float _attackCost = 10f;
 
     [SerializeField]
-    private GameObject _hurtFx;
+    protected GameObject _hurtFx;
 
     [SerializeField]
-    private Image _zombieHealthBar;
+    protected Image _zombieHealthBar;
 
-    private Coroutine _attackCoroutine;
-    private Coroutine _hurtCoroutine;
+    protected Coroutine _attackCoroutine;
+    protected Coroutine _hurtCoroutine;
 
     private float _currentSpeed;
     private float _speedSmoothTime = 0.1f;
@@ -203,6 +205,13 @@ public class ZombieBase : MonoBehaviour
         {
             _navMeshAgent.destination = transform.position;
             _navMeshAgent.isStopped = true;
+
+            if (_attackCoroutine != null)
+            {
+                StopCoroutine(_attackCoroutine);
+                _attackCoroutine = null;
+            }
+
             _attackCoroutine = StartCoroutine(Attack());
         }
     }
@@ -356,7 +365,7 @@ public class ZombieBase : MonoBehaviour
                     _currentHealth = 0;
 
                 if (_zombieHealthBar)
-                    _zombieHealthBar.fillAmount = _currentHealth / 100;
+                    _zombieHealthBar.fillAmount = _currentHealth / CharacterStats.Health;
 
                 if (_hurtFx != null)
                     Instantiate(_hurtFx, new Vector3(transform.position.x, 1, transform.position.z), Quaternion.identity);

@@ -31,4 +31,6 @@ public class CharacterStats : ScriptableObject
 
     public float DiveTime = 1f;
 
+    public float StompRange = 5;
+
 }

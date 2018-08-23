@@ -203,7 +203,7 @@ public class ZomzController : MonoBehaviour {
                                 ZomzMode.CurrentSelectedZombie = hit.transform.gameObject.GetComponent<ZombieBase>();
 
                                 Vector3 zombiePos = hit.transform.gameObject.transform.position;
-                                _pointerArrowObj.transform.position = new Vector3(zombiePos.x, 3, zombiePos.z);
+                                _pointerArrowObj.transform.position = new Vector3(zombiePos.x, 4, zombiePos.z);
                             }
                         }
                     }

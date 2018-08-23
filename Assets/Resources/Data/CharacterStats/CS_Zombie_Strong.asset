@@ -11,12 +11,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 010f5063cff6044a5bc592ccdb7030cc, type: 3}
   m_Name: CS_Zombie_Strong
   m_EditorClassIdentifier: 
-  Health: 100
-  WalkSpeed: 4
-  RunSpeed: 4
-  AttackRate: 3
+  Health: 700
+  WalkSpeed: 3
+  RunSpeed: 6
+  LookRange: 10
+  AttackRate: 1
+  HurtRate: 0
   AttackStrength: 20
-  AttackRange: 2
+  AttackRange: 4
   ZomzRange: 12
   ZomzSpeed: 5
   AttackDamageToSelf: 0
+  DiveDistance: 3
+  DiveTime: 1
+  StompRange: 7
