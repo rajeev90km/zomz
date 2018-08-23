@@ -331,10 +331,20 @@ public class ZombieBase : MonoBehaviour
 
             }
 
-            yield return StartCoroutine(Hurt(_characterStats.AttackDamageToSelf));
-
             yield return new WaitForSeconds(_characterStats.AttackRate / 2);
             _isAttacking = false;
+
+            //DAMAGE TO SELF
+            if (_isAlive)
+            {
+                if (_currentHealth - _characterStats.AttackDamageToSelf > 0)
+                    _currentHealth -= _characterStats.AttackDamageToSelf;
+                else
+                    _currentHealth = 0;
+
+                if (_currentHealth <= 0)
+                    DieState();
+            }
         }
         yield return null;
     }

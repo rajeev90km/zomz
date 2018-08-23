@@ -12,11 +12,17 @@ MonoBehaviour:
   m_Name: CS_Zombie_Exploding
   m_EditorClassIdentifier: 
   Health: 100
-  WalkSpeed: 3
-  RunSpeed: 4
-  AttackRate: 10
-  AttackStrength: 50
-  AttackRange: 1.2
+  WalkSpeed: 1
+  RunSpeed: 6
+  LookRange: 8
+  AttackRate: 2
+  HurtRate: 1
+  AttackStrength: 100
+  AttackRange: 2
   ZomzRange: 12
   ZomzSpeed: 5
   AttackDamageToSelf: 100
+  DiveDistance: 3
+  DiveTime: 1
+  StompRange: 5
+  ExplosionRange: 8

@@ -33,4 +33,6 @@ public class CharacterStats : ScriptableObject
 
     public float StompRange = 5;
 
+    public float ExplosionRange = 7f;
+
 }
