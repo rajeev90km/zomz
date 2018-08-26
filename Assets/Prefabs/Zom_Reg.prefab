@@ -766,6 +766,7 @@ GameObject:
   - component: {fileID: 114377608819685742}
   - component: {fileID: 114344428133228030}
   - component: {fileID: 114831396671220776}
+  - component: {fileID: 114247240597789332}
   m_Layer: 12
   m_Name: Zom_Reg
   m_TagString: Enemy
@@ -1267,7 +1268,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1690766357544074}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6, y: 0, z: -21.8}
+  m_LocalPosition: {x: 0, y: 0, z: 2.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4191826811236892}
@@ -2158,6 +2159,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114247240597789332
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1690766357544074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a26b350f2d1b42c38c70ea64afbbb47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _perParticleHurtAmount: 10
+  _hurtThreshold: 25
 --- !u!114 &114344428133228030
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2201,6 +2215,7 @@ MonoBehaviour:
   _characterStats: {fileID: 11400000, guid: 83d7d795f5b6f47f8a2d14a322ba6c10, type: 2}
   _currentHealth: 0
   ZomzMode: {fileID: 11400000, guid: 171a4897d216445ffb1428aab63fe011, type: 2}
+  _currentState: 0
   _model: {fileID: 1821426320984124}
   _defaultMaterial: {fileID: 2100000, guid: 5f929e11578277744a46d8e25cfe5c30, type: 2}
   _zomzModeMaterial: {fileID: 2100000, guid: 7444f32d9982f46ab8133da7505097ff, type: 2}

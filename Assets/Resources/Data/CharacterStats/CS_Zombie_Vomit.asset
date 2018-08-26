@@ -11,11 +11,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 010f5063cff6044a5bc592ccdb7030cc, type: 3}
   m_Name: CS_Zombie_Vomit
   m_EditorClassIdentifier: 
-  Health: 100
-  WalkSpeed: 2
-  RunSpeed: 3
-  AttackRate: 1.2
+  Health: 150
+  WalkSpeed: 2.5
+  RunSpeed: 5
+  LookRange: 7
+  AttackRate: 4
+  HurtRate: 1
   AttackStrength: 10
-  AttackRange: 5
+  AttackRange: 2
   ZomzRange: 12
   ZomzSpeed: 5
+  AttackDamageToSelf: 0
+  DiveDistance: 3
+  DiveTime: 1
+  StompRange: 5
+  ExplosionRange: 7
