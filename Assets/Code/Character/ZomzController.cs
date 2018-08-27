@@ -116,7 +116,8 @@ public class ZomzController : MonoBehaviour {
 
     public void UnregisterZomzMode()
     {
-        ZomzMode.CurrentSelectedZombie.OnZomzModeUnRegister();
+        if(ZomzMode.CurrentSelectedZombie)
+            ZomzMode.CurrentSelectedZombie.OnZomzModeUnRegister();
         _zomzUnregisterEvent.Raise();
         ZomzMode.CurrentSelectedZombie = null;
         ZomzMode.IsRegistered = false;

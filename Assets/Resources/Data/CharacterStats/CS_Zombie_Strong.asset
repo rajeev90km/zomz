@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health: 700
   WalkSpeed: 3
-  RunSpeed: 6
+  RunSpeed: 6.5
   LookRange: 10
   AttackRate: 1
   HurtRate: 0
@@ -25,3 +25,4 @@ MonoBehaviour:
   DiveDistance: 3
   DiveTime: 1
   StompRange: 7
+  ExplosionRange: 7

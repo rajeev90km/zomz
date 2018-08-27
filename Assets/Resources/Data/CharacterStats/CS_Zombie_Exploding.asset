@@ -25,4 +25,4 @@ MonoBehaviour:
   DiveDistance: 3
   DiveTime: 1
   StompRange: 5
-  ExplosionRange: 8
+  ExplosionRange: 10
