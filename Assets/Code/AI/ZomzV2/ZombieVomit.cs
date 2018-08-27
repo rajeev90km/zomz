@@ -27,7 +27,36 @@ public class ZombieVomit : ZombieBase
         _playerLayerMask = (1 << LayerMask.NameToLayer("Player"));
     }
 
-    public override IEnumerator Attack()
+    public override IEnumerator Hurt(float pDamage = 0.0f)
+    {
+        if (IsAlive )
+        {
+            if (pDamage > 0)
+            {
+                if (_currentHealth - pDamage > 0)
+                    _currentHealth -= pDamage;
+                else
+                    _currentHealth = 0;
+
+                if (_zombieHealthBar)
+                    _zombieHealthBar.fillAmount = _currentHealth / CharacterStats.Health;
+
+                if (_hurtFx != null)
+                    Instantiate(_hurtFx, new Vector3(transform.position.x, 1, transform.position.z), Quaternion.identity);
+                
+                if (_currentHealth <= 0)
+                {
+                    DieState();
+                    _navMeshAgent.enabled = false;
+                    transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+                }
+            }
+        }
+
+        yield return null;
+    }
+
+	public override IEnumerator Attack()
     {
         if (IsAlive && !IsAttacking)
         { 

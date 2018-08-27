@@ -342,7 +342,7 @@ GameObject:
   - component: {fileID: 195217632473862564}
   - component: {fileID: 114387978765886950}
   - component: {fileID: 114961555579819572}
-  - component: {fileID: 114601632623383610}
+  - component: {fileID: 114887355582590092}
   m_Layer: 12
   m_Name: Zom_Vomit
   m_TagString: Enemy
@@ -1229,7 +1229,7 @@ MonoBehaviour:
   Response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114601632623383610}
+      - m_Target: {fileID: 114887355582590092}
         m_MethodName: StartZomzMode
         m_Mode: 1
         m_Arguments:
@@ -1263,7 +1263,19 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
---- !u!114 &114601632623383610
+--- !u!114 &114769273864314512
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1595438564896448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e88d823f1d1540b8a344fadbd404990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rotationOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &114887355582590092
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1291,18 +1303,6 @@ MonoBehaviour:
   _vomitSpawnPosition: {fileID: 4948305366209560}
   _vomitFXPrefab: {fileID: 1610889669395592, guid: 73a521ea426ade1438d405f9a129fa55,
     type: 2}
---- !u!114 &114769273864314512
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1595438564896448}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e88d823f1d1540b8a344fadbd404990, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rotationOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &114893063432077664
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1334,7 +1334,7 @@ MonoBehaviour:
   Response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114601632623383610}
+      - m_Target: {fileID: 114887355582590092}
         m_MethodName: EndZomzMode
         m_Mode: 1
         m_Arguments:

@@ -46,6 +46,18 @@ public class ZombieBase : MonoBehaviour
         set { _isBeingControlled = value; }
     }
 
+    private bool _isChaseOverridden = false;
+    public bool IsChaseOverridden{
+        get { return _isChaseOverridden; }
+        set { _isChaseOverridden = value; }
+    }
+
+    private Vector3 overriddenChasePosition;
+    public Vector3 OverridenChasePosition{
+        get { return overriddenChasePosition; }
+        set { overriddenChasePosition = value; }
+    }
+
     private bool _isAlive = true;
     public bool IsAlive
     {
@@ -93,13 +105,13 @@ public class ZombieBase : MonoBehaviour
     [Header("Model Details")]
     [SerializeField]
     private GameObject _model;
-    private Renderer _modelRenderer;
+    protected Renderer _modelRenderer;
 
     [SerializeField]
-    private Material _defaultMaterial;
+    protected Material _defaultMaterial;
 
     [SerializeField]
-    private Material _zomzModeMaterial;
+    protected Material _zomzModeMaterial;
 
     [Header("Miscellaneous")]
     [SerializeField]
@@ -193,7 +205,11 @@ public class ZombieBase : MonoBehaviour
             if (_navMeshAgent.isActiveAndEnabled)
             {
                 _navMeshAgent.speed = _characterStats.RunSpeed;
-                _navMeshAgent.destination = _player.transform.position;
+
+                if (!_isChaseOverridden)
+                    _navMeshAgent.destination = _player.transform.position;
+                else
+                    _navMeshAgent.destination = overriddenChasePosition;
                 _navMeshAgent.isStopped = false;
             }
         }
@@ -234,9 +250,17 @@ public class ZombieBase : MonoBehaviour
     protected virtual void ExecuteAI()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, _player.transform.position);
+        float distanceToChasePosition = Vector3.Distance(transform.position, overriddenChasePosition);
+
+        //Reset Chase override if close to the patrol position
+        if(_isChaseOverridden)
+        {
+            if (distanceToChasePosition < 2f || (distanceToPlayer <= _characterStats.AttackRange) || ((distanceToPlayer < _characterStats.LookRange) && (distanceToPlayer > _characterStats.AttackRange)) || (!_isAttacking && _previousState == ZombieStates.ATTACK && distanceToPlayer > _characterStats.AttackRange))
+                _isChaseOverridden = false;
+        }
 
         //Transition to CHASE mode if close enough to the player
-        if (_playerController.IsAlive && (((distanceToPlayer < _characterStats.LookRange) && (distanceToPlayer > _characterStats.AttackRange)) || (!_isAttacking && _previousState == ZombieStates.ATTACK && distanceToPlayer > _characterStats.AttackRange)))
+        if (_playerController.IsAlive && ( _isChaseOverridden || ((distanceToPlayer < _characterStats.LookRange) && (distanceToPlayer > _characterStats.AttackRange)) || (!_isAttacking && _previousState == ZombieStates.ATTACK && distanceToPlayer > _characterStats.AttackRange)))
         {
             _currentState = ZombieStates.CHASE;
             InitNewState("run",false);  
@@ -410,17 +434,17 @@ public class ZombieBase : MonoBehaviour
         }
     }
 
-    public void EndZomzMode()
+    public virtual void EndZomzMode()
     {
         _modelRenderer.material = _defaultMaterial;
     }
 
-    public void OnZomzModeAffected()
+    public virtual void OnZomzModeAffected()
     {
         _modelRenderer.material = _zomzModeMaterial;
     }
 
-    public void OnZomzModeRegister()
+    public virtual void OnZomzModeRegister()
     {
         _isBeingControlled = true;
         _modelRenderer.material = _zomzModeMaterial;
