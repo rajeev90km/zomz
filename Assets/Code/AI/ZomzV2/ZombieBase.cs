@@ -23,7 +23,7 @@ public enum AttackTarget
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(NavMeshAgent))]
-public class ZombieBase : MonoBehaviour
+public class ZombieBase : Being
 {
     private bool _isAttacking = false;
     public bool IsAttacking
@@ -56,13 +56,6 @@ public class ZombieBase : MonoBehaviour
     public Vector3 OverridenChasePosition{
         get { return overriddenChasePosition; }
         set { overriddenChasePosition = value; }
-    }
-
-    private bool _isAlive = true;
-    public bool IsAlive
-    {
-        get { return _isAlive; }
-        set { _isAlive = value; }
     }
 
     [SerializeField]
@@ -138,6 +131,8 @@ public class ZombieBase : MonoBehaviour
     Vector3 forward, right;
     protected ZombieStates _animState;
 
+    ZomzController _zomzControl;
+
 	protected virtual void Awake () 
     {
         //Cache Properties
@@ -157,6 +152,8 @@ public class ZombieBase : MonoBehaviour
 
         //Setup Init Variables
         _currentHealth = _characterStats.Health;
+
+        _zomzControl = GameObject.FindWithTag("Player").GetComponent<ZomzController>();
 
         //Waypoints
         GameObject _wayPointsObj = GameObject.FindWithTag("Waypoints");
@@ -244,6 +241,7 @@ public class ZombieBase : MonoBehaviour
     {
         _isAlive = false;
         _animator.SetTrigger("die");
+        _zomzControl.UnregisterZomzMode();
     }
 	
     // MAIN AI LOOP - GOES THROUGH LIST OF ACTIONS AND DECIDES STATE OF AI
@@ -315,7 +313,7 @@ public class ZombieBase : MonoBehaviour
     //*********************************************************************************************************************************************************
     #region ZombieActions
 
-    public virtual IEnumerator Attack()
+    public override IEnumerator Attack()
     {
         if (!_isAttacking)
         {
@@ -374,7 +372,7 @@ public class ZombieBase : MonoBehaviour
     }
 
 
-    public virtual IEnumerator Hurt(float pDamage = 0.0f)
+    public override IEnumerator Hurt(float pDamage = 0.0f)
     {
         if (_isAlive)
         {
@@ -454,7 +452,7 @@ public class ZombieBase : MonoBehaviour
     public virtual void OnZomzModeUnRegister()
     {
         _isBeingControlled = false;
-        _modelRenderer.material = _zomzModeMaterial;
+        _modelRenderer.material = _defaultMaterial;
     }
 
     public void ResetDirectionVectors()

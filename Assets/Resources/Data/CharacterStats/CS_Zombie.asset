@@ -15,12 +15,14 @@ MonoBehaviour:
   WalkSpeed: 2.5
   RunSpeed: 4.5
   LookRange: 7
-  AttackRate: 1.5
+  AttackRate: 1.2
   HurtRate: 0.8
-  AttackStrength: 1
+  AttackStrength: 10
   AttackRange: 1.25
   ZomzRange: 10
   ZomzSpeed: 5
   AttackDamageToSelf: 0
   DiveDistance: 3
   DiveTime: 1
+  StompRange: 5
+  ExplosionRange: 7

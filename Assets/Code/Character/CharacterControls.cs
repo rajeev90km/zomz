@@ -5,7 +5,7 @@ using System.Linq;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Animator))]
-public class CharacterControls : MonoBehaviour
+public class CharacterControls : Being
 {
 
     [SerializeField]
@@ -50,12 +50,6 @@ public class CharacterControls : MonoBehaviour
     [SerializeField]
     private bool _debugMode = false;
 
-    public bool _isAlive = true;
-    public bool IsAlive
-    {
-        get { return _isAlive; }
-    }
-
     Vector3 forward, right;
 
     private Animator _animator;
@@ -99,7 +93,7 @@ public class CharacterControls : MonoBehaviour
     }
 
 
-	public void Attack()
+    public void BeginAttack()
 	{
 		if (_isAlive)
 		{
@@ -109,11 +103,11 @@ public class CharacterControls : MonoBehaviour
 				_attackCoroutine = null;
 			}
 
-			_attackCoroutine = StartCoroutine (BeginAttack ());
+			_attackCoroutine = StartCoroutine (Attack ());
 		}
 	}
 
-	public IEnumerator Hurt(float pDamage = 0.0f)
+	public override IEnumerator Hurt(float pDamage = 0.0f)
 	{
 		if (_isAlive)
         {
@@ -145,7 +139,7 @@ public class CharacterControls : MonoBehaviour
 	}
 
 
-    private IEnumerator BeginAttack()
+    public override IEnumerator Attack()
     {
         _isAttacking = true;
         _canAttack = false;
@@ -259,7 +253,7 @@ public class CharacterControls : MonoBehaviour
                 {
                     if (_canAttack)
                     {
-                        Attack();
+                        BeginAttack();
                     }
                 }
 
