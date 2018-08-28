@@ -18,8 +18,6 @@ public class Hurtable : Interactable {
 
         Being otherBeing = pCollision.gameObject.GetComponent<Being>();
 
-        Debug.Log(otherBeing);
-
         if(otherBeing!=null && otherBeing.IsAlive)
         {
             otherBeing.StartCoroutine(otherBeing.Hurt(_hurtAmount));

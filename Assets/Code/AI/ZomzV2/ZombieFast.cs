@@ -26,6 +26,12 @@ public class ZombieFast : ZombieBase
     private Coroutine _chargeCoroutine;
 
     private bool _isCharging = false;
+    public bool IsCharging
+    {
+        get { return _isCharging; }
+    }
+
+    public bool IsFast = true;
 
     GameObject _chargeFXObj;
 
@@ -157,6 +163,8 @@ public class ZombieFast : ZombieBase
             _chargeFXObj = Instantiate(_chargeFX);
             _chargeFXObj.transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
 
+            _isCharging = true;
+
             while (time < 1)
             {
                 transform.position = Vector3.Lerp(startPos, endPos, time);
@@ -164,6 +172,8 @@ public class ZombieFast : ZombieBase
                 time = time / _timeToCharge + Time.deltaTime;
                 yield return null;
             }
+
+            _isCharging = false;
 
             Destroy(_chargeFXObj, 1f);
 

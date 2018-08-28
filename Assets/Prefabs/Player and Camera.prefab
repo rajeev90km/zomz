@@ -2667,7 +2667,6 @@ MonoBehaviour:
   _eyes: {fileID: 4404284679108830}
   _currentHealth: 0
   _debugMode: 1
-  _isAlive: 1
   _hurtFX: {fileID: 100000, guid: f7261c1b6aae14ad3bb8800b75e3436b, type: 2}
 --- !u!114 &114998632717145078
 MonoBehaviour:

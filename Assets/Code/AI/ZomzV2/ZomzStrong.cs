@@ -11,6 +11,16 @@ public class ZomzStrong : ZombieBase {
     private GameObject stompFxObj;
 
     private bool _isAttackStarted = false;
+    private bool _isAttackEnded = false;
+    public bool IsAttackEnded
+    {
+        get { return _isAttackEnded; }
+    }
+
+    public bool IsAttackStarted
+    {
+        get { return _isAttackStarted; }
+    }
 
     private int _enemyLayerMask;
 
@@ -113,6 +123,7 @@ public class ZomzStrong : ZombieBase {
                 transform.position = endPos;
 
                 _isAttackStarted = false;
+                _isAttackEnded = true;
 
                 Vector3 fxPos = transform.position + transform.forward * 2f;
 
@@ -157,6 +168,7 @@ public class ZomzStrong : ZombieBase {
                 transform.position = endPos;
 
                 _isAttackStarted = false;
+                _isAttackEnded = true;
 
                 Vector3 fxPos = transform.position + transform.forward * 2f;
 
@@ -181,6 +193,7 @@ public class ZomzStrong : ZombieBase {
 
             yield return new WaitForSeconds(CharacterStats.AttackRate / 2);
             IsAttacking = false;
+            _isAttackEnded = false;
 
         }
         yield return null;
