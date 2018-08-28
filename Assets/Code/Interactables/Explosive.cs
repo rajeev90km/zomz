@@ -77,7 +77,7 @@ public class Explosive : Interactable {
         _explodeFX = Instantiate(_explodeFXPrefab);
         _explodeFX.transform.position = transform.position;
 
-        Collider[] _beingsHit = Physics.OverlapSphere(transform.position, _explosionRange, _enemyLayerMask);
+        Collider[] _beingsHit = Physics.OverlapSphere(transform.position, _explosionRange, _enemyAndPlayerLayerMask);
 
         for (int i = 0; i < _beingsHit.Length; i++)
         {
