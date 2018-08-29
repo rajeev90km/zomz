@@ -100,7 +100,7 @@ public class ZombieScream : ZombieBase {
 
             GameObject[] allZombies = GameObject.FindGameObjectsWithTag("Enemy");
 
-            yield return new WaitForSeconds(0.8f);
+            yield return new WaitForSeconds(0.5f);
 
             if (_screamFXPrefab != null)
             {
@@ -123,7 +123,7 @@ public class ZombieScream : ZombieBase {
                 }
             }
 
-            yield return new WaitForSeconds(CharacterStats.AttackRate-0.8f);
+            yield return new WaitForSeconds(CharacterStats.AttackRate-0.5f);
 
             IsAttacking = false;
         }
