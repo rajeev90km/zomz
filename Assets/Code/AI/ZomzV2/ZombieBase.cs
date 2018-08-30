@@ -507,6 +507,11 @@ public class ZombieBase : Being
     {
         _nextWayPoint = Random.Range(0, _wayPoints.Count);
     }
+
+    protected void GetExclusiveNextWayPoint()
+    {
+        _nextWayPoint = _wayPoints.Count - _nextWayPoint;
+    }
 	
     protected virtual void Update () 
     {

@@ -161,7 +161,7 @@ public class ZombieScream : ZombieBase {
             {
                 if(!_isFleePointFound)
                 {
-                    GetNextWayPoint();
+                    GetExclusiveNextWayPoint();
                     _isFleePointFound = true;
                 }
 
