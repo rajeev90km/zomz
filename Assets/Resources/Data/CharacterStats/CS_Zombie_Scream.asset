@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Name: CS_Zombie_Scream
   m_EditorClassIdentifier: 
   Health: 150
-  WalkSpeed: 2
+  WalkSpeed: 1.5
   RunSpeed: 5
-  LookRange: 7
-  AttackRate: 4
+  LookRange: 10
+  AttackRate: 2
   HurtRate: 1
-  AttackStrength: 10
-  AttackRange: 1.5
+  AttackStrength: 15
+  AttackRange: 5
   ZomzRange: 12
   ZomzSpeed: 5
   AttackDamageToSelf: 0

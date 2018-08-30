@@ -136,15 +136,6 @@ public class ZomzController : MonoBehaviour {
         ZomzMode.CurrentValue = false;
         _zomzEndEvent.Raise();    
     }
-	
-    void OnDrawGizmos()
-    {
-        if (_characterControls != null)
-        {
-            Gizmos.color = Color.white;
-            Gizmos.DrawWireSphere(transform.position, _characterControls.CharacterStats.ZomzRange);
-        }
-    }
 
     IEnumerator UseTimeBasedZomzMana()
     {

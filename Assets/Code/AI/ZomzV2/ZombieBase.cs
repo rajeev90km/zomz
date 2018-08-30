@@ -12,7 +12,8 @@ public enum ZombieStates
     ATTACK = 2,
     SPECIAL_ATTACK = 3,
     DIE = 4,
-    HURT = 5
+    HURT = 5,
+    FLEE = 6,
 }
 
 public enum AttackTarget

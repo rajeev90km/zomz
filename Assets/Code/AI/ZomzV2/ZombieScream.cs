@@ -19,6 +19,15 @@ public class ZombieScream : ZombieBase {
 
     private GameObject _screamFXObj;
 
+    private bool _isFleePointFound = false;
+
+    private bool _isFleeing = false;
+    public bool IsFleeing
+    {
+        get { return _isFleeing; }
+        set { _isFleeing = value; }
+    }
+
 	protected override void Awake()
 	{
         base.Awake();
@@ -95,6 +104,8 @@ public class ZombieScream : ZombieBase {
         {
             if (IsBeingControlled)
                 _animator.SetTrigger("attack");
+            else
+                transform.LookAt(_player.transform);
 
             IsAttacking = true;
 
@@ -126,8 +137,112 @@ public class ZombieScream : ZombieBase {
             yield return new WaitForSeconds(CharacterStats.AttackRate-0.5f);
 
             IsAttacking = false;
+            _isFleeing = true;
         }
 
         yield return null;
     }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, CharacterStats.LookRange);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, CharacterStats.AttackRange);
+    }
+
+
+    protected virtual void FleeState()
+    {
+        if (_isAlive && !IsBeingControlled)
+        {
+            if (_navMeshAgent.isActiveAndEnabled)
+            {
+                if(!_isFleePointFound)
+                {
+                    GetNextWayPoint();
+                    _isFleePointFound = true;
+                }
+
+                _navMeshAgent.speed = CharacterStats.RunSpeed;
+
+                _navMeshAgent.destination = _wayPoints[_nextWayPoint].position;
+                _navMeshAgent.isStopped = false;
+
+                if (Vector3.Distance(transform.position,_wayPoints[_nextWayPoint].position) <= 1f)
+                {
+                    _isFleeing = false;
+                    _isFleePointFound = false;
+                }
+            }
+        }
+    }
+
+
+    // MAIN AI LOOP - GOES THROUGH LIST OF ACTIONS AND DECIDES STATE OF AI
+    protected override void ExecuteAI()
+    {
+        float distanceToPlayer = Vector3.Distance(transform.position, _player.transform.position);
+
+        //Transition to CHASE mode if close enough to the player
+        if (_isFleeing)
+        {
+            _currentState = ZombieStates.FLEE;
+            InitNewState("run");
+            _previousState = _currentState;
+        }
+        else if (_playerController.IsAlive && (((distanceToPlayer < CharacterStats.LookRange) && (distanceToPlayer > CharacterStats.AttackRange)) || (!IsAttacking && _previousState == ZombieStates.ATTACK && distanceToPlayer > CharacterStats.AttackRange)))
+        {
+            _currentState = ZombieStates.CHASE;
+            InitNewState("run", false);
+            _previousState = _currentState;
+        }
+        //Transition to ATTACK if in attack range
+        else if (_playerController.IsAlive && (distanceToPlayer <= CharacterStats.AttackRange))
+        {
+            _currentState = ZombieStates.ATTACK;
+            InitNewState("attack", true);
+            _previousState = _currentState;
+        }
+        //Transition to PATROL if it doesn't meet any of the criteria
+        else if (!IsAttacking && distanceToPlayer > CharacterStats.LookRange && _previousState == ZombieStates.CHASE)
+        {
+            _currentState = ZombieStates.PATROL;
+            InitNewState("walk");
+            _previousState = _currentState;
+        }
+        else if (!_playerController.IsAlive)
+        {
+            _currentState = ZombieStates.PATROL;
+            InitNewState("walk");
+            _previousState = _currentState;
+        }
+        else
+        {
+            _currentState = ZombieStates.PATROL;
+            InitNewState("walk");
+            _previousState = _currentState;
+        }
+
+
+        switch (_currentState)
+        {
+            case ZombieStates.PATROL:
+                PatrolState();
+                break;
+            case ZombieStates.CHASE:
+                ChaseState();
+                break;
+            case ZombieStates.ATTACK:
+                AttackState();
+                break;
+            case ZombieStates.FLEE:
+                FleeState();
+                break;
+            default:
+                break;
+        }
+    }
+
 }
