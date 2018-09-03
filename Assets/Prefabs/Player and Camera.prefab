@@ -2320,7 +2320,7 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingPath: 3
+  m_RenderingPath: 1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
@@ -2681,7 +2681,7 @@ MonoBehaviour:
   _attackModifier: 0
   _eyes: {fileID: 4404284679108830}
   _currentHealth: 0
-  _debugMode: 1
+  _debugMode: 0
   _hurtFX: {fileID: 100000, guid: f7261c1b6aae14ad3bb8800b75e3436b, type: 2}
 --- !u!114 &114998632717145078
 MonoBehaviour:

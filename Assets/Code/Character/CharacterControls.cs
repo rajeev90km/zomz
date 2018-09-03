@@ -41,6 +41,20 @@ public class CharacterControls : Being
         get { return _eyes; }
     }
 
+    private bool _canPush = false;
+    public bool CanPush{
+        get { return _canPush; }
+        set { _canPush = value; }
+    }
+
+    private bool _isPushing = false;
+    public bool IsPushing {
+        get { return _isPushing; }
+        set { _isPushing = value; }
+    }
+
+    private bool _beginPush = false;
+
     public float _currentHealth;
 
     private float _speedSmoothTime = 0.1f;
@@ -67,11 +81,16 @@ public class CharacterControls : Being
     private string[] _hurtAnimations = { "hurt1"};
     private string _dodgeAnimation = "roll";
 
+    private int pushableMask;
+
+    private const float PUSH_ANGLE_RANGE = 45f;
+
     [Header("FX")]
     [SerializeField]
     private GameObject _hurtFX;
 
-
+    GameObject currentPushable = null;
+    Vector3 pushableOffset;
 
     void Start()
     {
@@ -79,6 +98,8 @@ public class CharacterControls : Being
         _currentHealth = _characterStats.Health;
 
         _animator = GetComponent<Animator>();
+
+        pushableMask = (1 << LayerMask.NameToLayer("Pushable"));
 
         ResetDirectionVectors();
     }
@@ -185,6 +206,45 @@ public class CharacterControls : Being
         _zomzControls.EndZomzMode();
 	}
 
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, 0.7f);
+
+    }
+
+    public GameObject GetClosestPushable()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 0.5f, pushableMask);
+
+        Collider closestCollider = null;
+
+        foreach (Collider hit in colliders)
+        {
+            Pushable pushable = hit.gameObject.GetComponent<Pushable>();
+
+            if (pushable == null)
+            {
+                continue;
+            }
+
+            if (!closestCollider)
+            {
+                closestCollider = hit;
+            }
+            //compares distances
+            if (Vector3.Distance(transform.position, hit.transform.position) <= Vector3.Distance(transform.position, closestCollider.transform.position))
+            {
+                closestCollider = hit;
+            }
+        }
+
+        if (!closestCollider)
+            return null;
+
+        return closestCollider.gameObject;
+    }
+
 	public GameObject GetClosestObject()
 	{
 		Collider[] colliders = Physics.OverlapSphere (transform.position, _characterStats.AttackRange);
@@ -248,8 +308,54 @@ public class CharacterControls : Being
         {
             if (_isAlive)
             {
+                #region -------------Push----------------
+                if (Input.GetKeyDown(KeyCode.P))
+                {
+                    _beginPush = !_beginPush;
+
+                    if (_beginPush)
+                    {
+                        currentPushable = GetClosestPushable();
+
+                        if (currentPushable != null)
+                        {
+                            _canPush = true;
+                        }
+                        else
+                        {
+                            _canPush = false;
+                            _beginPush = false;
+                        }
+                    }
+                    else
+                    {
+                        _canPush = false;
+                        _beginPush = false;
+                    }
+
+
+                    if (_canPush)
+                    {
+                        transform.LookAt(currentPushable.transform);
+                        pushableOffset = currentPushable.transform.position - transform.position;
+                        //currentPushable.GetComponent<Collider>().enabled = false;
+                        if(!_isPushing)
+                            _animator.SetTrigger("pushstart");
+                    }
+                    else if(!_canPush && currentPushable!=null)
+                    {
+                        //currentPushable.GetComponent<Collider>().enabled = true;
+                        pushableOffset = Vector3.zero;
+                        _animator.SetTrigger("endpush");
+                        currentPushable = null;
+                        _isPushing = false;
+                    }
+
+                }
+                #endregion
+
                 //Attack
-                if (Input.GetKeyDown(KeyCode.Space) && !_zomzControls.ZomzMode.CurrentValue && !_isDiving && !_zomzControls.ZomzMode.CurrentSelectedZombie)
+                if (Input.GetKeyDown(KeyCode.Space) && !_zomzControls.ZomzMode.CurrentValue && !_isDiving && !_zomzControls.ZomzMode.CurrentSelectedZombie && !_canPush && !_isPushing)
                 {
                     if (_canAttack)
                     {
@@ -269,11 +375,46 @@ public class CharacterControls : Being
                 if (!_isAttacking && !_isHurting && !_isDiving)
                 {
                     bool running = Input.GetKey(KeyCode.LeftShift);
-                    float targetSpeed = ((running) ? _characterStats.RunSpeed : _characterStats.WalkSpeed);
+
+                    if (_canPush)
+                        running = false;
+
+                    float targetSpeed = 0;
+                    if (!_canPush)
+                        targetSpeed = ((running) ? _characterStats.RunSpeed : _characterStats.WalkSpeed);
+                    else
+                    {
+                        targetSpeed = _characterStats.PushSpeed;
+                    }
                     _currentSpeed = Mathf.SmoothDamp(_currentSpeed, targetSpeed, ref _speedSmoothVelocity, _speedSmoothTime);
 
                     Vector3 rightMovement = right * _currentSpeed * Time.deltaTime * Input.GetAxis("Horizontal");
                     Vector3 upMovement = forward * _currentSpeed * Time.deltaTime * Input.GetAxis("Vertical");
+
+                    //Push Object
+                    if(_canPush)
+                    {
+                        float rightPushAngle = Vector3.Angle(right, transform.forward);
+
+                        rightMovement = Vector3.zero;
+                        upMovement = transform.forward * _currentSpeed * Time.deltaTime * Input.GetAxis("Vertical");
+                       
+
+                        if(Input.GetAxis("Vertical") > 0 && upMovement!=Vector3.zero)
+                        {
+                            if (!_isPushing)
+                            {
+                                _animator.ResetTrigger("pushstart");
+                                _animator.SetTrigger("push");
+                            }
+                        }
+                        else if (Input.GetAxis("Vertical") < 0 && upMovement!=Vector3.zero)
+                        {
+                            if (!_isPushing)
+                                _animator.SetTrigger("pull");
+                        }
+                    }
+
 
                     Vector3 heading = Vector3.Normalize(rightMovement + upMovement);
 
@@ -282,8 +423,23 @@ public class CharacterControls : Being
 
                     if (heading != Vector3.zero)
                     {
-                        transform.forward = heading;
+                        if (!_canPush)
+                            transform.forward = heading;
+                        else
+                            _isPushing = true;
+
                         transform.position += rightMovement + upMovement;
+
+                        if (currentPushable != null)
+                            currentPushable.transform.position = transform.position + pushableOffset;
+                    }
+                    else
+                    {
+                        if (_canPush)
+                        {
+                            _animator.SetTrigger("pushstart");
+                            _isPushing = false;
+                        }
                     }
 
                     float animationSpeedPercent = ((running) ? 1 : 0.5f) * heading.magnitude;
