@@ -85,6 +85,12 @@ public class CharacterControls : Being
 
     private const float PUSH_ANGLE_RANGE = 45f;
 
+    private bool _isCrouching = false;
+    public bool IsCrouching{
+        get { return _isCrouching; }
+        set { _isCrouching = value; }
+    }
+
     [Header("FX")]
     [SerializeField]
     private GameObject _hurtFX;
@@ -92,12 +98,21 @@ public class CharacterControls : Being
     GameObject currentPushable = null;
     Vector3 pushableOffset;
 
+    private CapsuleCollider _ownCollider;
+
+
+    private const float DEFAULT_COLLIDER_HEIGHT = 1.75f;
+    private Vector3 DEFAULT_COLLIDER_CENTER = new Vector3(0, 0.85f, 0);
+    private const float CROUCH_COLLIDER_HEIGHT = 1.1f;
+    private Vector3 CROUCH_COLLIDER_CENTER = new Vector3(0,0.55f,0);
+
     void Start()
     {
         _zomzControls = GetComponent<ZomzController>();
         _currentHealth = _characterStats.Health;
 
         _animator = GetComponent<Animator>();
+        _ownCollider = GetComponent<CapsuleCollider>();
 
         pushableMask = (1 << LayerMask.NameToLayer("Pushable"));
 
@@ -132,6 +147,8 @@ public class CharacterControls : Being
 	{
 		if (_isAlive)
         {
+            _isCrouching = false;
+
             _isHurting = true;
 
             if (_currentHealth - pDamage > 0)
@@ -295,6 +312,18 @@ public class CharacterControls : Being
         _isDiving = false;
     }
 
+
+    void EndCrouch()
+    {
+        if (_isCrouching)
+        {
+            _isCrouching = false;
+            _animator.SetTrigger("endcrouch");
+            _ownCollider.height = DEFAULT_COLLIDER_HEIGHT;
+            _ownCollider.center = DEFAULT_COLLIDER_CENTER;
+        }    
+    }
+
 	void Update () 
 	{
         if (!_gameData.IsPaused)
@@ -305,6 +334,8 @@ public class CharacterControls : Being
                 if (Input.GetKeyDown(KeyCode.P))
                 {
                     _beginPush = !_beginPush;
+
+                    _isCrouching = false;
 
                     if (_beginPush)
                     {
@@ -347,11 +378,28 @@ public class CharacterControls : Being
                 }
                 #endregion
 
+                if((Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl)) && !_zomzControls.ZomzMode.CurrentValue && !_isDiving && !_zomzControls.ZomzMode.CurrentSelectedZombie && !_canPush && !_isPushing)
+                {
+                    _isCrouching = !_isCrouching;
+
+                    if(_isCrouching){
+                        _ownCollider.height = CROUCH_COLLIDER_HEIGHT;
+                        _ownCollider.center = CROUCH_COLLIDER_CENTER;
+                        _animator.SetTrigger("crouch");
+                    }
+                    else{
+                        _animator.SetTrigger("endcrouch");
+                        _ownCollider.height = DEFAULT_COLLIDER_HEIGHT;
+                        _ownCollider.center = DEFAULT_COLLIDER_CENTER;
+                    }
+                }
+
                 //Attack
                 if (Input.GetKeyDown(KeyCode.Space) && !_zomzControls.ZomzMode.CurrentValue && !_isDiving && !_zomzControls.ZomzMode.CurrentSelectedZombie && !_canPush && !_isPushing)
                 {
                     if (_canAttack)
                     {
+                        _isCrouching = false;
                         BeginAttack();
                     }
                 }
@@ -416,6 +464,8 @@ public class CharacterControls : Being
 
                     if (heading != Vector3.zero)
                     {
+                        EndCrouch();
+
                         if (!_canPush)
                             transform.forward = heading;
                         else

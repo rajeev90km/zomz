@@ -271,7 +271,7 @@ public class ZombieBase : Being
         ownCollider.enabled = false;
         if (Physics.Raycast(transform.position + transform.up * _sightHeightMultiplier, playerDirection, out hit, Mathf.Infinity))
         {
-            Debug.Log(hit.collider.gameObject.name);
+            //Debug.Log(hit.collider.gameObject.name);
             if(hit.collider.CompareTag("Player")){
                 unobstructedViewToPlayer = true;
             }
