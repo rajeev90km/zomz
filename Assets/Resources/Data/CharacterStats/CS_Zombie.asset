@@ -14,6 +14,8 @@ MonoBehaviour:
   Health: 100
   WalkSpeed: 2.5
   RunSpeed: 4.5
+  PushSpeed: 1
+  FieldOfView: 180
   LookRange: 7
   AttackRate: 1.2
   HurtRate: 0.8

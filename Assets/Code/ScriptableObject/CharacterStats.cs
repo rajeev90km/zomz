@@ -13,6 +13,8 @@ public class CharacterStats : ScriptableObject
 
     public float PushSpeed = 1f;
 
+    public float FieldOfView = 90f;
+
     public float LookRange = 4f;
 
 	public float AttackRate = 1.2f;

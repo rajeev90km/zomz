@@ -14,6 +14,8 @@ MonoBehaviour:
   Health: 100
   WalkSpeed: 4.5
   RunSpeed: 6.5
+  PushSpeed: 1
+  FieldOfView: 180
   LookRange: 10
   AttackRate: 3
   HurtRate: 1
@@ -24,3 +26,5 @@ MonoBehaviour:
   AttackDamageToSelf: 0
   DiveDistance: 3
   DiveTime: 1
+  StompRange: 5
+  ExplosionRange: 7

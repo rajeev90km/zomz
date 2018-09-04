@@ -2283,6 +2283,8 @@ MonoBehaviour:
   _defaultMaterial: {fileID: 2100000, guid: 0d2dae1243c9c1d4da4309a3eacfbe4e, type: 2}
   _zomzModeMaterial: {fileID: 2100000, guid: 7444f32d9982f46ab8133da7505097ff, type: 2}
   _zomzManaAttribute: {fileID: 11400000, guid: f3a6c0e127ede49ad866f88bc2b95abb, type: 2}
+  _sightHeightMultiplier: 1.25
+  playerSightHeight: 0.2
   _moveCostPerUnit: 1
   _attackCost: 25
   _hurtFx: {fileID: 100000, guid: bc98890f6028f444eaa7789bde5e2eeb, type: 2}
@@ -2293,6 +2295,7 @@ MonoBehaviour:
   _chargeDistance: 8
   _chargeFX: {fileID: 1774422151322088, guid: 12437897ceabc4c1cbeb024b439d98eb, type: 2}
   _chargeFXLifetime: 1.5
+  IsFast: 1
 --- !u!136 &136266573115466834
 CapsuleCollider:
   m_ObjectHideFlags: 1

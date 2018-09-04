@@ -206,13 +206,6 @@ public class CharacterControls : Being
         _zomzControls.EndZomzMode();
 	}
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position, 0.7f);
-
-    }
-
     public GameObject GetClosestPushable()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, 0.5f, pushableMask);

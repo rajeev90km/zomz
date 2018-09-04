@@ -185,6 +185,17 @@ public class ZombieFast : ZombieBase
         yield return null;
 	}
 
+    protected override void DieState()
+    {
+        base.DieState();
+
+        if (_chargeCoroutine != null)
+        {
+            StopCoroutine(_chargeCoroutine);
+            _chargeCoroutine = null;
+        }
+    }
+
 	private void OnCollisionEnter(Collision pOther)
 	{
         if (!IsBeingControlled)

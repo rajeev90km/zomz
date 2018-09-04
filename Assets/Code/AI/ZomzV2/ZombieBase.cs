@@ -112,6 +112,12 @@ public class ZombieBase : Being
     protected GameFloatAttribute _zomzManaAttribute;
 
     [SerializeField]
+    protected float _sightHeightMultiplier = 1f;
+
+    [SerializeField]
+    protected float playerSightHeight = 0f;
+
+    [SerializeField]
     protected float _moveCostPerUnit = 1f;
 
     [SerializeField]
@@ -130,7 +136,9 @@ public class ZombieBase : Being
     private float _speedSmoothTime = 0.1f;
     private float _speedSmoothVelocity;
     Vector3 forward, right;
+
     protected ZombieStates _animState;
+    protected Collider ownCollider;
 
     ZomzController _zomzControl;
 
@@ -140,6 +148,7 @@ public class ZombieBase : Being
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
         _modelRenderer = _model.GetComponent<Renderer>();
+        ownCollider = GetComponent<Collider>();
 
         //Set initial State
         _initState = ZombieStates.PATROL;
@@ -248,8 +257,26 @@ public class ZombieBase : Being
     // MAIN AI LOOP - GOES THROUGH LIST OF ACTIONS AND DECIDES STATE OF AI
     protected virtual void ExecuteAI()
     {
+
         float distanceToPlayer = Vector3.Distance(transform.position, _player.transform.position);
         float distanceToChasePosition = Vector3.Distance(transform.position, overriddenChasePosition);
+        Vector3 playerDirection = new Vector3(_player.transform.position.x,playerSightHeight,_player.transform.position.z) - transform.position;
+        float playerAngle = Vector3.Angle(playerDirection, transform.forward);
+        bool unobstructedViewToPlayer = false;
+
+        RaycastHit hit;
+
+        Debug.DrawRay(transform.position + transform.forward + transform.up * _sightHeightMultiplier, playerDirection, Color.green);
+
+        ownCollider.enabled = false;
+        if (Physics.Raycast(transform.position + transform.up * _sightHeightMultiplier, playerDirection, out hit, Mathf.Infinity))
+        {
+            Debug.Log(hit.collider.gameObject.name);
+            if(hit.collider.CompareTag("Player")){
+                unobstructedViewToPlayer = true;
+            }
+        }
+        ownCollider.enabled = true;
 
         //Reset Chase override if close to the patrol position
         if(_isChaseOverridden)
@@ -259,7 +286,7 @@ public class ZombieBase : Being
         }
 
         //Transition to CHASE mode if close enough to the player
-        if (_playerController.IsAlive && ( _isChaseOverridden || ((distanceToPlayer < _characterStats.LookRange) && (distanceToPlayer > _characterStats.AttackRange)) || (!_isAttacking && _previousState == ZombieStates.ATTACK && distanceToPlayer > _characterStats.AttackRange)))
+        if (_playerController.IsAlive && ( _isChaseOverridden || (unobstructedViewToPlayer && (playerAngle<_characterStats.FieldOfView * 0.5f) && (distanceToPlayer < _characterStats.LookRange) && (distanceToPlayer > _characterStats.AttackRange)) || (!_isAttacking && _previousState == ZombieStates.ATTACK && distanceToPlayer > _characterStats.AttackRange)))
         {
             _currentState = ZombieStates.CHASE;
             InitNewState("run",false);  
@@ -310,6 +337,15 @@ public class ZombieBase : Being
     }
     #endregion
 
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, CharacterStats.LookRange);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, CharacterStats.AttackRange);
+    }
 
     //*********************************************************************************************************************************************************
     #region ZombieActions
@@ -510,7 +546,7 @@ public class ZombieBase : Being
 
     protected void GetExclusiveNextWayPoint()
     {
-        _nextWayPoint = _wayPoints.Count - _nextWayPoint;
+        _nextWayPoint = (_wayPoints.Count - _nextWayPoint) % _wayPoints.Count;
     }
 	
     protected virtual void Update () 

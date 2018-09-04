@@ -184,6 +184,21 @@ public class ZombieScream : ZombieBase {
     protected override void ExecuteAI()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, _player.transform.position);
+        Vector3 playerDirection = new Vector3(_player.transform.position.x, playerSightHeight, _player.transform.position.z) - transform.position;
+        float playerAngle = Vector3.Angle(playerDirection, transform.forward);
+        bool unobstructedViewToPlayer = false;
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position + transform.up * _sightHeightMultiplier, playerDirection, out hit, CharacterStats.LookRange))
+        {
+            if (hit.collider.CompareTag("Player"))
+            {
+                unobstructedViewToPlayer = true;
+            }
+        }
+
+        Debug.Log(unobstructedViewToPlayer);
 
         //Transition to CHASE mode if close enough to the player
         if (_isFleeing)
@@ -192,7 +207,7 @@ public class ZombieScream : ZombieBase {
             InitNewState("run");
             _previousState = _currentState;
         }
-        else if (_playerController.IsAlive && (((distanceToPlayer < CharacterStats.LookRange) && (distanceToPlayer > CharacterStats.AttackRange)) || (!IsAttacking && _previousState == ZombieStates.ATTACK && distanceToPlayer > CharacterStats.AttackRange)))
+        else if (_playerController.IsAlive && ((unobstructedViewToPlayer && (playerAngle < CharacterStats.FieldOfView * 0.5f) && (distanceToPlayer < CharacterStats.LookRange) && (distanceToPlayer > CharacterStats.AttackRange)) || (!IsAttacking && _previousState == ZombieStates.ATTACK && distanceToPlayer > CharacterStats.AttackRange)))
         {
             _currentState = ZombieStates.CHASE;
             InitNewState("run", false);
