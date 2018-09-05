@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -6579,18 +6579,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f21a9f0e79934bb88032c85e03857e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pitchCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _distanceCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   _cameraTopPosition: {fileID: 0}
   _cameraBottomPosition: {fileID: 0}
   _targetTransform: {fileID: 923243976}
@@ -17017,8 +17005,8 @@ Transform:
   - {fileID: 869148996}
   - {fileID: 1163900255}
   - {fileID: 592421722}
-  - {fileID: 440933194}
   - {fileID: 2115069628}
+  - {fileID: 440933194}
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -20598,32 +20586,32 @@ Transform:
   - {fileID: 2073427238}
   - {fileID: 1517368988}
   - {fileID: 497338857}
-  - {fileID: 1416045764}
+  - {fileID: 824994410}
   - {fileID: 489687014}
   - {fileID: 769323905}
   - {fileID: 1826926043}
   - {fileID: 871321151}
   - {fileID: 482706422}
+  - {fileID: 1002480666}
   - {fileID: 43547883}
   - {fileID: 282714553}
   - {fileID: 1138592537}
   - {fileID: 530590817}
+  - {fileID: 1345203574}
   - {fileID: 166945798}
+  - {fileID: 1416045764}
   - {fileID: 293094895}
   - {fileID: 843963802}
+  - {fileID: 1689237116}
   - {fileID: 258159832}
   - {fileID: 940835045}
   - {fileID: 1045670055}
   - {fileID: 1879679818}
   - {fileID: 1088349123}
-  - {fileID: 1689237116}
   - {fileID: 817286903}
-  - {fileID: 824994410}
   - {fileID: 903833984}
-  - {fileID: 1345203574}
   - {fileID: 1113478976}
   - {fileID: 1975565074}
-  - {fileID: 1002480666}
   - {fileID: 482555392}
   - {fileID: 1395951708}
   - {fileID: 775103326}

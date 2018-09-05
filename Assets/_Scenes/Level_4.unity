@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -791,7 +791,7 @@ Transform:
   - {fileID: 48111362}
   - {fileID: 204623512}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &48111361
 GameObject:
@@ -4117,7 +4117,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &326838146
 MonoBehaviour:
@@ -4130,9 +4130,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f21a9f0e79934bb88032c85e03857e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cameraTopPosition: {fileID: 0}
+  _cameraBottomPosition: {fileID: 0}
   _targetTransform: {fileID: 131591945}
   _rayCastPlayerTransform: {fileID: 1575071041}
-  _rotateSpeed: 50
   _smoothnessFactor: 0.17
   _mask: {fileID: 0}
   _minFov: 45
@@ -4285,7 +4286,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &348700396
 GameObject:
@@ -11553,7 +11554,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1001 &1089087717
 Prefab:
@@ -14698,9 +14699,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f21a9f0e79934bb88032c85e03857e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cameraTopPosition: {fileID: 0}
+  _cameraBottomPosition: {fileID: 0}
   _targetTransform: {fileID: 1101137274}
   _rayCastPlayerTransform: {fileID: 1101137273}
-  _rotateSpeed: 3
   _smoothnessFactor: 0.4
   _mask: {fileID: 0}
   _minFov: 45
@@ -19118,7 +19120,7 @@ Transform:
   - {fileID: 724517263}
   - {fileID: 1899412476}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1891496883
 Prefab:

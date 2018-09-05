@@ -90,7 +90,6 @@ public class Explosive : Interactable {
                 if (d <= _explosionRange)
                 {
                     float hurtAmount = (_explosionRange - d) / _explosionRange * _explosionStrength;
-                    Debug.Log(hurtAmount);
                     being.StartCoroutine(being.Hurt(hurtAmount));
                 }
             }

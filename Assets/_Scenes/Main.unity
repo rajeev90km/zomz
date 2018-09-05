@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -478,11 +478,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f21a9f0e79934bb88032c85e03857e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cameraTopPosition: {fileID: 0}
+  _cameraBottomPosition: {fileID: 0}
   _targetTransform: {fileID: 899891254}
   _rayCastPlayerTransform: {fileID: 1265512837}
-  _rotateSpeed: 50
   _smoothnessFactor: 0.17
   _mask: {fileID: 363907389}
+  _minFov: 45
+  _maxFov: 90
+  _zoomSensitivity: 10
 --- !u!4 &899891254 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4139142380059714, guid: 707f6a60d56414228a2d254e60d29543,

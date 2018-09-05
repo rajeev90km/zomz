@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -2368,9 +2368,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f21a9f0e79934bb88032c85e03857e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cameraTopPosition: {fileID: 0}
+  _cameraBottomPosition: {fileID: 0}
   _targetTransform: {fileID: 1455457776}
   _rayCastPlayerTransform: {fileID: 1455457775}
-  _rotateSpeed: 3
   _smoothnessFactor: 0.4
   _mask: {fileID: 0}
   _minFov: 45
