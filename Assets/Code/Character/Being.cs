@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Being : MonoBehaviour {
-
+public abstract class Being : MonoBehaviour 
+{    
     protected bool _isAlive = true;
     public bool IsAlive
     {
@@ -14,5 +14,4 @@ public abstract class Being : MonoBehaviour {
     public abstract IEnumerator Attack();
 
     public abstract IEnumerator Hurt(float pDamage = 0.0f);
-
 }

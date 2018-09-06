@@ -9,18 +9,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 010f5063cff6044a5bc592ccdb7030cc, type: 3}
-  m_Name: CS_Zombie
+  m_Name: CS_Human
   m_EditorClassIdentifier: 
   Health: 100
   WalkSpeed: 2.5
   RunSpeed: 4.5
   PushSpeed: 1
-  FieldOfView: 180
-  LookRange: 7
-  AttackRate: 1.2
-  HurtRate: 0.7
+  FieldOfView: 360
+  LookRange: 10
+  AttackRate: 1
+  HurtRate: 1
   AttackStrength: 10
-  AttackRange: 1.25
+  AttackRange: 1.5
   ZomzRange: 10
   ZomzSpeed: 5
   AttackDamageToSelf: 0

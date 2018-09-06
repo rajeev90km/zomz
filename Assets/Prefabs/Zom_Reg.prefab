@@ -323,7 +323,7 @@ GameObject:
   - component: {fileID: 114872833649277450}
   - component: {fileID: 114177764935757118}
   - component: {fileID: 114755589352223174}
-  m_Layer: 12
+  m_Layer: 5
   m_Name: ZombieHealthCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -355,7 +355,7 @@ GameObject:
   - component: {fileID: 224808664377963982}
   - component: {fileID: 222026825146640338}
   - component: {fileID: 114004714590633312}
-  m_Layer: 12
+  m_Layer: 5
   m_Name: ZombieHealth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1269,7 +1269,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1690766357544074}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 23, y: 0, z: -23.4}
+  m_LocalPosition: {x: 0, y: 0, z: 2.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4191826811236892}
@@ -2237,6 +2237,7 @@ MonoBehaviour:
   _zomzModeMaterial: {fileID: 2100000, guid: 7444f32d9982f46ab8133da7505097ff, type: 2}
   _zomzManaAttribute: {fileID: 11400000, guid: f3a6c0e127ede49ad866f88bc2b95abb, type: 2}
   _sightHeightMultiplier: 1.3
+  playerSightHeight: 0
   _moveCostPerUnit: 0.75
   _attackCost: 15
   _hurtFx: {fileID: 100000, guid: bc98890f6028f444eaa7789bde5e2eeb, type: 2}
@@ -2421,7 +2422,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1690766357544074}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.01
+  m_Radius: 0.13
   m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
