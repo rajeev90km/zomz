@@ -19,8 +19,6 @@ public class ZombieExplode : ZombieBase
 	{
         base.Awake();
 
-        _enemyLayerMask = (1 << LayerMask.NameToLayer("Enemy"));
-        _playerLayerMask = (1 << LayerMask.NameToLayer("Player"));
 
         _zomzController = GameObject.FindWithTag("Player").GetComponent<ZomzController>();
 	}
@@ -57,36 +55,23 @@ public class ZombieExplode : ZombieBase
 
             IsAttacking = true;
 
+            finalLayerMask = humanLayerMask | playerLayerMask | zombieLayerMask;
+
             yield return new WaitForSeconds(CharacterStats.AttackRate);
 
-            Collider[] _zombiesHit = Physics.OverlapSphere(transform.position, CharacterStats.ExplosionRange, _enemyLayerMask);
-            Collider[] _playerHit = Physics.OverlapSphere(transform.position, CharacterStats.ExplosionRange, _playerLayerMask);
+            Collider[] beingsHit = Physics.OverlapSphere(transform.position, CharacterStats.ExplosionRange, finalLayerMask);
 
-            for (int i = 0; i < _zombiesHit.Length; i++)
+            for (int i = 0; i < beingsHit.Length; i++)
             {
-                ZombieBase zombieBase = _zombiesHit[i].GetComponent<ZombieBase>();
+                Being being = beingsHit[i].GetComponent<Being>();
 
-                if (zombieBase != null && zombieBase.transform != transform)
+                if (being != null && being.transform != transform && being.IsAlive)
                 {
-                    float d = Vector3.Distance(zombieBase.transform.position, transform.position);
+                    float d = Vector3.Distance(being.transform.position, transform.position);
 
                     if (d <= CharacterStats.ExplosionRange)
                     {
-                        zombieBase.StartCoroutine(zombieBase.Hurt( (CharacterStats.ExplosionRange - d )/CharacterStats.ExplosionRange * CharacterStats.AttackStrength));
-                    }
-                }
-            }
-
-            for (int i = 0; i < _playerHit.Length; i++)
-            {
-                CharacterControls player = _playerHit[i].GetComponent<CharacterControls>();
-
-                if (player != null)
-                {
-                    float d = Vector3.Distance(player.transform.position, transform.position);
-                    if (d <= CharacterStats.ExplosionRange)
-                    {
-                        player.StartCoroutine(player.Hurt((CharacterStats.ExplosionRange - d) / CharacterStats.ExplosionRange * CharacterStats.AttackStrength));
+                        being.StartCoroutine(being.Hurt( (CharacterStats.ExplosionRange - d )/CharacterStats.ExplosionRange * CharacterStats.AttackStrength));
                     }
                 }
             }
@@ -105,8 +90,8 @@ public class ZombieExplode : ZombieBase
 
             if (!IsHurting)
                 _zomzController.UnregisterZomzMode();
-            Destroy(gameObject);
 
+            Destroy(gameObject);
 
         }
 

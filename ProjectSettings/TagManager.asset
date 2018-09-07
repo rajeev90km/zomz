@@ -10,6 +10,7 @@ TagManager:
   - Waypoints
   - FxTemporaire
   - ParticleHurt
+  - Human
   layers:
   - Default
   - TransparentFX

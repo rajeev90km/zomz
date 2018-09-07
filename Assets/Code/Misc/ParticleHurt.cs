@@ -29,19 +29,12 @@ public class ParticleHurt : MonoBehaviour {
     {
         particleCount = 0;
 
-        if(gameObject.CompareTag("Player"))
+        if(gameObject.CompareTag("Player") || gameObject.CompareTag("Enemy") || gameObject.CompareTag("Human")) 
         {
-            CharacterControls player = GetComponent<CharacterControls>();
+            Being being = GetComponent<Being>();
 
-            if (player && player.IsAlive)
-                player.StartCoroutine(player.Hurt(_perParticleHurtAmount));
-        }
-        else if(gameObject.CompareTag("Enemy"))
-        {
-            ZombieBase zombieBase = GetComponent<ZombieBase>();
-
-            if (zombieBase && zombieBase.IsAlive && !zombieBase.IsHurting)
-                zombieBase.StartCoroutine(zombieBase.Hurt(_perParticleHurtAmount));
+            if (being!=null && being.IsAlive)
+                being.StartCoroutine(being.Hurt(_perParticleHurtAmount));
         }
     }
 }

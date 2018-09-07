@@ -90,106 +90,72 @@ public class ZomzStrong : ZombieBase {
         {
             IsAttacking = true;
 
-            if (!IsBeingControlled)
-                transform.LookAt(_player.transform);
+            if (IsBeingControlled)
+                _animator.SetTrigger("attack");
+
+            finalLayerMask = humanLayerMask | playerLayerMask | zombieLayerMask;
+
+            Being closestBeing = GetClosestBeingToAttack(finalLayerMask, CharacterStats.AttackRange);
+
+            if(closestBeing)
+                transform.LookAt(closestBeing.transform);
 
             Vector3 startPos;
             Vector3 endPos;
-            if (!IsBeingControlled)
+
+            yield return new WaitForSeconds(0.5f);
+
+            startPos = transform.position;
+            endPos = transform.position + new Vector3(0, 3, 0);
+
+            float time = 0;
+
+            _isAttackStarted = true;
+
+            yield return new WaitForSeconds(0.4f);
+
+            while (time < 0.5f)
             {
-                yield return new WaitForSeconds(0.5f);
-
-                startPos = transform.position;
-                endPos = transform.position + new Vector3(0, 3, 0);
-
-                float time = 0;
-
-                _isAttackStarted = true;
-
-                yield return new WaitForSeconds(0.4f);
-
-                while (time < 0.5f)
-                {
-                    transform.position = Vector3.Lerp(startPos, endPos, time);
-                    time = time + Time.deltaTime;
-                    yield return null;
-                }
-                transform.position = endPos;
-
-                startPos = transform.position;
-                endPos = new Vector3(transform.position.x, 0, transform.position.z);
-
-                time = 1;
-                transform.position = endPos;
-
-                _isAttackStarted = false;
-                _isAttackEnded = true;
-
-                Vector3 fxPos = transform.position + transform.forward * 2f;
-
-                stompFxObj = Instantiate(_stompFx);
-                stompFxObj.transform.position = new Vector3(fxPos.x, 0f, fxPos.z);
-
-                if (Vector3.Distance(_player.transform.position, transform.position) <= CharacterStats.StompRange && !IsHurting)
-                {
-                    StartCoroutine(_playerController.Hurt(CharacterStats.AttackStrength));
-                }
+                transform.position = Vector3.Lerp(startPos, endPos, time);
+                time = time + Time.deltaTime;
+                yield return null;
             }
-            else
+
+            transform.position = endPos;
+
+            startPos = transform.position;
+            endPos = new Vector3(transform.position.x, 0, transform.position.z);
+
+            time = 1;
+            transform.position = endPos;
+
+            _isAttackStarted = false;
+            _isAttackEnded = true;
+
+            Vector3 fxPos = transform.position + transform.forward * 2f;
+
+            stompFxObj = Instantiate(_stompFx);
+            stompFxObj.transform.position = new Vector3(fxPos.x, 0f, fxPos.z);
+
+            Collider[] beingsHit = Physics.OverlapSphere(transform.position, CharacterStats.StompRange, finalLayerMask);
+
+            for (int i = 0; i < beingsHit.Length; i++)
             {
-                _animator.SetTrigger("attack");
+                Being being = beingsHit[i].GetComponent<Being>();
 
-                yield return new WaitForSeconds(0.5f);
-
-                startPos = transform.position;
-                endPos = transform.position + new Vector3(0, 3, 0);
-
-                float time = 0;
-
-                _isAttackStarted = true;
-
-                yield return new WaitForSeconds(0.4f);
-
-                while (time < 0.5f)
+                if (being != null && being.transform != transform)
                 {
-                    transform.position = Vector3.Lerp(startPos, endPos, time);
-                    time = time + Time.deltaTime;
-                    yield return null;
-                }
-                transform.position = endPos;
-
-                startPos = transform.position;
-                endPos = new Vector3(transform.position.x, 0, transform.position.z);
-
-
-                _isAttackStarted = false;
-
-                time = 1;
-                transform.position = endPos;
-
-                _isAttackStarted = false;
-                _isAttackEnded = true;
-
-                Vector3 fxPos = transform.position + transform.forward * 2f;
-
-                stompFxObj = Instantiate(_stompFx);
-                stompFxObj.transform.position = new Vector3(fxPos.x, 0f, fxPos.z);
-
-                Collider[] _zombiesHit = Physics.OverlapSphere(transform.position, CharacterStats.StompRange, _enemyLayerMask);
-
-                for (int i = 0; i < _zombiesHit.Length; i++)
-                {
-                    ZombieBase zombieBase = _zombiesHit[i].GetComponent<ZombieBase>();
-
-                    if (zombieBase != null && zombieBase.transform != transform)
+                    if (Vector3.Distance(being.transform.position, transform.position) <= CharacterStats.StompRange && !IsHurting)
                     {
-                        if (Vector3.Distance(zombieBase.transform.position, transform.position) <= CharacterStats.StompRange && !IsHurting)
+                        float d = Vector3.Distance(being.transform.position, transform.position);
+                        if (d <= CharacterStats.StompRange)
                         {
-                            zombieBase.StartCoroutine(zombieBase.Hurt(CharacterStats.AttackStrength));
+                            being.StartCoroutine(being.Hurt((CharacterStats.StompRange - d) / CharacterStats.StompRange * CharacterStats.AttackStrength));
                         }
                     }
                 }
             }
+
 
             yield return new WaitForSeconds(CharacterStats.AttackRate / 2);
             IsAttacking = false;

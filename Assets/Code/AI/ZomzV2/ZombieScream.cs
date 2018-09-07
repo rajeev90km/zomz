@@ -105,7 +105,14 @@ public class ZombieScream : ZombieBase {
             if (IsBeingControlled)
                 _animator.SetTrigger("attack");
             else
-                transform.LookAt(_player.transform);
+            {
+                finalLayerMask = humanLayerMask | playerLayerMask;
+
+                Being closestBeing = GetClosestBeingToAttack(finalLayerMask, CharacterStats.AttackRange);
+
+                if(closestBeing)
+                    transform.LookAt(closestBeing.transform);
+            }
 
             IsAttacking = true;
 
@@ -183,22 +190,34 @@ public class ZombieScream : ZombieBase {
     // MAIN AI LOOP - GOES THROUGH LIST OF ACTIONS AND DECIDES STATE OF AI
     protected override void ExecuteAI()
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, _player.transform.position);
-        Vector3 playerDirection = new Vector3(_player.transform.position.x, playerSightHeight, _player.transform.position.z) - transform.position;
-        float playerAngle = Vector3.Angle(playerDirection, transform.forward);
-        bool unobstructedViewToPlayer = false;
+        finalLayerMask = humanLayerMask | playerLayerMask;
+        Being visibleBeing = GetBeingInLookRange(finalLayerMask, CharacterStats.LookRange);
+        float distanceToBeing = Mathf.Infinity;
+        Vector3 beingDirection = Vector3.zero;
+        float beingAngle = Mathf.Infinity;
+        bool unobstructedViewToBeing = false;
 
-        RaycastHit hit;
-
-        if (Physics.Raycast(transform.position + transform.up * _sightHeightMultiplier, playerDirection, out hit, CharacterStats.LookRange))
+        if (visibleBeing != null)
         {
-            if (hit.collider.CompareTag("Player"))
+            distanceToBeing = Vector3.Distance(transform.position, visibleBeing.transform.position);
+            beingDirection = new Vector3(visibleBeing.transform.position.x, playerSightHeight, visibleBeing.transform.position.z) - transform.position;
+            beingAngle = Vector3.Angle(beingDirection, transform.forward);
+
+            RaycastHit hit;
+
+            Debug.DrawRay(transform.position + transform.forward + transform.up * _sightHeightMultiplier, beingDirection, Color.green);
+
+            ownCollider.enabled = false;
+            if (Physics.Raycast(transform.position + transform.up * _sightHeightMultiplier, beingDirection, out hit, Mathf.Infinity))
             {
-                unobstructedViewToPlayer = true;
+                if (hit.collider.CompareTag("Player") || hit.collider.CompareTag("Human"))
+                {
+                    unobstructedViewToBeing = true;
+                }
             }
+            ownCollider.enabled = true;
         }
 
-        Debug.Log(unobstructedViewToPlayer);
 
         //Transition to CHASE mode if close enough to the player
         if (_isFleeing)
@@ -207,30 +226,27 @@ public class ZombieScream : ZombieBase {
             InitNewState("run");
             _previousState = _currentState;
         }
-        else if (_playerController.IsAlive && ((unobstructedViewToPlayer && (playerAngle < CharacterStats.FieldOfView * 0.5f) && (distanceToPlayer < CharacterStats.LookRange) && (distanceToPlayer > CharacterStats.AttackRange)) || (!IsAttacking && _previousState == ZombieStates.ATTACK && distanceToPlayer > CharacterStats.AttackRange)))
+        else if (visibleBeing == null)
         {
+            _currentState = ZombieStates.PATROL;
+            InitNewState("walk");
+            _previousState = _currentState;
+        }
+        //Transition to CHASE mode if close enough to the player
+        else if (visibleBeing != null && visibleBeing.IsAlive && ((unobstructedViewToBeing && !IsAttacking && distanceToBeing > CharacterStats.AttackRange && beingAngle < CharacterStats.FieldOfView * 0.5f)))
+        {
+            targetBeing = visibleBeing;
+            _animator.ResetTrigger("walk");
             _currentState = ZombieStates.CHASE;
             InitNewState("run", false);
             _previousState = _currentState;
         }
         //Transition to ATTACK if in attack range
-        else if (_playerController.IsAlive && (distanceToPlayer <= CharacterStats.AttackRange))
+        else if (visibleBeing != null && visibleBeing.IsAlive && (distanceToBeing <= CharacterStats.AttackRange))
         {
+            _animator.ResetTrigger("walk");
             _currentState = ZombieStates.ATTACK;
             InitNewState("attack", true);
-            _previousState = _currentState;
-        }
-        //Transition to PATROL if it doesn't meet any of the criteria
-        else if (!IsAttacking && distanceToPlayer > CharacterStats.LookRange && _previousState == ZombieStates.CHASE)
-        {
-            _currentState = ZombieStates.PATROL;
-            InitNewState("walk");
-            _previousState = _currentState;
-        }
-        else if (!_playerController.IsAlive)
-        {
-            _currentState = ZombieStates.PATROL;
-            InitNewState("walk");
             _previousState = _currentState;
         }
         else

@@ -106,6 +106,10 @@ public class CharacterControls : Being
     private const float CROUCH_COLLIDER_HEIGHT = 1.1f;
     private Vector3 CROUCH_COLLIDER_CENTER = new Vector3(0,0.55f,0);
 
+    int humanLayerMask;
+    int zombieLayerMask;
+    int finalLayerMask;
+
     void Start()
     {
         _zomzControls = GetComponent<ZomzController>();
@@ -115,6 +119,11 @@ public class CharacterControls : Being
         _ownCollider = GetComponent<CapsuleCollider>();
 
         pushableMask = (1 << LayerMask.NameToLayer("Pushable"));
+
+        //LayerMasks
+        humanLayerMask = (1 << LayerMask.NameToLayer("Human"));
+        zombieLayerMask = (1 << LayerMask.NameToLayer("Enemy"));
+        finalLayerMask = humanLayerMask | zombieLayerMask;
 
         ResetDirectionVectors();
     }
@@ -183,22 +192,21 @@ public class CharacterControls : Being
         _canAttack = false;
         _animator.SetTrigger(_attackAnimations[Random.Range(0, _attackAnimations.Length)]);
 
-        GameObject closestEnemy = GetClosestObject();
+        Being closestEnemy = GetClosestBeingToAttack(finalLayerMask,_characterStats.AttackRange);
 
         yield return new WaitForSeconds(_characterStats.AttackRate / 2);
 
         if (closestEnemy)
         {
             transform.LookAt(closestEnemy.transform);
-            ZombieBase zombieControls = closestEnemy.GetComponent<ZombieBase>();
-            if (zombieControls)
-                StartCoroutine(zombieControls.Hurt(_characterStats.AttackStrength + _attackModifier));
+            if (closestEnemy && closestEnemy.IsAlive)
+                StartCoroutine(closestEnemy.Hurt(_characterStats.AttackStrength + _attackModifier));
         }
 
         yield return new WaitForSeconds(_characterStats.AttackRate/2);
         _canAttack = true;
 
-        AkSoundEngine.PostEvent("abe_attack", gameObject);
+        //AkSoundEngine.PostEvent("abe_attack", gameObject);
 
 
         //Update Weapon Durability if Any
@@ -257,42 +265,6 @@ public class CharacterControls : Being
 
         return closestCollider.gameObject;
     }
-
-	public GameObject GetClosestObject()
-	{
-		Collider[] colliders = Physics.OverlapSphere (transform.position, _characterStats.AttackRange);
-		Collider closestCollider = null;
-
-		foreach (Collider hit in colliders) 
-		{
-            ZombieBase zombieControls = hit.gameObject.GetComponent<ZombieBase> ();
-
-			if((hit.GetComponent<Collider>() == transform.GetComponent<Collider>()) || !hit.transform.CompareTag("Enemy"))
-			{
-				continue;
-			}
-
-			if (zombieControls != null && !zombieControls.IsAlive)
-			{
-				continue;
-			}
-
-			if(!closestCollider)
-			{
-				closestCollider = hit;
-			}
-			//compares distances
-			if(Vector3.Distance(transform.position, hit.transform.position) <= Vector3.Distance(transform.position, closestCollider.transform.position))
-			{
-				closestCollider = hit;
-			}
-		}
-
-		if (!closestCollider)
-			return null;
-
-		return closestCollider.gameObject;
-	}
 
     IEnumerator Dive()
     {

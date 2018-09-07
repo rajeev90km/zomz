@@ -15,6 +15,9 @@ public enum HumanStates
     FLEE = 6,
 }
 
+//TODO: When screamer screams nearby and you can't see, turn around
+//TODO: Fleeing Behaviours
+//TODO: Frozen in Fear ( but when attacked, attack back )
 public class HumanBase : Being
 {
     [SerializeField]
@@ -154,7 +157,7 @@ public class HumanBase : Being
 
             yield return new WaitForSeconds(_characterStats.AttackRate / 2);
 
-            Being closestEnemy = GetClosestBeingToAttack(finalLayerMask);
+            Being closestEnemy = GetClosestBeingToAttack(finalLayerMask,_characterStats.AttackRange);
 
             if (closestEnemy)
             {
@@ -251,12 +254,16 @@ public class HumanBase : Being
     // MAIN AI LOOP - GOES THROUGH LIST OF ACTIONS AND DECIDES STATE OF AI
     protected virtual void ExecuteAI()
     {
-        Being visibleBeing = GetAVisibleBeingInRange(finalLayerMask);
+        Being visibleBeing = GetBeingInLookRange(finalLayerMask,_characterStats.LookRange);
         float distanceToBeing = Mathf.Infinity;
+        Vector3 beingDirection = Vector3.zero;
+        float beingAngle = Mathf.Infinity;
 
         if (visibleBeing != null)
         {
             distanceToBeing = Vector3.Distance(transform.position, visibleBeing.transform.position);
+            beingDirection = visibleBeing.transform.position - transform.position;
+            beingAngle = Vector3.Angle(beingDirection, transform.forward);
         }
 
         if(visibleBeing==null){
@@ -265,7 +272,7 @@ public class HumanBase : Being
             _previousState = _currentState;
         }
         //Transition to CHASE mode if close enough to the player
-        else if (visibleBeing!=null && visibleBeing.IsAlive && !_isAttacking && distanceToBeing > _characterStats.AttackRange)
+        else if (visibleBeing!=null && visibleBeing.IsAlive && !_isAttacking && distanceToBeing > _characterStats.AttackRange && beingAngle < _characterStats.FieldOfView * 0.5f)
         {
             targetBeing = visibleBeing;
             _animator.ResetTrigger("walk");
@@ -274,7 +281,7 @@ public class HumanBase : Being
             _previousState = _currentState;
         }
         //Transition to ATTACK if in attack range
-        else if (visibleBeing != null && (distanceToBeing <= _characterStats.AttackRange))
+        else if ((distanceToBeing <= _characterStats.AttackRange))
         {
             _animator.ResetTrigger("walk");
             _currentState = HumanStates.ATTACK;
@@ -354,8 +361,12 @@ public class HumanBase : Being
 
     protected virtual void DieState()
     {
-        _isAlive = false;
-        _animator.SetTrigger("die");
+        if (_isAlive)
+        {
+            _isAlive = false;
+            _animator.SetTrigger("die");
+            ownCollider.enabled = false;
+        }
     }
 
     protected virtual void FleeState()
@@ -377,73 +388,5 @@ public class HumanBase : Being
         _nextWayPoint = (_wayPoints.Count - _nextWayPoint) % _wayPoints.Count;
     }
 
-    public Being GetAVisibleBeingInRange(int pLayerMask)
-    {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, _characterStats.LookRange, pLayerMask);
-
-        foreach (Collider hit in colliders)
-        {
-            Being being = hit.gameObject.GetComponent<Being>();
-
-            if ((hit.GetComponent<Collider>() == transform.GetComponent<Collider>()))
-            {
-                continue;
-            }
-
-            if (being != null && !being.IsAlive)
-            {
-                continue;
-            }
-
-            float distanceToBeing = Vector3.Distance(transform.position, being.transform.position);
-
-            if(distanceToBeing <= _characterStats.LookRange)
-            {
-                Vector3 beingDirection = new Vector3(being.transform.position.x, playerSightHeight, being.transform.position.z) - transform.position;
-                float beingAngle = Vector3.Angle(beingDirection, transform.forward);
-
-                if (beingAngle < _characterStats.FieldOfView * 0.5f)
-                {
-                    return being;
-                }
-            }
-            
-        }
-
-        return null;
-    }
-
-    public Being GetClosestBeingToAttack(int pLayerMask)
-    {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, _characterStats.AttackRange, pLayerMask);
-        Being closestBeing = null;
-
-        foreach (Collider hit in colliders)
-        {
-            Being being = hit.gameObject.GetComponent<Being>();
-
-            if ((hit.GetComponent<Collider>() == transform.GetComponent<Collider>()))
-            {
-                continue;
-            }
-
-            if (being != null && !being.IsAlive)
-            {
-                continue;
-            }
-
-            if (!closestBeing)
-            {
-                closestBeing = being;
-            }
-            //compares distances
-            if (Vector3.Distance(transform.position, being.transform.position) <= Vector3.Distance(transform.position, closestBeing.transform.position))
-            {
-                closestBeing = being;
-            }
-        }
-
-        return closestBeing;
-    }
     #endregion
 }

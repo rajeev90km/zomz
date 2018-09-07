@@ -15,12 +15,12 @@ MonoBehaviour:
   WalkSpeed: 2.5
   RunSpeed: 4.5
   PushSpeed: 1
-  FieldOfView: 360
+  FieldOfView: 180
   LookRange: 10
   AttackRate: 1
   HurtRate: 1
   AttackStrength: 10
-  AttackRange: 1.5
+  AttackRange: 1.25
   ZomzRange: 10
   ZomzSpeed: 5
   AttackDamageToSelf: 0

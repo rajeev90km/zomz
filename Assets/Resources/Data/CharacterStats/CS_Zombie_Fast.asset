@@ -17,9 +17,9 @@ MonoBehaviour:
   PushSpeed: 1
   FieldOfView: 180
   LookRange: 10
-  AttackRate: 3
+  AttackRate: 2
   HurtRate: 1
-  AttackStrength: 20
+  AttackStrength: 30
   AttackRange: 2.5
   ZomzRange: 12
   ZomzSpeed: 5

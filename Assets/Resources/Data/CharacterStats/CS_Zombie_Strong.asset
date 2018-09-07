@@ -19,12 +19,12 @@ MonoBehaviour:
   LookRange: 10
   AttackRate: 1
   HurtRate: 0
-  AttackStrength: 20
-  AttackRange: 4
+  AttackStrength: 80
+  AttackRange: 1.5
   ZomzRange: 12
   ZomzSpeed: 5
   AttackDamageToSelf: 0
   DiveDistance: 3
   DiveTime: 1
-  StompRange: 7
-  ExplosionRange: 7
+  StompRange: 8
+  ExplosionRange: 10

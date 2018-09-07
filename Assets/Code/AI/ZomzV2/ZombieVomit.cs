@@ -22,9 +22,6 @@ public class ZombieVomit : ZombieBase
     protected override void Awake()
     {
         base.Awake();
-
-        _enemyLayerMask = (1 << LayerMask.NameToLayer("Enemy"));
-        _playerLayerMask = (1 << LayerMask.NameToLayer("Player"));
     }
 
     public override IEnumerator Hurt(float pDamage = 0.0f)
@@ -59,9 +56,13 @@ public class ZombieVomit : ZombieBase
 	public override IEnumerator Attack()
     {
         if (IsAlive && !IsAttacking)
-        { 
-            if(!IsBeingControlled)
-                transform.LookAt(_player.transform);
+        {
+            finalLayerMask = humanLayerMask | playerLayerMask | zombieLayerMask;
+
+            Being closestBeing = GetClosestBeingToAttack(finalLayerMask, CharacterStats.AttackRange);
+
+            if(closestBeing)
+                transform.LookAt(closestBeing.transform);
 
             if (IsBeingControlled)
                 _animator.SetTrigger("attack");

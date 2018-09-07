@@ -103,9 +103,10 @@ GameObject:
   - component: {fileID: 54939606504187832}
   - component: {fileID: 114003480740263738}
   - component: {fileID: 195086099156710464}
+  - component: {fileID: 114777222491362310}
   m_Layer: 14
   m_Name: Human1
-  m_TagString: Untagged
+  m_TagString: Human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2221,8 +2222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b530581f9e3ca4f299aea8544b6689df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isAlive: 1
-  _canAttackHumans: 0
+  _canAttackHumans: 1
   _initState: 0
   _characterStats: {fileID: 11400000, guid: 17ceff4dbbfda47239318969ba62262e, type: 2}
   _currentHealth: 0
@@ -2275,6 +2275,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114777222491362310
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1020818613075934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a26b350f2d1b42c38c70ea64afbbb47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _perParticleHurtAmount: 10
+  _hurtThreshold: 100
 --- !u!114 &114779850922661096
 MonoBehaviour:
   m_ObjectHideFlags: 1

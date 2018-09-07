@@ -47,7 +47,7 @@ public class ZombieBase : Being
         set { _isBeingControlled = value; }
     }
 
-    private bool _isChaseOverridden = false;
+    public bool _isChaseOverridden = false;
     public bool IsChaseOverridden{
         get { return _isChaseOverridden; }
         set { _isChaseOverridden = value; }
@@ -142,8 +142,19 @@ public class ZombieBase : Being
 
     ZomzController _zomzControl;
 
+    protected int humanLayerMask;
+    protected int playerLayerMask;
+    protected int zombieLayerMask;
+    protected int finalLayerMask;
+
+    protected Being targetBeing;
+
 	protected virtual void Awake () 
     {
+        humanLayerMask = (1 << LayerMask.NameToLayer("Human"));
+        playerLayerMask = (1 << LayerMask.NameToLayer("Player"));
+        zombieLayerMask = (1 << LayerMask.NameToLayer("Enemy"));
+
         //Cache Properties
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
@@ -212,7 +223,10 @@ public class ZombieBase : Being
                 _navMeshAgent.speed = _characterStats.RunSpeed;
 
                 if (!_isChaseOverridden)
-                    _navMeshAgent.destination = _player.transform.position;
+                {
+                    if (targetBeing != null)
+                        _navMeshAgent.destination = targetBeing.transform.position;
+                }
                 else
                     _navMeshAgent.destination = overriddenChasePosition;
                 _navMeshAgent.isStopped = false;
@@ -227,11 +241,12 @@ public class ZombieBase : Being
             _navMeshAgent.destination = transform.position;
             _navMeshAgent.isStopped = true;
 
-            if (_attackCoroutine != null)
-            {
-                StopCoroutine(_attackCoroutine);
-                _attackCoroutine = null;
-            }
+            //NOTE: check if any problem with attack
+            //if (_attackCoroutine != null)
+            //{
+            //    StopCoroutine(_attackCoroutine);
+            //    _attackCoroutine = null;
+            //}
 
             _attackCoroutine = StartCoroutine(Attack());
         }
@@ -247,76 +262,87 @@ public class ZombieBase : Being
 
     protected virtual void DieState()
     {
-        _isAlive = false;
-        _animator.SetTrigger("die");
-        _zomzControl.UnregisterZomzMode();
+        if (_isAlive)
+        {
+            _isAlive = false;
+            _animator.SetTrigger("die");
+            if (ownCollider)
+                ownCollider.enabled = false;
+            _zomzControl.UnregisterZomzMode();
+        }
     }
 	
     // MAIN AI LOOP - GOES THROUGH LIST OF ACTIONS AND DECIDES STATE OF AI
     protected virtual void ExecuteAI()
     {
+        finalLayerMask = humanLayerMask | playerLayerMask;
 
-        float distanceToPlayer = Vector3.Distance(transform.position, _player.transform.position);
-        float distanceToChasePosition = Vector3.Distance(transform.position, overriddenChasePosition);
-        Vector3 playerDirection = new Vector3(_player.transform.position.x,playerSightHeight,_player.transform.position.z) - transform.position;
-        float playerAngle = Vector3.Angle(playerDirection, transform.forward);
-        bool unobstructedViewToPlayer = false;
+        Being visibleBeing = GetBeingInLookRange(finalLayerMask, _characterStats.LookRange);
+        float distanceToBeing = Mathf.Infinity;
+        Vector3 beingDirection = Vector3.zero;
+        float beingAngle = Mathf.Infinity;
+        bool unobstructedViewToBeing = false;
 
-        RaycastHit hit;
-
-        Debug.DrawRay(transform.position + transform.forward + transform.up * _sightHeightMultiplier, playerDirection, Color.green);
-
-        ownCollider.enabled = false;
-        if (Physics.Raycast(transform.position + transform.up * _sightHeightMultiplier, playerDirection, out hit, Mathf.Infinity))
+        if (visibleBeing != null)
         {
-            //Debug.Log(hit.collider.gameObject.name);
-            if(hit.collider.CompareTag("Player")){
-                unobstructedViewToPlayer = true;
+            distanceToBeing = Vector3.Distance(transform.position, visibleBeing.transform.position);
+            beingDirection = new Vector3(visibleBeing.transform.position.x, playerSightHeight, visibleBeing.transform.position.z) - transform.position;
+            beingAngle = Vector3.Angle(beingDirection, transform.forward);
+
+            RaycastHit hit;
+
+            Debug.DrawRay(transform.position + transform.forward + transform.up * _sightHeightMultiplier, beingDirection, Color.green);
+
+            ownCollider.enabled = false;
+            if (Physics.Raycast(transform.position + transform.up * _sightHeightMultiplier, beingDirection, out hit, Mathf.Infinity))
+            {
+                if (hit.collider.CompareTag("Player") || hit.collider.CompareTag("Human"))
+                {
+                    unobstructedViewToBeing = true;
+                }
             }
+            ownCollider.enabled = true;
         }
-        ownCollider.enabled = true;
+
+        float distanceToChasePosition = Vector3.Distance(transform.position, overriddenChasePosition);
 
         //Reset Chase override if close to the patrol position
         if(_isChaseOverridden)
         {
-            if (distanceToChasePosition < 2f || (distanceToPlayer <= _characterStats.AttackRange) || ((distanceToPlayer < _characterStats.LookRange) && (distanceToPlayer > _characterStats.AttackRange)) || (!_isAttacking && _previousState == ZombieStates.ATTACK && distanceToPlayer > _characterStats.AttackRange))
+            if (distanceToChasePosition < 2f || (distanceToBeing <= _characterStats.AttackRange) || ((distanceToBeing < _characterStats.LookRange) && (distanceToBeing > _characterStats.AttackRange)))
                 _isChaseOverridden = false;
         }
 
-        //Transition to CHASE mode if close enough to the player
-        if (_playerController.IsAlive && ( _isChaseOverridden || (unobstructedViewToPlayer && (playerAngle<_characterStats.FieldOfView * 0.5f) && (distanceToPlayer < _characterStats.LookRange) && (distanceToPlayer > _characterStats.AttackRange)) || (!_isAttacking && _previousState == ZombieStates.ATTACK && distanceToPlayer > _characterStats.AttackRange)))
+
+        if (visibleBeing == null && !_isChaseOverridden)
         {
+            _currentState = ZombieStates.PATROL;
+            InitNewState("walk");
+            _previousState = _currentState;
+        }
+        //Transition to CHASE mode if close enough to the player
+        else if (_isChaseOverridden || ( visibleBeing != null && visibleBeing.IsAlive  && (unobstructedViewToBeing && !_isAttacking && distanceToBeing > _characterStats.AttackRange && beingAngle < _characterStats.FieldOfView * 0.5f)))
+        {
+            targetBeing = visibleBeing;
+            _animator.ResetTrigger("walk");
             _currentState = ZombieStates.CHASE;
-            InitNewState("run",false);  
+            InitNewState("run", false);
             _previousState = _currentState;
         }
         //Transition to ATTACK if in attack range
-        else if (_playerController.IsAlive && (distanceToPlayer <= _characterStats.AttackRange))
+        else if ((distanceToBeing <= _characterStats.AttackRange))
         {
+            _animator.ResetTrigger("walk");
             _currentState = ZombieStates.ATTACK;
-            InitNewState("attack",true);
+            InitNewState("attack", true);
             _previousState = _currentState;
-        }
-        //Transition to PATROL if it doesn't meet any of the criteria
-        else if(!_isAttacking && distanceToPlayer > _characterStats.LookRange && _previousState == ZombieStates.CHASE)
-        {
-            _currentState = ZombieStates.PATROL;
-            InitNewState("walk");
-            _previousState = _currentState;    
-        }
-        else if(!_playerController.IsAlive)
-        {
-            _currentState = ZombieStates.PATROL;
-            InitNewState("walk");
-            _previousState = _currentState;    
         }
         else
         {
             _currentState = ZombieStates.PATROL;
             InitNewState("walk");
-            _previousState = _currentState;    
+            _previousState = _currentState;
         }
-
 
         switch(_currentState)
         {
@@ -355,37 +381,34 @@ public class ZombieBase : Being
             _isAttacking = true;
 
             if (_isBeingControlled)
+            {
                 _animator.SetTrigger("attack");
+                finalLayerMask = humanLayerMask | zombieLayerMask | playerLayerMask;
+            }
+            else
+                finalLayerMask = humanLayerMask | playerLayerMask;
+
+            Being closestBeingToAttack = GetClosestBeingToAttack(finalLayerMask, _characterStats.AttackRange);
+
+            if(closestBeingToAttack)
+                transform.LookAt(closestBeingToAttack.transform);
 
             yield return new WaitForSeconds(_characterStats.AttackRate / 2);
 
-            if (!_isBeingControlled)
+            if (closestBeingToAttack)
             {
-                transform.LookAt(_player.transform);
-
-                if (Vector3.Distance(_player.transform.position, transform.position) <= _characterStats.AttackRange && !_isHurting)
+                if (Vector3.Distance(closestBeingToAttack.transform.position, transform.position) <= _characterStats.AttackRange && !_isHurting)
                 {
-                    StartCoroutine(_playerController.Hurt(_characterStats.AttackStrength));
-                }
-            }
-            else
-            {
-                if(ZomzMode.ManaConsumeType==ZomzManaConsumeType.ACTION_BASED)
-                    _zomzManaAttribute.CurrentValue -= _attackCost;
-
-                _animState = ZombieStates.ATTACK;
-
-                GameObject closestEnemy = GetClosestObject();
-
-                if (closestEnemy)
-                {
-                    transform.LookAt(closestEnemy.transform);    
-                    ZombieBase zombieControls = closestEnemy.GetComponent<ZombieBase>();
-
-                    if (zombieControls)
-                        StartCoroutine(zombieControls.Hurt(_characterStats.AttackStrength));
+                    StartCoroutine(closestBeingToAttack.Hurt(_characterStats.AttackStrength));
                 }
 
+                if (_isBeingControlled)
+                {
+                    if (ZomzMode.ManaConsumeType == ZomzManaConsumeType.ACTION_BASED)
+                        _zomzManaAttribute.CurrentValue -= _attackCost;
+
+                    _animState = ZombieStates.ATTACK;
+                }
             }
 
             yield return new WaitForSeconds(_characterStats.AttackRate / 2);
