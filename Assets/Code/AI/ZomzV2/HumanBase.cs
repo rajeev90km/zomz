@@ -99,12 +99,12 @@ public class HumanBase : Being
     protected HumanStates _animState;
     protected Collider ownCollider;
 
-    int humanLayerMask;
-    int playerLayerMask;
-    int zombieLayerMask;
-    int finalLayerMask;
+    protected int humanLayerMask;
+    protected int playerLayerMask;
+    protected int zombieLayerMask;
+    protected int finalLayerMask;
 
-    Being targetBeing;
+    protected Being targetBeing;
 
     protected virtual void Awake()
     {
@@ -155,14 +155,15 @@ public class HumanBase : Being
         {
             _isAttacking = true;
 
-            yield return new WaitForSeconds(_characterStats.AttackRate / 2);
+            Being closestEnemy = GetClosestBeingToAttack(finalLayerMask, _characterStats.AttackRange);
 
-            Being closestEnemy = GetClosestBeingToAttack(finalLayerMask,_characterStats.AttackRange);
+            if (closestEnemy)
+                transform.LookAt(closestEnemy.transform);
+
+            yield return new WaitForSeconds(_characterStats.AttackRate / 2);
 
             if (closestEnemy)
             {
-                transform.LookAt(closestEnemy.transform);
-
                 if (Vector3.Distance(closestEnemy.transform.position, transform.position) <= _characterStats.AttackRange && !_isHurting)
                 {
                     closestEnemy.StartCoroutine(closestEnemy.Hurt(_characterStats.AttackStrength));
@@ -181,7 +182,7 @@ public class HumanBase : Being
                 else
                     _currentHealth = 0;
 
-                if (_currentHealth <= 0)
+                if (_currentHealth <= 0.1f)
                     DieState();
             }
         }
@@ -223,7 +224,7 @@ public class HumanBase : Being
                 _isHurting = false;
                 _isAttacking = false;
 
-                if (_currentHealth <= 0)
+                if (_currentHealth <= 0.1f)
                 {
                     DieState();
                 }
@@ -254,25 +255,46 @@ public class HumanBase : Being
     // MAIN AI LOOP - GOES THROUGH LIST OF ACTIONS AND DECIDES STATE OF AI
     protected virtual void ExecuteAI()
     {
-        Being visibleBeing = GetBeingInLookRange(finalLayerMask,_characterStats.LookRange);
+        Being visibleBeing = GetBeingInLookRange(finalLayerMask, _characterStats.LookRange);
         float distanceToBeing = Mathf.Infinity;
         Vector3 beingDirection = Vector3.zero;
         float beingAngle = Mathf.Infinity;
+        bool unobstructedViewToBeing = false;
 
         if (visibleBeing != null)
         {
             distanceToBeing = Vector3.Distance(transform.position, visibleBeing.transform.position);
             beingDirection = visibleBeing.transform.position - transform.position;
             beingAngle = Vector3.Angle(beingDirection, transform.forward);
+
+            if (visibleBeing.CompareTag("Player"))
+            {
+                RaycastHit hit;
+
+                Debug.DrawRay(transform.position + transform.forward + transform.up * _sightHeightMultiplier, beingDirection, Color.green);
+
+                ownCollider.enabled = false;
+                if (Physics.Raycast(transform.position + transform.up * _sightHeightMultiplier, beingDirection, out hit, Mathf.Infinity))
+                {
+                    if (hit.collider.CompareTag("Player") || hit.collider.CompareTag("Human"))
+                    {
+                        unobstructedViewToBeing = true;
+                    }
+                }
+                ownCollider.enabled = true;
+            }
+            else
+                unobstructedViewToBeing = true;
         }
 
-        if(visibleBeing==null){
+        if (visibleBeing == null)
+        {
             _currentState = HumanStates.WALK;
             InitNewState("walk");
             _previousState = _currentState;
         }
         //Transition to CHASE mode if close enough to the player
-        else if (visibleBeing!=null && visibleBeing.IsAlive && !_isAttacking && distanceToBeing > _characterStats.AttackRange && beingAngle < _characterStats.FieldOfView * 0.5f)
+        else if (visibleBeing != null && visibleBeing.IsAlive && unobstructedViewToBeing && !_isAttacking && distanceToBeing > _characterStats.AttackRange && beingAngle < _characterStats.FieldOfView * 0.5f)
         {
             targetBeing = visibleBeing;
             _animator.ResetTrigger("walk");
@@ -341,7 +363,7 @@ public class HumanBase : Being
             {
                 _navMeshAgent.speed = _characterStats.RunSpeed;
 
-                if(targetBeing!=null)
+                if (targetBeing != null)
                     _navMeshAgent.destination = targetBeing.transform.position;
                 _navMeshAgent.isStopped = false;
             }
@@ -371,7 +393,7 @@ public class HumanBase : Being
 
     protected virtual void FleeState()
     {
-        
+
     }
     #endregion
 
@@ -387,6 +409,26 @@ public class HumanBase : Being
     {
         _nextWayPoint = (_wayPoints.Count - _nextWayPoint) % _wayPoints.Count;
     }
+    #endregion
 
+
+
+    //**********************************************************************************************************************************************************
+    #region ZomzMode
+    public virtual void StartZomzMode()
+    {
+        if (_isAlive)
+        {
+            _animator.SetTrigger("idle");
+            _previousState = HumanStates.NONE;
+            _navMeshAgent.destination = transform.position;
+            _navMeshAgent.isStopped = true;
+        }
+    }
+
+    public virtual void EndZomzMode()
+    {
+        
+    }
     #endregion
 }

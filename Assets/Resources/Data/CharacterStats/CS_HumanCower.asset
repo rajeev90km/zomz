@@ -9,22 +9,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 010f5063cff6044a5bc592ccdb7030cc, type: 3}
-  m_Name: CS_Player
+  m_Name: CS_HumanCower
   m_EditorClassIdentifier: 
   Health: 100
-  WalkSpeed: 2.1
-  RunSpeed: 4
+  WalkSpeed: 2.5
+  RunSpeed: 4.5
   PushSpeed: 1
-  FieldOfView: 90
-  LookRange: 4
-  AttackRate: 0.75
-  HurtRate: 0.7
-  AttackStrength: 34
-  AttackRange: 1.2
+  FieldOfView: 180
+  LookRange: 8.5
+  AttackRate: 1
+  HurtRate: 1
+  AttackStrength: 10
+  AttackRange: 1.25
   ZomzRange: 10
   ZomzSpeed: 5
   AttackDamageToSelf: 0
-  DiveDistance: 4
-  DiveTime: 0.9
+  DiveDistance: 3
+  DiveTime: 1
   StompRange: 5
   ExplosionRange: 7

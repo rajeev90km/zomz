@@ -422,7 +422,7 @@ public class ZombieBase : Being
                 else
                     _currentHealth = 0;
 
-                if (_currentHealth <= 0)
+                if (_currentHealth <= 0.1f)
                     DieState();
             }
         }
@@ -465,7 +465,7 @@ public class ZombieBase : Being
                 _isHurting = false;
                 _isAttacking = false;
                 
-                if (_currentHealth <= 0)
+                if (_currentHealth <= 0.1)
                 {
                     DieState();
                 }

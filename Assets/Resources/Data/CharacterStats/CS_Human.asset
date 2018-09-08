@@ -18,7 +18,7 @@ MonoBehaviour:
   FieldOfView: 180
   LookRange: 10
   AttackRate: 1
-  HurtRate: 1
+  HurtRate: 0.5
   AttackStrength: 10
   AttackRange: 1.25
   ZomzRange: 10
