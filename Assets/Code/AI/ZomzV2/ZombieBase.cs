@@ -364,11 +364,11 @@ public class ZombieBase : Being
 
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position, CharacterStats.LookRange);
+        //Gizmos.color = Color.white;
+        //Gizmos.DrawWireSphere(transform.position, CharacterStats.LookRange);
 
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, CharacterStats.AttackRange);
+        //Gizmos.color = Color.yellow;
+        //Gizmos.DrawWireSphere(transform.position, CharacterStats.AttackRange);
     }
 
     //*********************************************************************************************************************************************************
