@@ -206,7 +206,7 @@ public class CharacterControls : Being
         yield return new WaitForSeconds(_characterStats.AttackRate/2);
         _canAttack = true;
 
-        //AkSoundEngine.PostEvent("abe_attack", gameObject);
+        AkSoundEngine.PostEvent("abe_attack", gameObject);
 
 
         //Update Weapon Durability if Any

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{8A2C5F6C-55E2-43EF-8629-D879D90BD0FE}" SchemaVersion="89">
+	<AudioObjects>
+		<WorkUnit Name="Default Work Unit" ID="{8A2C5F6C-55E2-43EF-8629-D879D90BD0FE}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="hit" ID="{556B1488-643B-4306-9758-379F91CAE857}" ShortID="710663119">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{771FF8B4-A38B-481E-A712-C582655E0E68}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{BFE70C38-2C50-44DF-B2C4-AE47D14795F6}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="hit" ID="{7FD5A43F-0528-4896-81EF-AA1A91B0A6C2}" ShortID="687094787">
+							<Language>SFX</Language>
+							<AudioFile>hit.wav</AudioFile>
+						</AudioFileSource>
+					</ChildrenList>
+					<ActiveSourceList>
+						<ActiveSource Name="hit" ID="{7FD5A43F-0528-4896-81EF-AA1A91B0A6C2}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

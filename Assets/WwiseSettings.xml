@@ -9,5 +9,5 @@
   <SoundbankPath>Audio/GeneratedSoundBanks</SoundbankPath>
   <WwiseInstallationPathMac>/Applications/Audiokinetic/Wwise 2018.1.1.6727/Wwise.app</WwiseInstallationPathMac>
   <WwiseInstallationPathWindows />
-  <WwiseProjectPath>../../WwiseProjects/Zomz/Zomz.wproj</WwiseProjectPath>
+  <WwiseProjectPath>../Wwise/Zomz/Zomz.wproj</WwiseProjectPath>
 </WwiseSettings>

@@ -1,0 +1,6 @@
+Event	ID	Name			Wwise Object Path	Notes
+	622635788	abe_attack			\Default Work Unit\abe_attack	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	687094787	hit	Y:\Documents\WwiseProjects\Zomz\.cache\Windows\SFX\hit_56D34C19.wem		\Actor-Mixer Hierarchy\Default Work Unit\hit		36928
+

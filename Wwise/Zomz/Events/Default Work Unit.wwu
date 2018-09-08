@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{89920AC3-0140-4C69-9ADA-39B1A9E930EC}" SchemaVersion="89">
+	<Events>
+		<WorkUnit Name="Default Work Unit" ID="{89920AC3-0140-4C69-9ADA-39B1A9E930EC}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="abe_attack" ID="{269AC1E4-C40F-4FDD-A9C2-C74778CBAE3A}">
+					<ChildrenList>
+						<Action Name="" ID="{AD556344-599E-4291-AFC0-5E35DA2AC743}" ShortID="168506782">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="1"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="hit" ID="{556B1488-643B-4306-9758-379F91CAE857}" WorkUnitID="{8A2C5F6C-55E2-43EF-8629-D879D90BD0FE}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

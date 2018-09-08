@@ -226,8 +226,6 @@ MonoBehaviour:
       minDuration: 0
   ExpandedItems:
   - /Zomz
-  - /Zomz/Banks
-  - /Zomz/Banks/Default Work Unit
   RtpcWwu:
   - Guid: '{4C82564E-69D3-45F5-BAD3-18653E3676D5}'
     m_lastTimePart2: -1999236399

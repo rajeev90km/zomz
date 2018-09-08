@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SoundBanksInfo Platform="Windows" BasePlatform="Windows" SchemaVersion="11" SoundbankVersion="132">
+	<RootPaths>
+		<ProjectRoot>/Users/rajeevmukundan/Library/Application Support/Wwise2018/Bottles/wwise/dosdevices/y:/Documents/Zomz/Wwise/Zomz/</ProjectRoot>
+		<SourceFilesRoot>/Users/rajeevmukundan/Library/Application Support/Wwise2018/Bottles/wwise/dosdevices/y:/Documents/Zomz/Wwise/Zomz/.cache/Windows/</SourceFilesRoot>
+		<SoundBanksRoot>/Users/rajeevmukundan/Library/Application Support/Wwise2018/Bottles/wwise/dosdevices/y:/Documents/Zomz/Wwise/Zomz/GeneratedSoundBanks/Windows/</SoundBanksRoot>
+		<ExternalSourcesInputFile></ExternalSourcesInputFile>
+		<ExternalSourcesOutputRoot>/Users/rajeevmukundan/Library/Application Support/Wwise2018/Bottles/wwise/dosdevices/y:/Documents/Zomz/Wwise/Zomz/GeneratedSoundBanks/Windows</ExternalSourcesOutputRoot>
+	</RootPaths>
+	<DialogueEvents/>
+	<StreamedFiles/>
+	<MediaFilesNotInAnyBank/>
+	<SoundBanks>
+		<SoundBank Id="1355168291" Language="SFX">
+			<ObjectPath>Init</ObjectPath>
+			<ShortName>Init</ShortName>
+			<Path>Init.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="3161908922" Language="SFX">
+			<ObjectPath>\SoundBanks\Default Work Unit\main</ObjectPath>
+			<ShortName>main</ShortName>
+			<Path>main.bnk</Path>
+			<IncludedEvents>
+				<Event Id="622635788" Name="abe_attack" ObjectPath="\Events\Default Work Unit\abe_attack"/>
+			</IncludedEvents>
+			<IncludedMemoryFiles>
+				<File Id="687094787" Language="SFX">
+					<ShortName>hit.wav</ShortName>
+					<Path>SFX/hit_56D34C19.wem</Path>
+				</File>
+			</IncludedMemoryFiles>
+		</SoundBank>
+	</SoundBanks>
+</SoundBanksInfo>
