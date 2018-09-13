@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 010f5063cff6044a5bc592ccdb7030cc, type: 3}
+  m_Name: CS_Jalali
+  m_EditorClassIdentifier: 
+  Health: 300
+  WalkSpeed: 2.1
+  RunSpeed: 4
+  PushSpeed: 1
+  FieldOfView: 90
+  LookRange: 4
+  AttackRate: 0.75
+  HurtRate: 0.7
+  AttackStrength: 34
+  AttackRange: 1.2
+  ZomzRange: 10
+  ZomzSpeed: 5
+  AttackDamageToSelf: 0
+  DiveDistance: 4
+  DiveTime: 0.9
+  StompRange: 5
+  ExplosionRange: 7

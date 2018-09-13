@@ -1,10 +1,11 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
-Shader "Zomz/Always Visible Standard"
+Shader "Zomz/Standard"
 {
     Properties
     {
         _Color("Color", Color) = (1,1,1,1)
+        _Color2("Color", Color) = (1,1,1,1)
         _MainTex("Albedo", 2D) = "white" {}
 
         _Cutoff("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
@@ -37,8 +38,9 @@ Shader "Zomz/Always Visible Standard"
         _DetailNormalMapScale("Scale", Float) = 1.0
         _DetailNormalMap("Normal Map", 2D) = "bump" {}
 
-        [Enum(UV0,0,UV1,1)] _UVSec ("UV Set for secondary textures", Float) = 0
+        //_EdgeColor("XRay Edge Color", Color) = (0,0,0,0)
 
+        [Enum(UV0,0,UV1,1)] _UVSec ("UV Set for secondary textures", Float) = 0
 
         // Blending state
         [HideInInspector] _Mode ("__mode", Float) = 0.0
@@ -53,7 +55,7 @@ Shader "Zomz/Always Visible Standard"
 
     SubShader
     {
-        Tags { "RenderType"="Opaque" "PerformanceChecks"="False" "Queue"="Geometry-2"}
+        Tags { "RenderType"="Opaque" "PerformanceChecks"="False" "XRay" = "ColoredOutline" "Queue" = "Geometry-1" }
         LOD 300
 
 
@@ -222,7 +224,7 @@ Shader "Zomz/Always Visible Standard"
 
     SubShader
     {
-        Tags { "RenderType"="Opaque" "PerformanceChecks"="False" }
+        Tags { "RenderType"="Opaque" "PerformanceChecks"="False" "XRay" = "ColoredOutline" "Queue" = "Geometry-1" }
         LOD 150
 
         // ------------------------------------------------------------------

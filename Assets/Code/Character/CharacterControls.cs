@@ -382,7 +382,7 @@ public class CharacterControls : Being
                 //Debug.Log(_isDiving);
 
                 //DIVE
-                if(Input.GetKeyDown(KeyCode.R) && !_zomzControls.ZomzMode.CurrentValue && !_isDiving && !_zomzControls.ZomzMode.CurrentSelectedZombie)
+                if(Input.GetKeyDown(KeyCode.R) && !_zomzControls.ZomzMode.CurrentValue && !_isDiving && !_isHurting && !_zomzControls.ZomzMode.CurrentSelectedZombie)
                 {
                     _isDiving = true;
                     StartCoroutine(Dive());
@@ -434,11 +434,13 @@ public class CharacterControls : Being
 
                     Vector3 heading = Vector3.Normalize(rightMovement + upMovement);
 
-                    if (_zomzControls.ZomzMode.CurrentValue || _zomzControls.ZomzMode.CurrentSelectedZombie!=null)
+                    if (_zomzControls.ZomzMode.CurrentValue || _zomzControls.ZomzMode.CurrentSelectedZombie!=null || _isHurting)
                         heading = Vector3.zero;
 
                     if (heading != Vector3.zero)
                     {
+                        _animator.ResetTrigger("hurt1");
+
                         EndCrouch();
 
                         if (!_canPush)
