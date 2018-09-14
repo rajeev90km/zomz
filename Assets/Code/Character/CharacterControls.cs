@@ -70,7 +70,12 @@ public class CharacterControls : Being
     private ZomzController _zomzControls;
 
     private bool _isAttacking = false;
+
     private bool _isHurting = false;
+    public bool IsHurting 
+    {
+        get { return _isHurting; }    
+    }
     private bool _canAttack = true;
     private bool _isDiving = false;
 

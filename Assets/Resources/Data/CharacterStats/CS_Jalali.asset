@@ -21,6 +21,7 @@ MonoBehaviour:
   HurtRate: 0.7
   AttackStrength: 34
   AttackRange: 1.2
+  ShootRange: 27
   ZomzRange: 10
   ZomzSpeed: 5
   AttackDamageToSelf: 0

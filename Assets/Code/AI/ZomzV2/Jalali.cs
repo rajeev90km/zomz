@@ -123,12 +123,18 @@ public class Jalali : Being
     [SerializeField]
     private GameObject _gunShotBulletImpactFx;
 
+    [SerializeField]
+    private GameObject _muzzleFlash;
+
     [Header("Gun Transforms")]
     [SerializeField]
     private GunTransforms _normalTransform;
 
     [SerializeField]
     private GunTransforms _shootTransform;
+
+    [SerializeField]
+    private GunTransforms _runTransform;
 
     [SerializeField]
     protected JalaliStates _currentState;
@@ -148,6 +154,8 @@ public class Jalali : Being
 
     public ZomzData ZomzMode;
 
+    private LineRenderer _shotLine;
+
 
     private Coroutine _playerHurtCoroutine;
     protected Coroutine _attackCoroutine;
@@ -165,7 +173,13 @@ public class Jalali : Being
 
     protected Being targetBeing;
 
+    bool allVantagePointsRayCast = false;
+
     bool unobstructedViewToBeing = false;
+
+    int vantagePointIndex = -1;
+
+    List<Transform> jalaliVantagePoints = new List<Transform>();
 
     protected virtual void Awake()
     {
@@ -173,11 +187,12 @@ public class Jalali : Being
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
         ownCollider = GetComponent<Collider>();
+        _shotLine = GetComponent<LineRenderer>();
 
         //Set initial State
-        _initState = JalaliStates.RUN;
+        _initState = JalaliStates.NONE;
         _currentState = _initState;
-        InitNewState("run");
+        InitNewState("idle");
         _previousState = _currentState;
 
         //Cache Player Controls
@@ -191,6 +206,16 @@ public class Jalali : Being
         playerLayerMask = (1 << LayerMask.NameToLayer("Player"));
 
         finalLayerMask = playerLayerMask;
+
+        GameObject JalaliWayPoints = GameObject.FindWithTag("JalaliVantagePoints");
+
+        if(JalaliWayPoints!=null)
+        {
+            for (int i = 0; i < JalaliWayPoints.transform.childCount;i++)
+            {
+                jalaliVantagePoints.Add(JalaliWayPoints.transform.GetChild(i));   
+            }
+        }
     }
 
     public override IEnumerator Attack()
@@ -208,30 +233,63 @@ public class Jalali : Being
 
             float t = 0;
 
-            while(t < _shootTime)
+            while (t < _shootTime)
             {
                 float distanceFromPlayer = _shootCurve.Evaluate((Mathf.Lerp(0, 1, t / _shootTime))) * _aimStartFactor;
 
                 Vector3 directionToPlayer = transform.position - _aimFollowPosition;
+                Vector3 beingDirection = new Vector3(_player.transform.position.x, playerSightHeight, _player.transform.position.z) - transform.position;
+
 
                 transform.LookAt(new Vector3(_aimFollowPosition.x, transform.position.y, _aimFollowPosition.z));
 
-                if (_gunShotBulletImpactFx)
+                //Check for each shot if can see player
+                RaycastHit hit;
+                bool canSeePlayer = false;
+
+                Debug.DrawRay(transform.position + transform.forward + transform.up * _sightHeightMultiplier, beingDirection, Color.green);
+
+                ownCollider.enabled = false;
+                if (Physics.Raycast(transform.position + transform.up * _sightHeightMultiplier, beingDirection, out hit, Mathf.Infinity))
                 {
-                    GameObject bulletFX = Instantiate(_gunShotBulletImpactFx);
-                    bulletFX.transform.position = _aimFollowPosition + (directionToPlayer.normalized * distanceFromPlayer);
-
-                    if(Vector3.Distance(bulletFX.transform.position, _player.transform.position)<0.1f){
-
-                        if(_playerHurtCoroutine!=null){
-                            StopCoroutine(_playerHurtCoroutine);
-                            _playerHurtCoroutine = null;
-                        }
-                        _playerHurtCoroutine = _playerController.StartCoroutine(_playerController.Hurt(1f));
+                    if (hit.collider.CompareTag("Player"))
+                    {
+                        canSeePlayer = true;
                     }
                 }
+                ownCollider.enabled = true;
+                //Check for each shot if can see player
 
-                yield return new WaitForSeconds(_timeBetweenShots);
+                if (canSeePlayer) 
+                { 
+                    if (_gunShotBulletImpactFx)
+                    {
+                        _muzzleFlash.SetActive(true);
+
+                        GameObject bulletFX = Instantiate(_gunShotBulletImpactFx);
+                        bulletFX.transform.position = _aimFollowPosition + (directionToPlayer.normalized * distanceFromPlayer);
+
+                        _shotLine.SetPosition(0, _muzzleFlash.transform.position);
+                        _shotLine.SetPosition(1, bulletFX.transform.position);
+
+                        if (Vector3.Distance(bulletFX.transform.position, _player.transform.position) < 0.1f)
+                        {
+
+                            if(!_playerController.IsHurting)
+                                _playerController.StartCoroutine(_playerController.Hurt(1f));
+                        }
+                    }
+
+                    _shotLine.enabled = true;
+                    yield return new WaitForSeconds(_timeBetweenShots/2);
+                    _shotLine.enabled = false;
+                    yield return new WaitForSeconds(_timeBetweenShots / 2);
+                }
+                else
+                {
+                    _muzzleFlash.SetActive(false);
+                    _shotLine.enabled = false;
+                }
                 t += _timeBetweenShots;
             }
 
@@ -249,6 +307,8 @@ public class Jalali : Being
     {
         if(_isAlive && !_isShooting)
         {
+            _muzzleFlash.SetActive(false);
+
             _currentState = JalaliStates.RELOAD;
             _previousState = JalaliStates.RELOAD;
                 
@@ -259,13 +319,55 @@ public class Jalali : Being
             yield return new WaitForSeconds(_reloadTime);
 
             _isReloading = false;
+
+            allVantagePointsRayCast = false;
         }
 
         yield return null;
     }
 
-    public override IEnumerator Hurt(float pDamage = 0)
+    public override IEnumerator Hurt(float pDamage = 0.0f)
     {
+        if (_isAlive)
+        {
+            if (pDamage > 0)
+            {
+                if (_attackCoroutine != null)
+                {
+                    StopCoroutine(_attackCoroutine);
+                    _attackCoroutine = null;
+                }
+
+                _previousState = JalaliStates.HURT;
+                _currentState = JalaliStates.HURT;
+
+                _isHurting = true;
+                _animator.SetTrigger("hurt");
+                _navMeshAgent.isStopped = true;
+
+                if (_currentHealth - pDamage > 0)
+                    _currentHealth -= pDamage;
+                else
+                    _currentHealth = 0;
+
+                if (_healthBar)
+                    _healthBar.fillAmount = _currentHealth / CharacterStats.Health;
+
+                if (_hurtFx != null)
+                    Instantiate(_hurtFx, new Vector3(transform.position.x, 1, transform.position.z), Quaternion.identity);
+
+                yield return new WaitForSeconds(_characterStats.HurtRate);
+
+                _isHurting = false;
+                _isAttacking = false;
+
+                if (_currentHealth <= 0.1)
+                {
+                    DieState();
+                }
+            }
+        }
+
         yield return null;
     }
 
@@ -284,6 +386,11 @@ public class Jalali : Being
         }
     }
 
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, CharacterStats.ShootRange);
+    }
 
     //*********************************************************************************************************************************************************
     #region AIStateBehaviors
@@ -294,7 +401,6 @@ public class Jalali : Being
         float distanceToBeing = Vector3.Distance(transform.position, _player.transform.position);
         Vector3 beingDirection = new Vector3(_player.transform.position.x, playerSightHeight, _player.transform.position.z) - transform.position;
         float beingAngle = Vector3.Angle(beingDirection, transform.forward);
-        unobstructedViewToBeing = false;
 
         RaycastHit hit;
 
@@ -303,23 +409,93 @@ public class Jalali : Being
         ownCollider.enabled = false;
         if (Physics.Raycast(transform.position + transform.up * _sightHeightMultiplier, beingDirection, out hit, Mathf.Infinity))
         {
-            Debug.Log(hit.collider.name);
+            //Debug.Log(hit.collider.name);
 
             if (hit.collider.CompareTag("Player"))
             {
                 unobstructedViewToBeing = true;
             }
+            else
+                unobstructedViewToBeing = false;
         }
         ownCollider.enabled = true;
 
+        //Debug.Log(unobstructedViewToBeing);
+
         Debug.DrawRay(transform.position + transform.forward + transform.up * _sightHeightMultiplier, beingDirection, Color.green);
 
-        if(unobstructedViewToBeing)
+        if(unobstructedViewToBeing && distanceToBeing <= _characterStats.ShootRange && _playerController.IsAlive)
         {
+            allVantagePointsRayCast = false;
+            vantagePointIndex = -1;
             _animator.ResetTrigger("run");
             _currentState = JalaliStates.SHOOT;
             InitNewState("shoot", false);
             _previousState = _currentState;
+        }
+        else if(hit.collider.GetComponent<Breakable>() && distanceToBeing <= _characterStats.ShootRange && _playerController.IsAlive)
+        {
+            allVantagePointsRayCast = false;
+            vantagePointIndex = -1;
+            Debug.Log("I can break it. Just blow it up!!!");
+        }
+        else if(!allVantagePointsRayCast && _playerController.IsAlive){
+                
+                _muzzleFlash.SetActive(false);
+
+                for (int i = 0; i < jalaliVantagePoints.Count; i++)
+                {
+                    RaycastHit vantageHit;
+
+                    Vector3 vantagePos = jalaliVantagePoints[i].position + transform.up * _sightHeightMultiplier;
+                    Vector3 vantageDirection = new Vector3(_player.transform.position.x, 0.5f, _player.transform.position.z) - vantagePos;
+
+                    //Debug.DrawRay(vantagePos, vantageDirection, Color.green, 15f);
+
+                    if (Physics.Raycast(vantagePos, vantageDirection, out vantageHit, Mathf.Infinity))
+                    {
+                        if (vantageHit.collider.CompareTag("Player"))
+                        {
+                            if (vantagePointIndex == -1)
+                                vantagePointIndex = i;
+                            else
+                            {
+                                float prevDist = Vector3.Distance(jalaliVantagePoints[vantagePointIndex].position, _player.transform.position);
+                                float curDist = Vector3.Distance(jalaliVantagePoints[i].position, _player.transform.position);
+
+                                vantagePointIndex = curDist < prevDist ? i : vantagePointIndex;
+                            }
+                        }
+                    }
+
+                }
+
+                allVantagePointsRayCast = true;
+
+                if (vantagePointIndex > -1)
+                {
+                    _currentState = JalaliStates.RUN;
+                    InitNewState("run", false);
+                    _previousState = _currentState;
+                }
+        }
+        else
+        {
+            if (_navMeshAgent.isActiveAndEnabled)
+            {
+                if (_navMeshAgent.remainingDistance <= 1f)
+                {
+                    _muzzleFlash.SetActive(false);
+
+                    //_gun.transform.localPosition = _normalTransform.Position;
+                    //_gun.transform.localRotation = Quaternion.Euler(_normalTransform.Rotation);
+
+                    _currentState = JalaliStates.NONE;
+                    InitNewState("idle", false);
+                    _previousState = _currentState;
+                    allVantagePointsRayCast = false;
+                }
+            }
         }
         //else if(!unobstructedViewToBeing && hit.collider.GetComponent<Breakable>()!=null)
         //{
@@ -351,6 +527,7 @@ public class Jalali : Being
         {
             _isAlive = false;
             _animator.SetTrigger("die");
+
             if (ownCollider)
                 ownCollider.enabled = false;
 
@@ -369,11 +546,11 @@ public class Jalali : Being
             {
                 _navMeshAgent.speed = _characterStats.RunSpeed;
 
-                _gun.transform.localPosition = _normalTransform.Position;
-                _gun.transform.localRotation = Quaternion.Euler(_normalTransform.Rotation);
+                _gun.transform.localPosition = _runTransform.Position;
+                _gun.transform.localRotation = Quaternion.Euler(_runTransform.Rotation);
 
-                if(_player!=null)
-                    _navMeshAgent.destination = _player.transform.position;
+                if(vantagePointIndex>-1)
+                    _navMeshAgent.destination = jalaliVantagePoints[vantagePointIndex].position;
                 _navMeshAgent.isStopped = false;
             }
         }
