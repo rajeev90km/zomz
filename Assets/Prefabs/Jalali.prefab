@@ -86,6 +86,10 @@ GameObject:
   - component: {fileID: 195743908459020084}
   - component: {fileID: 120503217963157992}
   - component: {fileID: 114571776839726882}
+  - component: {fileID: 114593313490471490}
+  - component: {fileID: 114375646606635072}
+  - component: {fileID: 114727603228194398}
+  - component: {fileID: 114124376675417436}
   m_Layer: 12
   m_Name: Jalali
   m_TagString: Enemy
@@ -1650,7 +1654,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1083744624958058}
   m_LocalRotation: {x: -0, y: 0.9988253, z: -0, w: -0.04845684}
-  m_LocalPosition: {x: 14.6, y: 2.56, z: -8.71}
+  m_LocalPosition: {x: 12.7, y: 2.4, z: -9.2}
   m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
   m_Children:
   - {fileID: 4304659580772456}
@@ -2602,6 +2606,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rotationOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &114124376675417436
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1083744624958058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 0ddb850c332c84204a55d4353e7a25f1, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114571776839726882}
+        m_MethodName: OutOfZomzMode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114261111087490978
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2645,6 +2677,34 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114375646606635072
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1083744624958058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: e0a1dd3e65881485caf9d33ddf46842f, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114571776839726882}
+        m_MethodName: OutOfZomzMode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114571776839726882
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2656,7 +2716,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c219a5e5f858d4685b8d1bd0fa8af308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentPhase: 0
+  _currentPhase: 2
   _initState: 0
   _characterStats: {fileID: 11400000, guid: 28a0e163381e54db39e86d1f06dc4121, type: 2}
   _currentHealth: 0
@@ -2690,6 +2750,7 @@ MonoBehaviour:
   _aimStartFactor: 5
   _aimFollowSpeed: 17
   _reloadTime: 3.5
+  _damagePerShot: 0.5
   _gunShotBulletImpactFx: {fileID: 100006, guid: 94a130fb17f1cae4388a8fe1d8bd3055,
     type: 2}
   _muzzleFlash: {fileID: 1343380017644154}
@@ -2708,6 +2769,34 @@ MonoBehaviour:
   _hurtFx: {fileID: 100000, guid: bc98890f6028f444eaa7789bde5e2eeb, type: 2}
   _healthBar: {fileID: 114273212744910228}
   ZomzMode: {fileID: 11400000, guid: 171a4897d216445ffb1428aab63fe011, type: 2}
+--- !u!114 &114593313490471490
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1083744624958058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 955a51db9b35444b795c34aefcce8a74, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114571776839726882}
+        m_MethodName: InZomzMode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114713992964207880
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2720,6 +2809,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   time: 0.05
+--- !u!114 &114727603228194398
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1083744624958058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 667daaff2d7244a75a401eece422b7c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 9bef04880d4c741f786ba635f7878f54, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114571776839726882}
+        m_MethodName: OutOfZomzMode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114864721125177742
 MonoBehaviour:
   m_ObjectHideFlags: 1

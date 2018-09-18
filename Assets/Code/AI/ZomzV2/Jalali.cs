@@ -20,6 +20,7 @@ public enum JalaliPhase
 {
     PHASE_ONE = 0,
     PHASE_TWO = 1,
+    PHASE_THREE = 2,
 }
 
 [System.Serializable]
@@ -118,6 +119,12 @@ public class Jalali : Being
     [SerializeField]
     private float _reloadTime = 4f;
 
+    [SerializeField]
+    private float _damagePerShot = 1f;
+
+    [SerializeField]
+    private float _damagePerZombieShot = 2f;
+
     private Vector3 _aimFollowPosition = Vector3.zero;
 
     [SerializeField]
@@ -137,7 +144,7 @@ public class Jalali : Being
     private GunTransforms _runTransform;
 
     [SerializeField]
-    protected JalaliStates _currentState;
+    public JalaliStates _currentState;
 
     [Header("Miscellaneous")]
     [SerializeField]
@@ -156,6 +163,8 @@ public class Jalali : Being
 
     private LineRenderer _shotLine;
 
+    private bool _inZomzMode = false;
+
 
     private Coroutine _playerHurtCoroutine;
     protected Coroutine _attackCoroutine;
@@ -173,6 +182,8 @@ public class Jalali : Being
 
     protected Being targetBeing;
 
+    private int[] _phaseThreeShootDirections = { 1, -1 };
+
     bool allVantagePointsRayCast = false;
 
     bool unobstructedViewToBeing = false;
@@ -180,6 +191,10 @@ public class Jalali : Being
     int vantagePointIndex = -1;
 
     List<Transform> jalaliVantagePoints = new List<Transform>();
+
+
+    private Breakable currentTargetBreakable = null;
+    private Being currentVisibleBeing = null;
 
     protected virtual void Awake()
     {
@@ -233,13 +248,20 @@ public class Jalali : Being
 
             float t = 0;
 
-            while (t < _shootTime)
+            int shootDirection = _phaseThreeShootDirections[Random.Range(0, _phaseThreeShootDirections.Length)];
+
+            while (t < _shootTime && !ZomzMode.CurrentValue)
             {
                 float distanceFromPlayer = _shootCurve.Evaluate((Mathf.Lerp(0, 1, t / _shootTime))) * _aimStartFactor;
 
-                Vector3 directionToPlayer = transform.position - _aimFollowPosition;
-                Vector3 beingDirection = new Vector3(_player.transform.position.x, playerSightHeight, _player.transform.position.z) - transform.position;
+                Vector3 directionToPlayer = Vector3.zero;
 
+                if(_currentPhase==JalaliPhase.PHASE_ONE || _currentPhase == JalaliPhase.PHASE_TWO)
+                    directionToPlayer = transform.position - _aimFollowPosition;
+                else
+                    directionToPlayer = shootDirection * transform.right;
+                
+                Vector3 beingDirection = new Vector3(_player.transform.position.x, playerSightHeight, _player.transform.position.z) - transform.position;
 
                 transform.LookAt(new Vector3(_aimFollowPosition.x, transform.position.y, _aimFollowPosition.z));
 
@@ -247,7 +269,8 @@ public class Jalali : Being
                 RaycastHit hit;
                 bool canSeePlayer = false;
 
-                Debug.DrawRay(transform.position + transform.forward + transform.up * _sightHeightMultiplier, beingDirection, Color.green);
+                //Debug.DrawRay(transform.position + transform.forward + transform.up * _sightHeightMultiplier, beingDirection, Color.green);
+
 
                 ownCollider.enabled = false;
                 if (Physics.Raycast(transform.position + transform.up * _sightHeightMultiplier, beingDirection, out hit, Mathf.Infinity))
@@ -260,7 +283,81 @@ public class Jalali : Being
                 ownCollider.enabled = true;
                 //Check for each shot if can see player
 
-                if (canSeePlayer) 
+                //If there is a breakable container that frame
+                if (currentTargetBreakable!=null && !canSeePlayer)
+                {
+                    if (_gunShotBulletImpactFx)
+                    {
+                        _muzzleFlash.SetActive(true);
+
+                        Vector3 directionToBreakable = Vector3.zero;
+
+                        if (_currentPhase == JalaliPhase.PHASE_ONE || _currentPhase == JalaliPhase.PHASE_TWO)
+                            directionToBreakable = transform.position - currentTargetBreakable.transform.position;
+                        else
+                            directionToBreakable = shootDirection * transform.right;
+
+                        GameObject bulletFX = Instantiate(_gunShotBulletImpactFx);
+                        bulletFX.transform.position = currentTargetBreakable.transform.position + (directionToBreakable.normalized * distanceFromPlayer);
+
+                        _shotLine.SetPosition(0, _muzzleFlash.transform.position);
+                        _shotLine.SetPosition(1, bulletFX.transform.position);
+
+                        //Debug.Log(currentTargetBreakable.name);
+                        //Debug.Log(Vector3.Distance(bulletFX.transform.position, currentTargetBreakable.transform.position));
+
+                        if (Vector3.Distance(bulletFX.transform.position, currentTargetBreakable.transform.position) < 0.1f)
+                        {
+                            if (currentTargetBreakable.Durability > 0)
+                                currentTargetBreakable.Damage(_damagePerShot);
+                        }
+
+                        if (currentTargetBreakable.Durability <= 0.1f)
+                            currentTargetBreakable = null;
+                    }
+
+                    _shotLine.enabled = true;
+                    yield return new WaitForSeconds(_timeBetweenShots / 2);
+                    _shotLine.enabled = false;
+                    yield return new WaitForSeconds(_timeBetweenShots / 2);
+                }
+                else if (currentVisibleBeing != null && !canSeePlayer)
+                {
+                    if (_gunShotBulletImpactFx)
+                    {
+                        _muzzleFlash.SetActive(true);
+
+                        Vector3 directionToBeing = Vector3.zero;
+
+                        if (_currentPhase == JalaliPhase.PHASE_ONE || _currentPhase == JalaliPhase.PHASE_TWO)
+                            directionToBeing = transform.position - currentVisibleBeing.transform.position;
+                        else
+                            directionToBeing = shootDirection * transform.right;
+
+                        GameObject bulletFX = Instantiate(_gunShotBulletImpactFx);
+                        bulletFX.transform.position = currentVisibleBeing.transform.position + (directionToBeing.normalized * distanceFromPlayer);
+
+                        _shotLine.SetPosition(0, _muzzleFlash.transform.position);
+                        _shotLine.SetPosition(1, bulletFX.transform.position);
+
+                        //Debug.Log(currentTargetBreakable.name);
+                        //Debug.Log(Vector3.Distance(bulletFX.transform.position, currentTargetBreakable.transform.position));
+
+                        if (Vector3.Distance(bulletFX.transform.position, currentVisibleBeing.transform.position) < 0.1f)
+                        {
+                            currentVisibleBeing.StartCoroutine(currentVisibleBeing.Hurt(_damagePerZombieShot));
+                        }
+
+                        if (!currentVisibleBeing.IsAlive)
+                            currentVisibleBeing = null;
+                    }
+
+                    _shotLine.enabled = true;
+                    yield return new WaitForSeconds(_timeBetweenShots / 2);
+                    _shotLine.enabled = false;
+                    yield return new WaitForSeconds(_timeBetweenShots / 2);
+                }
+                else if (canSeePlayer) 
                 { 
                     if (_gunShotBulletImpactFx)
                     {
@@ -274,9 +371,8 @@ public class Jalali : Being
 
                         if (Vector3.Distance(bulletFX.transform.position, _player.transform.position) < 0.1f)
                         {
-
-                            if(!_playerController.IsHurting)
-                                _playerController.StartCoroutine(_playerController.Hurt(1f));
+                            //if(!_playerController.IsHurting)
+                            _playerController.StartCoroutine(_playerController.Hurt(_damagePerShot));
                         }
                     }
 
@@ -293,11 +389,18 @@ public class Jalali : Being
                 t += _timeBetweenShots;
             }
 
+            if(ZomzMode.CurrentValue)
+            {
+                _muzzleFlash.SetActive(false);
+                _shotLine.enabled = false;
+            }
+
             _aimFollowPosition = Vector3.zero;
 
             _isShooting = false;
 
-            _reloadCoroutine = StartCoroutine(Reload());
+            if(!ZomzMode.CurrentValue)
+                _reloadCoroutine = StartCoroutine(Reload());
         }
 
         yield return null;
@@ -321,6 +424,7 @@ public class Jalali : Being
             _isReloading = false;
 
             allVantagePointsRayCast = false;
+            vantagePointIndex = -1;
         }
 
         yield return null;
@@ -374,7 +478,7 @@ public class Jalali : Being
 
     protected virtual void Update()
     {
-        if (_isAlive && !_isAttacking && !_isShooting && !_isReloading && !_isHurting && !ZomzMode.CurrentValue)
+        if (_isAlive && !_isAttacking && !_isShooting && !_isReloading && !_isHurting && !_inZomzMode)
         {
             ExecuteAI();
         }
@@ -390,6 +494,23 @@ public class Jalali : Being
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, CharacterStats.ShootRange);
+    }
+
+    public void InZomzMode()
+    {
+        _inZomzMode = true;
+        _muzzleFlash.SetActive(false);
+        _currentState = JalaliStates.NONE;
+        InitNewState("idle", false);
+        _previousState = _currentState;
+        allVantagePointsRayCast = false;
+        vantagePointIndex = -1;
+        _navMeshAgent.isStopped = true;
+    }
+
+    public void OutOfZomzMode()
+    {
+        _inZomzMode = false;
     }
 
     //*********************************************************************************************************************************************************
@@ -426,6 +547,8 @@ public class Jalali : Being
 
         if(unobstructedViewToBeing && distanceToBeing <= _characterStats.ShootRange && _playerController.IsAlive)
         {
+            currentTargetBreakable = null;
+            currentVisibleBeing = null;
             allVantagePointsRayCast = false;
             vantagePointIndex = -1;
             _animator.ResetTrigger("run");
@@ -435,22 +558,43 @@ public class Jalali : Being
         }
         else if(hit.collider.GetComponent<Breakable>() && distanceToBeing <= _characterStats.ShootRange && _playerController.IsAlive)
         {
+            currentVisibleBeing = null;
             allVantagePointsRayCast = false;
             vantagePointIndex = -1;
-            Debug.Log("I can break it. Just blow it up!!!");
+            _animator.ResetTrigger("run");
+            _currentState = JalaliStates.SHOOT;
+            InitNewState("shoot", false);
+            _previousState = _currentState;
+
+            currentTargetBreakable = hit.collider.GetComponent<Breakable>();
+        }
+        else if (hit.collider.GetComponent<Being>() && !hit.collider.CompareTag("Player") && distanceToBeing <= _characterStats.ShootRange && _playerController.IsAlive)
+        {
+            allVantagePointsRayCast = false;
+            vantagePointIndex = -1;
+            _animator.ResetTrigger("run");
+            _currentState = JalaliStates.SHOOT;
+            InitNewState("shoot", false);
+            _previousState = _currentState;
+            currentTargetBreakable = null;
+
+            currentVisibleBeing = hit.collider.GetComponent<Being>();
+
+            Debug.Log("Blocked by a being");
         }
         else if(!allVantagePointsRayCast && _playerController.IsAlive){
                 
                 _muzzleFlash.SetActive(false);
+                currentTargetBreakable = null;
 
                 for (int i = 0; i < jalaliVantagePoints.Count; i++)
                 {
                     RaycastHit vantageHit;
 
                     Vector3 vantagePos = jalaliVantagePoints[i].position + transform.up * _sightHeightMultiplier;
-                    Vector3 vantageDirection = new Vector3(_player.transform.position.x, 0.5f, _player.transform.position.z) - vantagePos;
+                    Vector3 vantageDirection = new Vector3(_player.transform.position.x, 1f, _player.transform.position.z) - vantagePos;
 
-                    //Debug.DrawRay(vantagePos, vantageDirection, Color.green, 15f);
+                    Debug.DrawRay(vantagePos, vantageDirection, Color.green, 4f);
 
                     if (Physics.Raycast(vantagePos, vantageDirection, out vantageHit, Mathf.Infinity))
                     {
@@ -494,6 +638,7 @@ public class Jalali : Being
                     InitNewState("idle", false);
                     _previousState = _currentState;
                     allVantagePointsRayCast = false;
+                    vantagePointIndex = -1;
                 }
             }
         }
